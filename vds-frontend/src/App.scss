@@ -1,0 +1,120 @@
+.navbar-wrap.bg-light {
+  font-family: Roboto, Open Sans Regular, sans-serif;
+  color: #141821;
+  background: #fff !important;
+  box-shadow: 0 3px 20px rgba(100, 128, 154, 0.25);
+  height: 4.6875rem;
+  width: 100%;
+  .navBar-linkwrap {
+    width: 65%;
+    justify-content: space-between;
+    .mid-logo {
+      width: 9%;
+      margin-top: -10px;
+      margin-right: 8px;
+    }
+    .mid-label {
+      margin-top: 19px;
+      display: inline-block;
+      color: #000;
+      font-size: 1.5rem;
+      text-align: center;
+    }
+    .setting-label {
+      color: #000;
+      font-size: medium;
+      margin-top: 23px;
+      margin-right: 5px;
+    }
+    .setting-icon {
+      width: 38px;
+    }
+  }
+}
+.page-container {
+  text-align: center;
+  width: 80%;
+  margin: 15% auto 0;
+  font-size: 26px;
+  font-weight: 500;
+  .button-wrap button {
+    margin: 25px 5px 0;
+  }
+  .button-wrap button.btn-secondary:disabled {
+    cursor: not-allowed;
+  }
+  .user-message-wrap {
+    margin-top: 25px;
+    font-size: 18px;
+    .error-msg {
+      color: red;
+    }
+    .info-message {
+      color: blue;
+    }
+  }
+  .text-align-right {
+    text-align: right;
+  }
+  .text-align-left {
+    text-align: left;
+  }
+  .setting-label {
+    font-size: 16px;
+    margin-top: 12px;
+    margin-bottom: 0;
+  }
+  .row-margin {
+    margin-top: 15px;
+  }
+  .no-padding {
+    padding: 0 !important;
+  }
+  .row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  .setting-value {
+    font-size: 15px;
+    margin-top: 12px;
+    margin-bottom: 0;
+    color: #726e6e;
+    margin-left: 5px;
+  }
+  input[type="radio"] {
+    margin-right: 5px;
+  }
+  .radio-label {
+    font-size: 14px;
+  }
+}
+.react-confirm-alert-body h1 {
+  font-size: 16px;
+}
+
+.info-box {
+  padding: 20px;
+  margin-top: 20px;
+  border: 1px solid;
+  border-radius: 4px;
+  width: 100%;
+}
+button.btn-secondary:disabled {
+  cursor: not-allowed;
+}
+.status-btn {
+  margin-left: 10px;
+}
+.info-btn {
+  margin-left: 10px;
+}
+.reader-response {
+  margin-left: 180px;
+}
+.reader-info {
+  margin-left: 50px;
+}
+.radio-label {
+  margin-left: 5px;
+}
