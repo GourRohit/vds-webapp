@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
-const PORT = 3001;
+const path = require("path");
+const PORT = 3000;
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -59,27 +60,21 @@ function checkForDuplicateData(docNumber) {
       "'" +
       docNumber +
       "'";
-    return db.run(query, function (error, rows) {
-      console.log("duplicate", rows);
+    return db.all(query, function (error, rows) {
       if (error) {
         return reject(error);
       } else {
-        //return resolve(rows);
-
-        Object.keys(rows).forEach((row) => {
-          if (row.length > 0) {
-            return resolve(true);
-          } else {
-            return resolve(false);
-          }
-          count++;
-        });
+        if (rows.length > 0) {
+          return resolve(true);
+        } else {
+          return resolve(false);
+        }
       }
     });
   });
 }
 
-app.post("/saveData", async (req, res) => {
+app.post("/data", async (req, res) => {
   let message;
   const data = {
     documentNumber: req.body.documentNumber,
@@ -99,13 +94,29 @@ function getdataFromDb() {
     });
   });
 }
-app.get("/getData", async (req, res) => {
+app.get("/data", async (req, res) => {
   let identitydata = [];
   const data = await getdataFromDb();
   data.forEach((row) => {
     identitydata.push(row.documentNumber);
   });
   res.json({ data: identitydata });
+});
+
+app.delete("/data", async (req, res) => {
+  db.serialize(() => {
+    db.run("DELETE FROM CHECKIN_DATA");
+    res.json({ message: "Success fully deleted a data" });
+  });
+});
+
+// serve up production assets
+app.use(express.static("../vds-frontend/build"));
+
+app.get("*", (req, res) => {
+  res.sendFile(
+    path.resolve(__dirname, "../vds-frontend", "build", "index.html")
+  );
 });
 
 app.listen(PORT, () => {
