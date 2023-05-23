@@ -35,6 +35,7 @@ class Dashboard extends Component {
         //console.log(e.data);
         if (e.data) {
           this.setState({
+            recievedIdentityInfo: true,
             currentTime: time,
             firstName: e.data.data.givenNames,
             lastName: e.data.data.familyName,
@@ -118,7 +119,7 @@ class Dashboard extends Component {
   render() {
     return (
       <>
-        <Header></Header>
+        <Header />
         <div className="page-container">
           <p>
             Welcome to Mocktana department of motor vehicles. This is a sample
@@ -148,8 +149,8 @@ class Dashboard extends Component {
                 : this.state.deviceStatus === "CONNECTED_AOA_MODE" &&
                   this.state.deviceMode === "ID_READ_EVENT_DRIVEN"
                 ? "Tap or scan your mobile DL or physical DL to check in"
-                : this.state.deviceMode !== "ID_READ_EVENT_DRIVEN" &&
-                  this.state.deviceMode !== "USB_EVENT_DRIVEN"
+                : this.state.deviceMode === "STANDALONE" &&
+                  this.state.deviceMode === "E-SEEK"
                 ? "Please switch the device to “autonomous or host trigger mode” to start scanning"
                 : ""}
             </p>

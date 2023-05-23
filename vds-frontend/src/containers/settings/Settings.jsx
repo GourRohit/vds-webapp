@@ -177,8 +177,8 @@ class Settings extends Component {
                       className="status-btn"
                       src={
                         this.state.deviceStatus === "CONNECTED_AOA_MODE"
-                          ? require("../../assets/images/connected.png")
-                          : require("../../assets/images/disconnected.png")
+                          ? require("../../assets/images/connected_.png")
+                          : require("../../assets/images/not_connected.png")
                       }
                       height={15}
                       alt="connectionStatus"
