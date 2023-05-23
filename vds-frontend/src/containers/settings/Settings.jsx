@@ -80,7 +80,7 @@ class Settings extends Component {
   };
   clearData = () => {
     axios
-      .delete("http://localhost:3000/data")
+      .delete("http://ec2-15-206-123-117.ap-south-1.compute.amazonaws.com:3000/data")
       .then((res) => {
         if (res.status) {
           alert(res.data.message);

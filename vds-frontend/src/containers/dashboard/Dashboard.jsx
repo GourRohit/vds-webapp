@@ -55,7 +55,7 @@ class Dashboard extends Component {
       // checkIn: this.state.currentTime,
     };
     axios
-      .post("http://localhost:3000/data", idData)
+      .post("http://ec2-15-206-123-117.ap-south-1.compute.amazonaws.com:3000/data", idData)
       .then((res) => {
         if (res.data && res.status) {
           if (res.data.message === "Saved Sucessfully") {
@@ -131,6 +131,7 @@ class Dashboard extends Component {
               variant={this.buttonEnabled() ? "primary" : "secondary"}
               onClick={() => this.getIdentityInfo()}
               disabled={!this.buttonEnabled()}
+              size="lg"
             >
               Check in with Physical DL
             </Button>
@@ -138,6 +139,7 @@ class Dashboard extends Component {
               variant={this.buttonEnabled() ? "primary" : "secondary"}
               onClick={() => this.getIdentityInfo()}
               disabled={!this.buttonEnabled()}
+              size="lg"
             >
               Check in with Mobile DL
             </Button>
@@ -149,8 +151,10 @@ class Dashboard extends Component {
                 : this.state.deviceStatus === "CONNECTED_AOA_MODE" &&
                   this.state.deviceMode === "ID_READ_EVENT_DRIVEN"
                 ? "Tap or scan your mobile DL or physical DL to check in"
-                : this.state.deviceMode === "STANDALONE" &&
-                  this.state.deviceMode === "E-SEEK"
+                : this.state.deviceMode === "" ||
+                  this.state.deviceMode === null ||
+                  this.state.deviceMode !== "ID_READ_EVENT_DRIVEN" ||
+                  this.state.deviceMode !== "USB_EVENT_DRIVEN"
                 ? "Please switch the device to “autonomous or host trigger mode” to start scanning"
                 : ""}
             </p>
