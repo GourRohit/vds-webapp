@@ -7,10 +7,10 @@ import "react-confirm-alert/src/react-confirm-alert.css";
 
 class Settings extends Component {
   state = {
-    deviceStatus: "CONNECTED",
+    deviceStatus: "",
     readerData: [],
     isData: false,
-    deviceMode: "USB_EVENT_DRIVEN",
+    deviceMode: "",
   };
   getReaderinfo = () => {
     axios
@@ -20,7 +20,8 @@ class Settings extends Component {
           this.setState({
             readerData: response.data,
             isData: true,
-            // deviceStatus: response.data.deviceState,
+            deviceStatus: response.data.deviceState,
+            deviceMode: response.data.usbMode,
           });
         } else {
           this.setState({
@@ -38,14 +39,11 @@ class Settings extends Component {
       });
   };
   changeMode = (value) => {
-    // this.setState({
-    //   deviceMode: value,
-    // });
     axios
       .post("http://localhost:8081/verifier-sdk/reader/properties", {
         setting: "USB_mode",
         value: {
-          mode: "USB_EVENT_DRIVEN",
+          mode: value,
         },
       })
       .then((response) => {

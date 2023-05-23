@@ -7,13 +7,13 @@ import moment from "moment";
 
 class Dashboard extends Component {
   state = {
-    deviceMode: "ID_READ_EVENT_DRIVEN",
-    deviceStatus: "CONNECTED",
+    deviceMode: "",
+    deviceStatus: "",
     recievedIdentityInfo: false,
     currentTime: null,
     firstName: "",
-    lastName: "doe",
-    docNumber: "G4841292",
+    lastName: "",
+    docNumber: "",
     isDuplicate: false,
   };
 
@@ -33,12 +33,15 @@ class Dashboard extends Component {
       );
       sse.addEventListener("SCANNED_DATA", function (e) {
         //console.log(e.data);
-        this.setState({
-          currentTime: time,
-          firstName: e.data.data.givenNames,
-          lastName: e.data.data.familyName,
-          docNumber: e.data.data.documentNumber,
-        });
+        if (e.data) {
+          this.setState({
+            currentTime: time,
+            firstName: e.data.data.givenNames,
+            lastName: e.data.data.familyName,
+            docNumber: e.data.data.documentNumber,
+          });
+          this.saveIdData();
+        }
       });
     }
   };
@@ -46,9 +49,9 @@ class Dashboard extends Component {
     //const { firstName, lastName } = {"Stefan", "doe"}
     const idData = {
       documentNumber: this.state.docNumber,
-      firstName: this.state.firstName,
-      lastName: this.state.lastName,
-      checkIn: this.state.currentTime,
+      // firstName: this.state.firstName,
+      // lastName: this.state.lastName,
+      // checkIn: this.state.currentTime,
     };
     axios
       .post("http://localhost:3001/data", idData)
