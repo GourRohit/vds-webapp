@@ -12,14 +12,19 @@ class Settings extends Component {
     isData: false,
     deviceMode: "",
   };
-  getReaderinfo = () => {
+
+  componentDidMount = () => {
+    this.getReaderinfo(false)
+  }
+
+  getReaderinfo = (isData) => {
     axios
       .get("http://localhost:8081/verifier-sdk/reader/info")
       .then((response) => {
         if (response.data) {
           this.setState({
             readerData: response.data,
-            isData: true,
+            isData: isData,
             deviceStatus: response.data.deviceState,
             deviceMode: response.data.usbMode,
           });
@@ -58,12 +63,13 @@ class Settings extends Component {
       });
   };
   handleRadioBtn = (e) => {
+    let deviceMode = e.target.value; 
     confirmAlert({
       title: "Do you want to switch to " + `${e.target.value}`,
       buttons: [
         {
           label: "Yes",
-          onClick: () => this.changeMode(e.target.value),
+          onClick: () => this.changeMode(deviceMode),
         },
         {
           label: "No",
@@ -145,12 +151,12 @@ class Settings extends Component {
                     type="radio"
                     id="eseek"
                     name="mode"
-                    value="E-Seek"
-                    checked={this.state.deviceMode === "E-Seek" && "checked"}
+                    value="E-SEEK"
+                    checked={this.state.deviceMode === "E-SEEK" && "checked"}
                     onClick={(e) => this.handleRadioBtn(e)}
                   />
                   <label for="eseek" className="radio-label">
-                    E-Seek
+                    E-SEEK
                   </label>
                 </Col>
               </Row>
@@ -170,7 +176,7 @@ class Settings extends Component {
                     <img
                       className="status-btn"
                       src={
-                        this.state.deviceStatus === "CONNECTED"
+                        this.state.deviceStatus === "CONNECTED_AOA_MODE"
                           ? require("../../assets/images/connected.png")
                           : require("../../assets/images/disconnected.png")
                       }
@@ -186,9 +192,9 @@ class Settings extends Component {
                     <strong>Device Info:</strong>
                     <Button
                       className="info-btn"
-                      onClick={this.getReaderinfo}
+                      onClick={()=>this.getReaderinfo(true)}
                       variant={
-                        this.state.deviceStatus === "CONNECTED"
+                        this.state.deviceStatus === "CONNECTED_AOA_MODE"
                           ? "primary"
                           : "secondary"
                       }
@@ -200,7 +206,7 @@ class Settings extends Component {
                 </Col>
               </Row>
               <Row className={this.state.isData ? "info-box" : ""}>
-                {this.state.deviceStatus === "CONNECTED" ? (
+                {this.state.deviceStatus === "CONNECTED_AOA_MODE" ? (
                   <Col md={6}>
                     {Object.keys(this.state.readerData).map((item, i) => (
                       <Row className="reader-info">

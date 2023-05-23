@@ -19,7 +19,7 @@ class Dashboard extends Component {
 
   buttonEnabled = () => {
     return (
-      this.state.deviceStatus === "CONNECTED" &&
+      this.state.deviceStatus === "CONNECTED_AOA_MODE" &&
       this.state.deviceMode === "USB_EVENT_DRIVEN"
     );
   };
@@ -145,7 +145,7 @@ class Dashboard extends Component {
             <p className="error-msg">
               {this.state.deviceStatus === "NOT_CONNECTED"
                 ? "Please connect the device and try again."
-                : this.state.deviceStatus === "CONNECTED" &&
+                : this.state.deviceStatus === "CONNECTED_AOA_MODE" &&
                   this.state.deviceMode === "ID_READ_EVENT_DRIVEN"
                 ? "Tap or scan your mobile DL or physical DL to check in"
                 : this.state.deviceMode !== "ID_READ_EVENT_DRIVEN" &&
