@@ -54,7 +54,7 @@ class Dashboard extends Component {
       // checkIn: this.state.currentTime,
     };
     axios
-      .post("http://localhost:3001/data", idData)
+      .post("http://localhost:3000/data", idData)
       .then((res) => {
         if (res.data && res.status) {
           if (res.data.message === "Saved Sucessfully") {

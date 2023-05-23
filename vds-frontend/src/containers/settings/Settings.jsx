@@ -74,7 +74,7 @@ class Settings extends Component {
   };
   clearData = () => {
     axios
-      .delete("http://localhost:3001/data")
+      .delete("http://localhost:3000/data")
       .then((res) => {
         if (res.status) {
           alert(res.data.message);
