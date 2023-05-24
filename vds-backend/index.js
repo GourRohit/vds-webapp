@@ -81,8 +81,10 @@ app.post("/data", async (req, res) => {
   };
   let isDuplicate = await checkForDuplicateData(data.documentNumber);
   if (!isDuplicate) {
+    res.status(200);
     message = await insertData(data.documentNumber);
   } else {
+    res.status(409);
     message = "Duplicate Entry";
   }
   res.json({ message: message });
