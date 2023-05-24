@@ -8,7 +8,6 @@ import physicalIMG from "../../assets/images/DL_Scan_Back.png";
 
 const InformationModal = (props) => {
   const [message, setMessage] = useState("");
-  const [currentTime, setCurrentTime] = useState(null);
   const [docNumber, setDocNumber] = useState("");
 
   useEffect(() => {
@@ -26,7 +25,7 @@ const InformationModal = (props) => {
       )
       .then((res) => {
         if (res.data && res.status) {
-          return res.data.message;
+          return res.status;
         }
       })
       .catch((err) => {
@@ -39,17 +38,18 @@ const InformationModal = (props) => {
       .get("http://localhost:8081/verifier-sdk/identity/info")
       .then((response) => {
         if (response.data) {
+          console.log("Response received from identity info API");
           var time = moment().add(30, "m").format("LT");
-          setCurrentTime = time;
+          //setCurrentTime = time;
           setDocNumber = response.data.data.documentNumber;
-          let responseMsg = saveIdData();
-          if (responseMsg === "Saved Sucessfully") {
+          let responseStatus = saveIdData();
+          if (responseStatus === 200) {
             setMessage = ` Welcome Mr. ${response.data.data.givenNames} ${response.data.data.familyName}, you are checked in for 
-            your ${currentTime} appointment.`;
-          } else if (responseMsg === "Duplicate Entry") {
+            your ${time} appointment.`;
+          } else if (responseStatus === 409) {
             setMessage = ` Welcome Mr. ${response.data.data.givenNames} ${response.data.data.familyName}, we
               could find an appointment for you, you are checked in to the
-              walk-in line ${currentTime}.`;
+              walk-in line ${time}.`;
           } else {
             setMessage = "";
           }
