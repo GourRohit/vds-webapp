@@ -130,7 +130,9 @@ class Settings extends Component {
                     height={15}
                     alt="connectionStatus"
                   />{" "}
-                  {this.state.deviceStatus}
+                  {this.state.deviceStatus === "CONNECTED_AOA_MODE"
+                    ? "CONNECTED"
+                    : "NOT_CONNECTED"}
                 </Col>
               </Row>
               <Row>
