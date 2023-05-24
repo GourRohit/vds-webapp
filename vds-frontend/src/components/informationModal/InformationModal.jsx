@@ -24,14 +24,14 @@ const InformationModal = (props) => {
         idData
       )
       .then((res) => {
-        console.log(res);
+        console.log("response from saveData", res);
         if (res.data && res.status) {
           return res.status;
         }
       })
       .catch((err) => {
         console.error(err);
-        return false;
+        return 500;
       });
   }
   function getIdentityInfo() {
@@ -44,7 +44,7 @@ const InformationModal = (props) => {
           //setCurrentTime = time;
           setDocNumber(response.data.data.documentNumber);
           let responseStatus = saveIdData();
-          console.log(responseStatus);
+          console.log("responseStatus", responseStatus);
           if (responseStatus == 200) {
             console.log("200");
             setMessage(` Welcome Mr. ${response.data.data.givenNames} ${response.data.data.familyName}, you are checked in for 
