@@ -4,7 +4,7 @@ import Header from "../header/Header";
 import axios from "axios";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
-
+import Table from "react-bootstrap/Table";
 class Settings extends Component {
   state = {
     deviceStatus: "",
@@ -78,6 +78,21 @@ class Settings extends Component {
       ],
     });
   };
+  handleClearBtn = () => {
+    confirmAlert({
+      title: "Do you want to clear data?",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () => this.clearData(),
+        },
+        {
+          label: "No",
+          //onClick: () => alert('Click No')
+        },
+      ],
+    });
+  };
   clearData = () => {
     axios
       .delete(
@@ -90,6 +105,7 @@ class Settings extends Component {
       })
       .catch((error) => {
         console.error(error);
+        alert("Data already cleared");
       });
   };
   render() {
@@ -98,14 +114,32 @@ class Settings extends Component {
         <Header />
         <Container>
           <Row>
-            <Col md={5}>
-              <Row style={{ marginTop: "165px" }}>
-                <Col md={4}>
+            <Col md={6}>
+              <Row className="device-status">
+                <Col md={3}>
+                  <strong>Device Status :</strong>
+                </Col>
+                <Col md={9}>
+                  <img
+                    className="status-btn"
+                    src={
+                      this.state.deviceStatus === "CONNECTED_AOA_MODE"
+                        ? require("../../assets/images/connected_.png")
+                        : require("../../assets/images/not_connected.png")
+                    }
+                    height={15}
+                    alt="connectionStatus"
+                  />{" "}
+                  {this.state.deviceStatus}
+                </Col>
+              </Row>
+              <Row>
+                <Col md={3}>
                   <p className="setting-label">
-                    <strong>Device Mode: </strong>
+                    <strong>Device Mode :</strong>
                   </p>
                 </Col>
-                <Col md={6} className="text-align-left">
+                <Col md={9} className="text-align-left">
                   <input
                     type="radio"
                     id="iddriven"
@@ -162,69 +196,46 @@ class Settings extends Component {
                   </label>
                 </Col>
               </Row>
+            </Col>
+            <Col md={6}>
               <Row>
-                <div>
-                  <Button variant="primary" onClick={this.clearData}>
+                <Col md={7} className="reader-info-btn">
+                  <Button
+                    className="info-btn"
+                    onClick={() => this.getReaderinfo(true)}
+                    variant={
+                      this.state.deviceStatus === "CONNECTED_AOA_MODE"
+                        ? "primary"
+                        : "secondary"
+                    }
+                    disabled={this.state.deviceStatus === "NOT_CONNECTED"}
+                  >
+                    Fetch Reader Info
+                  </Button>
+                </Col>
+                <Col md={5} style={{ marginTop: "160px" }}>
+                  <Button variant="primary" onClick={this.handleClearBtn}>
                     Clear Data
                   </Button>
-                </div>
-              </Row>
-            </Col>
-            <Col md={7}>
-              <Row>
-                <Col md={6} style={{ marginTop: "165px" }}>
-                  <p>
-                    <strong>Device Status :</strong>
-                    <img
-                      className="status-btn"
-                      src={
-                        this.state.deviceStatus === "CONNECTED_AOA_MODE"
-                          ? require("../../assets/images/connected_.png")
-                          : require("../../assets/images/not_connected.png")
-                      }
-                      height={15}
-                      alt="connectionStatus"
-                    />{" "}
-                    {this.state.deviceStatus}
-                  </p>
-                </Col>
-
-                <Col md={6} style={{ marginTop: "160px" }}>
-                  <p>
-                    <strong>Device Info:</strong>
-                    <Button
-                      className="info-btn"
-                      onClick={() => this.getReaderinfo(true)}
-                      variant={
-                        this.state.deviceStatus === "CONNECTED_AOA_MODE"
-                          ? "primary"
-                          : "secondary"
-                      }
-                      disabled={this.state.deviceStatus === "NOT_CONNECTED"}
-                    >
-                      Fetch Reader Info
-                    </Button>
-                  </p>
                 </Col>
               </Row>
               <Row className={this.state.isData ? "info-box" : ""}>
-                {this.state.deviceStatus === "CONNECTED_AOA_MODE" &&
-                this.state.isData ? (
-                  <Col md={6}>
-                    {Object.keys(this.state.readerData).map((item, i) => (
-                      <Row className="reader-info">
-                        <Col md={6}>
-                          <p>{item + ":"}</p>
-                        </Col>
-                        <Col md={6}>
-                          <p className="reader-response">
-                            {this.state.readerData[item] !== null
-                              ? this.state.readerData[item]
-                              : "Unvailable"}
-                          </p>
-                        </Col>
-                      </Row>
-                    ))}
+                {this.state.deviceStatus === "CONNECTED_AOA_MODE" ? (
+                  <Col md={12}>
+                    <Table hover size="sm">
+                      <tbody>
+                        {Object.keys(this.state.readerData).map((item, i) => (
+                          <tr>
+                            <td>{item + ":"}</td>
+                            <td>
+                              {this.state.readerData[item] !== null
+                                ? this.state.readerData[item]
+                                : "Unvailable"}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </Table>
                   </Col>
                 ) : null}
               </Row>

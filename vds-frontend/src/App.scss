@@ -100,27 +100,18 @@
 }
 
 .info-box {
-  padding: 20px;
-  margin-top: 20px;
-  border: 1px solid;
-  border-radius: 4px;
-  width: 100%;
+  margin-top: 40px;
+  background-color:#fbfbf8;
+  text-align: left;
 }
 button.btn-secondary:disabled {
   cursor: not-allowed;
 }
-.status-btn {
-  margin-left: 10px;
-  margin-right: 3px;
-}
 .info-btn {
-  margin-left: 10px;
+  margin-left: 100px;
 }
 .reader-response {
   margin-left: 180px;
-}
-.reader-info {
-  margin-left: 50px;
 }
 .radio-label {
   margin-left: 5px;
@@ -143,4 +134,16 @@ button.btn-secondary:disabled {
   margin-top: 10%;
   font-size: 28px;
   color: red;
+}
+.device-status {
+  margin-top: 165px;
+}
+.setting-label {
+  margin-top: 25px;
+}
+.text-align-left {
+  margin-top: 25px;
+}
+.reader-info-btn {
+  margin-top: 160px;
 }
