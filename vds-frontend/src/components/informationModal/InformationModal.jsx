@@ -8,13 +8,13 @@ import physicalIMG from "../../assets/images/DL_Scan_Back.png";
 
 const InformationModal = (props) => {
   const [message, setMessage] = useState("");
-  const [docNumber, setDocNumber] = useState("");
+  // const [docNumber, setDocNumber] = useState("");
 
   useEffect(() => {
     getIdentityInfo();
   }, []);
 
-  function saveIdData() {
+  function saveIdData(docNumber) {
     const idData = {
       documentNumber: docNumber,
     };
@@ -43,8 +43,9 @@ const InformationModal = (props) => {
           console.log("Response received from identity info API");
           var time = moment().add(30, "m").format("LT");
           //setCurrentTime = time;
-          setDocNumber(response.data.data.documentNumber);
-          let responseMsg = saveIdData();
+          //setDocNumber(response.data.data.documentNumber);
+          console.log("from Identityinfo", response.data.data.documentNumber);
+          let responseMsg = saveIdData(response.data.data.documentNumber);
           console.log("responseStatus", responseMsg);
           if (responseMsg === "success") {
             console.log("200");
