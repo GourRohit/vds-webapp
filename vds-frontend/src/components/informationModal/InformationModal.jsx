@@ -18,6 +18,7 @@ const InformationModal = (props) => {
     const idData = {
       documentNumber: docNumber,
     };
+    console.log("document no", docNumber);
     axios
       .post(
         "http://ec2-15-206-123-117.ap-south-1.compute.amazonaws.com:3000/data",
@@ -26,12 +27,12 @@ const InformationModal = (props) => {
       .then((res) => {
         console.log("response from saveData", res);
         if (res.data && res.status) {
-          return res.status;
+          return res.data.message;
         }
       })
       .catch((err) => {
         console.error(err);
-        return 500;
+        return "failed";
       });
   }
   function getIdentityInfo() {
@@ -43,13 +44,13 @@ const InformationModal = (props) => {
           var time = moment().add(30, "m").format("LT");
           //setCurrentTime = time;
           setDocNumber(response.data.data.documentNumber);
-          let responseStatus = saveIdData();
+          let responseMsg = saveIdData();
           console.log("responseStatus", responseStatus);
-          if (responseStatus == 200) {
+          if (responseMsg === "success") {
             console.log("200");
             setMessage(` Welcome Mr. ${response.data.data.givenNames} ${response.data.data.familyName}, you are checked in for 
             your ${time} appointment.`);
-          } else if (responseStatus == 409) {
+          } else if (responseMsg === "duplicate") {
             console.log("409");
             setMessage(` Welcome Mr. ${response.data.data.givenNames} ${response.data.data.familyName}, we
               could find an appointment for you, you are checked in to the
