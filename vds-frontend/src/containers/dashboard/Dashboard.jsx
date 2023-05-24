@@ -45,38 +45,10 @@ class Dashboard extends Component {
             lastName: e.data.data.familyName,
             docNumber: e.data.data.documentNumber,
           });
-          this.saveIdData();
+          //this.saveIdData();
         }
       });
     }
-  };
-  saveIdData = () => {
-    const idData = {
-      documentNumber: this.state.docNumber,
-    };
-    axios
-      .post(
-        "http://ec2-15-206-123-117.ap-south-1.compute.amazonaws.com:3000/data",
-        idData
-      )
-      .then((res) => {
-        if (res.data && res.status) {
-          return res.data.message;
-          // if (res.data.message === "Saved Sucessfully") {
-          //   return res.data.message;
-          //   // this.setState({
-          //   //   isDuplicate: false,
-          //   // });
-          // } else {
-          //   // this.setState({
-          //   //   isDuplicate: true,
-          //   // });
-          // }
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-      });
   };
 
   getDeviceinfo = () => {
@@ -98,55 +70,6 @@ class Dashboard extends Component {
   getIdentityInfo = (isMdl) => {
     this.setState({ isMdL: isMdl });
     this.handleModal(true);
-    // let data = this.saveIdData();
-    // if (data === "Saved Sucessfully") {
-    //   this.setState({
-    //     message: "Welcome",
-    //   });
-    // } else {
-    //   this.setState({
-    //     message: "Duplicate",
-    //   });
-    // }
-    axios
-      .get("http://localhost:8081/verifier-sdk/identity/info")
-      .then((response) => {
-        if (response.data) {
-          console.log("response", response.data);
-          console.log("firstName", response.data.givenNames);
-          var time = moment().add(30, "m").format("LT");
-          this.setState({
-            recievedIdentityInfo: true,
-            currentTime: time,
-            // firstName: response.data.givenNames,
-            // lastName: response.data.familyName,
-            docNumber: response.data.documentNumber,
-          });
-          let responseMsg = this.saveIdData();
-          if (responseMsg === "Saved Sucessfully") {
-            this.setState({
-              message: ` Welcome Mr. ${response.data.givenNames} ${response.data.familyName}, you are checked in for 
-              your ${this.state.currentTime} appointment.`,
-            });
-          } else if (responseMsg === "Duplicate Entry") {
-            this.setState({
-              message: ` Welcome Mr. ${response.data.givenNames} ${response.data.familyName}, we
-              could find an appointment for you, you are checked in to the
-              walk-in line ${this.state.currentTime}.`,
-            });
-          } else {
-            this.setState({ message: "" });
-          }
-        } else {
-          this.setState({
-            recievedIdentityInfo: false,
-            message: "",
-          });
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
   };
   handleModal = (value) => {
     this.setState({
@@ -169,7 +92,7 @@ class Dashboard extends Component {
             <Button
               variant={this.buttonEnabled() ? "primary" : "secondary"}
               onClick={() => this.getIdentityInfo(false)}
-              //disabled={!this.buttonEnabled()}
+              disabled={!this.buttonEnabled()}
               className="db-button"
             >
               Check in with <br /> <span className="big-text">Physical DL</span>
@@ -177,7 +100,7 @@ class Dashboard extends Component {
             <Button
               variant={this.buttonEnabled() ? "primary" : "secondary"}
               onClick={() => this.getIdentityInfo(true)}
-              //disabled={!this.buttonEnabled()}
+              disabled={!this.buttonEnabled()}
               className="db-button"
             >
               Check in with <br /> <span className="big-text"> Mobile DL</span>
@@ -195,23 +118,6 @@ class Dashboard extends Component {
                 ? "Please switch the device to “autonomous or host trigger mode” to start scanning"
                 : ""}
             </p>
-            {this.state.recievedIdentityInfo && (
-              <>
-                {this.state.isDuplicate ? (
-                  <p className="info-message">
-                    Welcome Mr. {this.state.firstName} {this.state.lastName}, we
-                    could find an appointment for you, you are checked in to the
-                    walk-in line {this.state.currentTime}
-                  </p>
-                ) : (
-                  <p className="info-message">
-                    Welcome Mr. {this.state.firstName} {this.state.lastName} ,
-                    you are checked in for your {this.state.currentTime}{" "}
-                    appointment
-                  </p>
-                )}
-              </>
-            )}
           </div>
         </div>
       </>

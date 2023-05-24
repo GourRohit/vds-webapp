@@ -112,7 +112,7 @@ class Settings extends Component {
     return (
       <>
         <Header />
-        <Container>
+        <Container className="page-container">
           <Row>
             <Col md={6}>
               <Row className="device-status">

@@ -45,7 +45,7 @@
   font-size: 26px;
   font-weight: 500;
   .button-wrap button {
-    margin: 25px 5px 0;
+    margin: 25px 30px 0;
   }
   .button-wrap button.btn-secondary:disabled {
     cursor: not-allowed;
@@ -96,13 +96,16 @@
     font-size: 14px;
   }
 }
+
+.plImg {
+  width: 23%;
+}
 .react-confirm-alert-body h1 {
   font-size: 16px;
 }
-
 .info-box {
   margin-top: 40px;
-  background-color:#fbfbf8;
+  background-color: #fbfbf8;
   text-align: left;
 }
 button.btn-secondary:disabled {
