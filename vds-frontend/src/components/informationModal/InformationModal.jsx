@@ -12,7 +12,7 @@ const InformationModal = (props) => {
 
   useEffect(() => {
     getIdentityInfo();
-  });
+  }, []);
 
   function saveIdData() {
     const idData = {
@@ -24,6 +24,7 @@ const InformationModal = (props) => {
         idData
       )
       .then((res) => {
+        console.log(res);
         if (res.data && res.status) {
           return res.status;
         }
@@ -43,6 +44,7 @@ const InformationModal = (props) => {
           //setCurrentTime = time;
           setDocNumber(response.data.data.documentNumber);
           let responseStatus = saveIdData();
+          console.log(responseStatus);
           if (responseStatus === 200) {
             console.log("200");
             setMessage(` Welcome Mr. ${response.data.data.givenNames} ${response.data.data.familyName}, you are checked in for 
