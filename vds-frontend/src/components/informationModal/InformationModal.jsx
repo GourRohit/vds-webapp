@@ -27,11 +27,13 @@ const InformationModal = (props) => {
       .then((res) => {
         console.log("response from saveData", res);
         if (res.data && res.status) {
+          console.log("response from res", res.data.message);
           return res.data.message;
         }
+        console.log("here");
       })
       .catch((err) => {
-        console.error(err);
+        console.error("error response", err);
         return "failed";
       });
   }
