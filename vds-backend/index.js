@@ -106,7 +106,7 @@ app.get("/data", async (req, res) => {
 app.delete("/data", async (req, res) => {
   db.serialize(() => {
     db.run("DELETE FROM CHECKIN_DATA");
-    res.json({ message: "Success fully deleted a data" });
+    res.json({ message: "Successfully deleted checkin data" });
   });
 });
 

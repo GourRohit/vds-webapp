@@ -100,12 +100,12 @@ class Settings extends Component {
       )
       .then((res) => {
         if (res.status) {
-          alert(res.data.message);
+          alert("Checkin data cleared sucessfully");
         }
       })
       .catch((error) => {
         console.error(error);
-        alert("Data already cleared");
+        alert("Failed to clear checkin data");
       });
   };
   render() {
@@ -132,7 +132,7 @@ class Settings extends Component {
                   />{" "}
                   {this.state.deviceStatus === "CONNECTED_AOA_MODE"
                     ? "CONNECTED"
-                    : "NOT_CONNECTED"}
+                    : "NOT CONNECTED"}
                 </Col>
               </Row>
               <Row>
@@ -217,7 +217,7 @@ class Settings extends Component {
                 </Col>
                 <Col md={5}>
                   <Button variant="primary" onClick={this.handleClearBtn}>
-                    Clear Data
+                    Clear Checkin Data
                   </Button>
                 </Col>
               </Row>
