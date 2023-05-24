@@ -246,7 +246,7 @@ class Settings extends Component {
                             <td>{item + ":"}</td>
                             <td>
                               {this.state.readerData[item] !== null
-                                ? this.state.readerData[item]
+                                ? this.state.readerData[item].toString()
                                 : "Unvailable"}
                             </td>
                           </tr>
