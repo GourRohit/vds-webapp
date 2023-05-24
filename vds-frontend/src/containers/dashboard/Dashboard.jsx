@@ -122,9 +122,7 @@ class Dashboard extends Component {
         <Header />
         <div className="page-container">
           <p>
-            Welcome to Mocktana department of motor vehicles. This is a sample
-            App to check in using physical or digital license. Click on the
-            following button to proceed{" "}
+            Welcome to Mocktana Department of Motor Vehicles{" "}
           </p>
           <div className="button-wrap">
             <Button

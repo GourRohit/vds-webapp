@@ -17,13 +17,10 @@ class Header extends Component {
             <Nav className="me-auto navBar-linkwrap">
               <Nav.Link href="/">
                 <img
-                  src={require("../../assets/images/mid-logo.png")}
+                  src={require("../../assets/images/DMV_Logo.png")}
                   alt="MID-LOGO"
                   className="mid-logo"
                 />
-                <label className="mid-label">
-                  Welcome to Mocktana Department of Motors
-                </label>
               </Nav.Link>
               <Nav.Link href="/dashboard/settings">
                 <label className="setting-label">Settings</label>
