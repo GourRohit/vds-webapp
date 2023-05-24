@@ -45,7 +45,7 @@ const InformationModal = (props) => {
           //setCurrentTime = time;
           setDocNumber(response.data.data.documentNumber);
           let responseMsg = saveIdData();
-          console.log("responseStatus", responseStatus);
+          console.log("responseStatus", responseMsg);
           if (responseMsg === "success") {
             console.log("200");
             setMessage(` Welcome Mr. ${response.data.data.givenNames} ${response.data.data.familyName}, you are checked in for 
