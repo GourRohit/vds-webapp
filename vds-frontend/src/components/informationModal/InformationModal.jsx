@@ -41,20 +41,20 @@ const InformationModal = (props) => {
           console.log("Response received from identity info API");
           var time = moment().add(30, "m").format("LT");
           //setCurrentTime = time;
-          setDocNumber = response.data.data.documentNumber;
+          setDocNumber(response.data.data.documentNumber);
           let responseStatus = saveIdData();
           if (responseStatus === 200) {
-            setMessage = ` Welcome Mr. ${response.data.data.givenNames} ${response.data.data.familyName}, you are checked in for 
-            your ${time} appointment.`;
+            setMessage(` Welcome Mr. ${response.data.data.givenNames} ${response.data.data.familyName}, you are checked in for 
+            your ${time} appointment.`);
           } else if (responseStatus === 409) {
-            setMessage = ` Welcome Mr. ${response.data.data.givenNames} ${response.data.data.familyName}, we
+            setMessage(` Welcome Mr. ${response.data.data.givenNames} ${response.data.data.familyName}, we
               could find an appointment for you, you are checked in to the
-              walk-in line ${time}.`;
+              walk-in line ${time}.`);
           } else {
-            setMessage = "";
+            setMessage("");
           }
         } else {
-          setMessage = "";
+          setMessage("");
         }
       })
       .catch((error) => {
