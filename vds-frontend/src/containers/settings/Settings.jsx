@@ -100,12 +100,26 @@ class Settings extends Component {
       )
       .then((res) => {
         if (res.status) {
-          alert("Checkin data cleared sucessfully");
+          confirmAlert({
+            title: "Checkin data cleared successfully",
+            buttons: [
+              {
+                label: "Ok",
+              },
+            ],
+          });
         }
       })
       .catch((error) => {
         console.error(error);
-        alert("Failed to clear checkin data");
+        confirmAlert({
+          title: "Failed to clear checkin data",
+          buttons: [
+            {
+              label: "Ok",
+            },
+          ],
+        });
       });
   };
   render() {
