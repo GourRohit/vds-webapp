@@ -14,12 +14,12 @@ const InformationModal = (props) => {
     getIdentityInfo();
   }, []);
 
-  function saveIdData(docNumber) {
+  async function saveIdData(docNumber) {
     const idData = {
       documentNumber: docNumber,
     };
     console.log("document no", docNumber);
-    axios
+    await axios
       .post(
         "http://ec2-15-206-123-117.ap-south-1.compute.amazonaws.com:3000/data",
         idData
@@ -37,8 +37,8 @@ const InformationModal = (props) => {
         return "failed";
       });
   }
-  function getIdentityInfo() {
-    axios
+  async function getIdentityInfo() {
+    await axios
       .get("http://localhost:8081/verifier-sdk/identity/info")
       .then((response) => {
         if (response.data) {
