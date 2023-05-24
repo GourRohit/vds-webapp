@@ -19,7 +19,6 @@ const InformationModal = (props) => {
     const idData = {
       documentNumber: data.documentNumber,
     };
-    console.log("document no", docNumber);
     axios
       .post(
         "http://ec2-15-206-123-117.ap-south-1.compute.amazonaws.com:3000/data",
