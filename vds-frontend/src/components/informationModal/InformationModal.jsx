@@ -44,16 +44,20 @@ const InformationModal = (props) => {
           setDocNumber(response.data.data.documentNumber);
           let responseStatus = saveIdData();
           if (responseStatus === 200) {
+            console.log("200");
             setMessage(` Welcome Mr. ${response.data.data.givenNames} ${response.data.data.familyName}, you are checked in for 
             your ${time} appointment.`);
           } else if (responseStatus === 409) {
+            console.log("409");
             setMessage(` Welcome Mr. ${response.data.data.givenNames} ${response.data.data.familyName}, we
               could find an appointment for you, you are checked in to the
               walk-in line ${time}.`);
           } else {
+            console.log("No response from db");
             setMessage("");
           }
         } else {
+          console.log("noData");
           setMessage("");
         }
       })
