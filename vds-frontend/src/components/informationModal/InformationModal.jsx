@@ -14,12 +14,13 @@ const InformationModal = (props) => {
     getIdentityInfo();
   }, []);
 
-  async function saveIdData(docNumber) {
+  function saveIdData(data) {
+    var time = moment().add(30, "m").format("LT");
     const idData = {
-      documentNumber: docNumber,
+      documentNumber: data.documentNumber,
     };
     console.log("document no", docNumber);
-    return await axios
+    axios
       .post(
         "http://ec2-15-206-123-117.ap-south-1.compute.amazonaws.com:3000/data",
         idData
@@ -27,8 +28,19 @@ const InformationModal = (props) => {
       .then((res) => {
         console.log("response from saveData", res);
         if (res.data && res.status) {
-          console.log("response from res", res.data.message);
-          return res.data.message;
+          if (res.data.message === "success") {
+            console.log("200");
+            setMessage(` Welcome Mr. ${data.givenNames} ${data.familyName}, you are checked in for 
+            your ${time} appointment.`);
+          } else if (res.data.message === "duplicate") {
+            console.log("409");
+            setMessage(` Welcome Mr. ${data.givenNames} ${data.familyName}, we
+              could find an appointment for you, you are checked in to the
+              walk-in line ${time}.`);
+          } else {
+            console.log("No response from db");
+            setMessage("");
+          }
         }
         console.log("here");
       })
@@ -43,25 +55,11 @@ const InformationModal = (props) => {
       .then((response) => {
         if (response.data) {
           console.log("Response received from identity info API");
-          var time = moment().add(30, "m").format("LT");
+
           //setCurrentTime = time;
           //setDocNumber(response.data.data.documentNumber);
           console.log("from Identityinfo", response.data.data.documentNumber);
-          let responseMsg = saveIdData(response.data.data.documentNumber);
-          console.log("responseStatus", responseMsg);
-          if (responseMsg === "success") {
-            console.log("200");
-            setMessage(` Welcome Mr. ${response.data.data.givenNames} ${response.data.data.familyName}, you are checked in for 
-            your ${time} appointment.`);
-          } else if (responseMsg === "duplicate") {
-            console.log("409");
-            setMessage(` Welcome Mr. ${response.data.data.givenNames} ${response.data.data.familyName}, we
-              could find an appointment for you, you are checked in to the
-              walk-in line ${time}.`);
-          } else {
-            console.log("No response from db");
-            setMessage("");
-          }
+          saveIdData(response.data.data);
         } else {
           console.log("noData");
           setMessage("");
