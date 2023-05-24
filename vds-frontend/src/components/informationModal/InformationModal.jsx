@@ -29,11 +29,11 @@ const InformationModal = (props) => {
         if (res.data && res.status) {
           if (res.data.message === "success") {
             console.log("200");
-            setMessage(` Welcome Mr. ${data.givenNames} ${data.familyName}, you are checked in for 
+            setMessage(` Welcome ${data.givenNames} ${data.familyName}, you are checked in for 
             your ${time} appointment.`);
           } else if (res.data.message === "duplicate") {
             console.log("409");
-            setMessage(` Welcome Mr. ${data.givenNames} ${data.familyName}, we
+            setMessage(` Welcome ${data.givenNames} ${data.familyName}, we
               could find an appointment for you, you are checked in to the
               walk-in line ${time}.`);
           } else {
