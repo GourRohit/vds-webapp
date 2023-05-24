@@ -14,8 +14,8 @@ class Settings extends Component {
   };
 
   componentDidMount = () => {
-    this.getReaderinfo(false)
-  }
+    this.getReaderinfo(false);
+  };
 
   getReaderinfo = (isData) => {
     axios
@@ -63,7 +63,7 @@ class Settings extends Component {
       });
   };
   handleRadioBtn = (e) => {
-    let deviceMode = e.target.value; 
+    let deviceMode = e.target.value;
     confirmAlert({
       title: "Do you want to switch to " + `${e.target.value}`,
       buttons: [
@@ -80,7 +80,9 @@ class Settings extends Component {
   };
   clearData = () => {
     axios
-      .delete("http://ec2-15-206-123-117.ap-south-1.compute.amazonaws.com:3000/data")
+      .delete(
+        "http://ec2-15-206-123-117.ap-south-1.compute.amazonaws.com:3000/data"
+      )
       .then((res) => {
         if (res.status) {
           alert(res.data.message);
@@ -192,7 +194,7 @@ class Settings extends Component {
                     <strong>Device Info:</strong>
                     <Button
                       className="info-btn"
-                      onClick={()=>this.getReaderinfo(true)}
+                      onClick={() => this.getReaderinfo(true)}
                       variant={
                         this.state.deviceStatus === "CONNECTED_AOA_MODE"
                           ? "primary"
@@ -206,7 +208,8 @@ class Settings extends Component {
                 </Col>
               </Row>
               <Row className={this.state.isData ? "info-box" : ""}>
-                {this.state.deviceStatus === "CONNECTED_AOA_MODE" ? (
+                {this.state.deviceStatus === "CONNECTED_AOA_MODE" &&
+                this.state.isData ? (
                   <Col md={6}>
                     {Object.keys(this.state.readerData).map((item, i) => (
                       <Row className="reader-info">
