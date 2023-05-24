@@ -19,7 +19,7 @@ const InformationModal = (props) => {
       documentNumber: docNumber,
     };
     console.log("document no", docNumber);
-    await axios
+    return await axios
       .post(
         "http://ec2-15-206-123-117.ap-south-1.compute.amazonaws.com:3000/data",
         idData
@@ -37,8 +37,8 @@ const InformationModal = (props) => {
         return "failed";
       });
   }
-  async function getIdentityInfo() {
-    await axios
+  function getIdentityInfo() {
+    axios
       .get("http://localhost:8081/verifier-sdk/identity/info")
       .then((response) => {
         if (response.data) {
