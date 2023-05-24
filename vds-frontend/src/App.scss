@@ -6,6 +6,7 @@
   height: 4.6875rem;
   width: 100%;
   .navBar-linkwrap {
+    margin-left: 220px;
     width: 65%;
     justify-content: space-around;
     .mid-logo {
@@ -137,13 +138,17 @@ button.btn-secondary:disabled {
 }
 .device-status {
   margin-top: 165px;
-}
-.setting-label {
-  margin-top: 25px;
+  margin-bottom: 30px;
 }
 .text-align-left {
   margin-top: 25px;
 }
 .reader-info-btn {
   margin-top: 160px;
+}
+.container {
+  margin-top: 165px;
+}
+.btn-row {
+  margin-bottom: 40px;
 }

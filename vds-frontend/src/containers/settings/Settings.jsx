@@ -135,7 +135,7 @@ class Settings extends Component {
               </Row>
               <Row>
                 <Col md={3}>
-                  <p className="setting-label">
+                  <p>
                     <strong>Device Mode :</strong>
                   </p>
                 </Col>
@@ -198,7 +198,7 @@ class Settings extends Component {
               </Row>
             </Col>
             <Col md={6}>
-              <Row>
+              <Row className="btn-row">
                 <Col md={7} className="reader-info-btn">
                   <Button
                     className="info-btn"
@@ -213,14 +213,15 @@ class Settings extends Component {
                     Fetch Reader Info
                   </Button>
                 </Col>
-                <Col md={5} style={{ marginTop: "160px" }}>
+                <Col md={5}>
                   <Button variant="primary" onClick={this.handleClearBtn}>
                     Clear Data
                   </Button>
                 </Col>
               </Row>
               <Row className={this.state.isData ? "info-box" : ""}>
-                {this.state.deviceStatus === "CONNECTED_AOA_MODE" ? (
+                {this.state.deviceStatus === "CONNECTED_AOA_MODE" &&
+                this.state.isData ? (
                   <Col md={12}>
                     <Table hover size="sm">
                       <tbody>
