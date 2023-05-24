@@ -80,12 +80,14 @@ class Dashboard extends Component {
     return (
       <>
         <Header></Header>
-        <InformationModal
-          show={this.state.showModal}
-          modalclose={this.handleModal}
-          isMobileDLCheck={this.state.isMdL}
-          message={this.state.message}
-        ></InformationModal>
+        {this.state.showModal && (
+          <InformationModal
+            show={this.state.showModal}
+            modalclose={this.handleModal}
+            isMobileDLCheck={this.state.isMdL}
+            message={this.state.message}
+          ></InformationModal>
+        )}
         <div className="page-container">
           <p>Welcome to Mocktana Department of Motor Vehicles </p>
           <div className="button-wrap">
