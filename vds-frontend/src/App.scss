@@ -134,9 +134,29 @@ button.btn-secondary:disabled {
   justify-content: space-evenly;
   margin: 25px 0;
 }
+.name-wrap {
+  display: flex;
+  justify-content: space-around;
+  margin: 25px;
+}
+.qr-verification-text {
+  margin-left: 17px;
+  font-size: 26px;
+}
+.nfc-verification-text {
+  margin-right: 15px;
+  font-size: 26px;
+}
+.physical-verification {
+  margin-top: 20px;
+  font-size: 26px;
+  display: flex;
+  justify-content: center;
+}
 .message-wrap {
   text-align: center;
-  margin-top: 10%;
+  margin-top: 5%;
+  margin-bottom: 5%;
   font-size: 28px;
   color: red;
 }
@@ -155,4 +175,10 @@ button.btn-secondary:disabled {
 }
 .btn-row {
   margin-bottom: 40px;
+}
+.done-btn {
+  display: flex;
+  justify-content: center;
+  margin-right: 30px;
+  margin-bottom: 10px;
 }
