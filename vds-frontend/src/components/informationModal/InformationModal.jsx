@@ -5,6 +5,7 @@ import moment from "moment";
 import QRGIF1 from "../../assets/images/Verification_using_QR.gif";
 import QRGIF2 from "../../assets/images/Verification_using_NFC.gif";
 import physicalIMG from "../../assets/images/DL_Scan_Back.png";
+import { Button } from "react-bootstrap";
 
 const InformationModal = (props) => {
   const [message, setMessage] = useState("");
@@ -28,20 +29,16 @@ const InformationModal = (props) => {
         console.log("response from saveData", res);
         if (res.data && res.status) {
           if (res.data.message === "success") {
-            console.log("200");
             setMessage(` Welcome ${data.givenNames} ${data.familyName}, you are checked in for 
             your ${time} appointment.`);
           } else if (res.data.message === "duplicate") {
-            console.log("409");
             setMessage(` Welcome ${data.givenNames} ${data.familyName}, we
               could find an appointment for you, you are checked in to the
               walk-in line ${time}.`);
           } else {
-            console.log("No response from db");
             setMessage("");
           }
         }
-        console.log("here");
       })
       .catch((err) => {
         console.error("error response", err);
@@ -53,14 +50,10 @@ const InformationModal = (props) => {
       .get("http://localhost:8081/verifier-sdk/identity/info")
       .then((response) => {
         if (response.data) {
-          console.log("Response received from identity info API");
-
           //setCurrentTime = time;
           //setDocNumber(response.data.data.documentNumber);
-          console.log("from Identityinfo", response.data.data.documentNumber);
           saveIdData(response.data.data);
         } else {
-          console.log("noData");
           setMessage("");
         }
       })
@@ -74,6 +67,7 @@ const InformationModal = (props) => {
       show={props.show}
       onHide={props.modalclose}
       aria-labelledby="example-modal-sizes-title-lg"
+      centered
     >
       <Modal.Header closeButton>
         <Modal.Title id="example-modal-sizes-title-lg">
@@ -87,21 +81,52 @@ const InformationModal = (props) => {
           {props.isMobileDLCheck ? (
             <>
               <div className="image-wrap">
-                <img src={QRGIF1}></img>
-                <img src={QRGIF2}></img>
+                <img src={QRGIF1} alt="qr-gif"></img>
+                <img src={QRGIF2} alt="nfc-gif"></img>
+              </div>
+              <div className="name-wrap">
+                <h3 className="qr-verification-text">QR Verification</h3>
+                <h3 className="nfc-verification-text">NFC Verification</h3>
               </div>
               <div className="message-wrap">
                 <p>{message}</p>
+              </div>
+              <div className="done-btn">
+                <Button
+                  size="lg"
+                  variant={message ? "primary" : "secondary"}
+                  disabled={!message}
+                  onClick={() => props.modalclose(false)}
+                >
+                  Done
+                </Button>
               </div>
             </>
           ) : (
             <>
               <div className="modal-wrap">
                 <div className="image-wrap">
-                  <img className="plImg" src={physicalIMG}></img>
+                  <img
+                    className="plImg"
+                    src={physicalIMG}
+                    alt="physicalImg"
+                  ></img>
+                </div>
+                <div className="physical-verification">
+                  <h3>Physical Verification</h3>
                 </div>
                 <div className="message-wrap">
                   <p>{message}</p>
+                </div>
+                <div className="done-btn">
+                  <Button
+                    size="lg"
+                    variant={message ? "primary" : "secondary"}
+                    disabled={!message}
+                    onClick={() => props.modalclose(false)}
+                  >
+                    Done
+                  </Button>
                 </div>
               </div>
             </>
