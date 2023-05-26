@@ -56,9 +56,25 @@ class Settings extends Component {
           this.setState({
             deviceMode: value,
           });
+          confirmAlert({
+            title: "Device mode successfully changed",
+            buttons: [
+              {
+                label: "Ok",
+              },
+            ],
+          });
         }
       })
       .catch(function (error) {
+        confirmAlert({
+          title: "Failed to change device mode",
+          buttons: [
+            {
+              label: "Ok",
+            },
+          ],
+        });
         console.log(error);
       });
   };

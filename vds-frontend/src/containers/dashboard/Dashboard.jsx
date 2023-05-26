@@ -29,13 +29,22 @@ class Dashboard extends Component {
   };
 
   componentDidMount = () => {
-    this.getDeviceinfo();
-    var time = moment().add(30, "m").format("LT");
+    this.getDeviceMode();
+  };
+
+  componentDidMount = () => {
+    this.inerval = setInterval(() => {
+      this.getDeviceStatus();
+    }, 5000);
+  };
+
+  componentDidMount = () => {
     if (this.state.deviceMode === "ID_READ_EVENT_DRIVEN") {
       const sse = new EventSource(
         "http://localhost:8081/verifier-sdk/sse/read"
       );
-      sse.addEventListener("SCANNED_DATA", function (e) {
+      sse.onmessage = function (e) {
+        let time = moment().add(30, "m").format("LT");
         //console.log(e.data);
         if (e.data) {
           this.setState({
@@ -45,20 +54,86 @@ class Dashboard extends Component {
             lastName: e.data.data.familyName,
             docNumber: e.data.data.documentNumber,
           });
-          //this.saveIdData();
+          this.saveIdData(e.data);
         }
-      });
+      };
+      sse.onerror = function () {
+        alert("Server connection closed");
+        sse.close();
+      };
     }
   };
 
-  getDeviceinfo = () => {
+  saveIdData(data) {
+    const idData = {
+      documentNumber: data.data.documentNumber,
+    };
+    axios
+      .post(
+        "http://ec2-15-206-123-117.ap-south-1.compute.amazonaws.com:3000/data",
+        idData
+      )
+      .then((res) => {
+        console.log("response from saveData", res);
+        if (res.data && res.status) {
+          if (res.data.message === "success") {
+            this.setState({
+              message: ` Welcome ${data.givenNames} ${data.familyName}, you are checked in for 
+            your ${data.time} appointment.`,
+            });
+          } else if (res.data.message === "duplicate") {
+            this.setState({
+              message: ` Welcome ${data.givenNames} ${data.familyName}, we
+              could find an appointment for you, you are checked in to the
+              walk-in line ${data.time}.`,
+            });
+          } else if (res.data.message === "Generic Error") {
+            this.setState({
+              message: "Verification failed. Please try again after some time",
+            });
+          } else if (
+            res.data.message ===
+            "Service busy with another operation, try after sometime"
+          ) {
+            this.setState({
+              message:
+                "Service is busy with another operation. Please try after sometime",
+            });
+          } else {
+            this.setState({
+              message: "",
+            });
+          }
+        }
+      })
+      .catch((err) => {
+        console.error("error response", err);
+        return "failed";
+      });
+  }
+
+  getDeviceMode = () => {
     axios
       .get("http://localhost:8081/verifier-sdk/reader/info")
       .then((response) => {
         if (response.data && response.status) {
           this.setState({
-            deviceStatus: response.data.deviceState,
             deviceMode: response.data.usbMode,
+          });
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  getDeviceStatus = () => {
+    axios
+      .get("http://localhost:8081/verifier-sdk/reader/connection/status")
+      .then((response) => {
+        if (response.data && response.status) {
+          this.setState({
+            deviceStatus: response.data.deviceState,
           });
         }
       })
@@ -120,6 +195,9 @@ class Dashboard extends Component {
                 ? "Please switch the device to “autonomous or host trigger mode” to start scanning"
                 : ""}
             </p>
+          </div>
+          <div>
+            <p>{this.state.message}</p>
           </div>
         </div>
       </>

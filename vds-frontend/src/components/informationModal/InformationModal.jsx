@@ -35,6 +35,15 @@ const InformationModal = (props) => {
             setMessage(` Welcome ${data.givenNames} ${data.familyName}, we
               could find an appointment for you, you are checked in to the
               walk-in line ${time}.`);
+          } else if (res.data.message === "Generic Error") {
+            setMessage("Verification failed. Please try again after some time");
+          } else if (
+            res.data.message ===
+            "Service busy with another operation, try after sometime"
+          ) {
+            setMessage(
+              "Service is busy with another operation. Please try after sometime"
+            );
           } else {
             setMessage("");
           }
@@ -72,7 +81,7 @@ const InformationModal = (props) => {
       <Modal.Header closeButton>
         <Modal.Title id="example-modal-sizes-title-lg">
           {props.isMobileDLCheck
-            ? "Check in with Mobile DL"
+            ? "Follow instructions to complete ID verification"
             : "Check In with Physical DL"}
         </Modal.Title>
       </Modal.Header>
@@ -89,7 +98,7 @@ const InformationModal = (props) => {
                 <h3 className="nfc-verification-text">NFC Verification</h3>
               </div>
               <div className="message-wrap">
-                <p>{message}</p>
+                <p>{!message ? "Please wait..." : message}</p>
               </div>
               <div className="done-btn">
                 <Button
@@ -116,7 +125,7 @@ const InformationModal = (props) => {
                   <h3>Physical Verification</h3>
                 </div>
                 <div className="message-wrap">
-                  <p>{message}</p>
+                  <p>{!message ? "Please wait..." : message}</p>
                 </div>
                 <div className="done-btn">
                   <Button
