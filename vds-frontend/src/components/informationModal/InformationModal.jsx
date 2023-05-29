@@ -6,6 +6,7 @@ import QRGIF1 from "../../assets/images/Verification_using_QR.gif";
 import QRGIF2 from "../../assets/images/Verification_using_NFC.gif";
 import physicalIMG from "../../assets/images/DL_Scan_Back.png";
 import { Button } from "react-bootstrap";
+import { awsUrl } from "../../UrlConfig";
 
 const InformationModal = (props) => {
   const [message, setMessage] = useState("");
@@ -16,13 +17,13 @@ const InformationModal = (props) => {
   }, []);
 
   function saveIdData(data) {
-    var time = moment().add(30, "m").format("LT");
+    let time = moment().add(30, "m").format("LT");
     const idData = {
       documentNumber: data.documentNumber,
     };
     axios
       .post(
-        "http://ec2-15-206-123-117.ap-south-1.compute.amazonaws.com:3000/data",
+        `${awsUrl}/data`,
         idData
       )
       .then((res) => {

@@ -5,6 +5,7 @@ import axios from "axios";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import Table from "react-bootstrap/Table";
+import { awsUrl } from "../../UrlConfig";
 class Settings extends Component {
   state = {
     deviceStatus: "",
@@ -112,7 +113,7 @@ class Settings extends Component {
   clearData = () => {
     axios
       .delete(
-        "http://ec2-15-206-123-117.ap-south-1.compute.amazonaws.com:3000/data"
+        `${awsUrl}/data`
       )
       .then((res) => {
         if (res.status) {

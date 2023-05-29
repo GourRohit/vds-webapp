@@ -4,6 +4,7 @@ import { Button } from "react-bootstrap";
 import axios from "axios";
 import moment from "moment";
 import InformationModal from "../../components/informationModal/InformationModal";
+import { awsUrl } from "../../UrlConfig";
 //import { Container } from "react-bootstrap";
 
 class Dashboard extends Component {
@@ -70,7 +71,7 @@ class Dashboard extends Component {
     };
     axios
       .post(
-        "http://ec2-15-206-123-117.ap-south-1.compute.amazonaws.com:3000/data",
+        `${awsUrl}/data`,
         idData
       )
       .then((res) => {
