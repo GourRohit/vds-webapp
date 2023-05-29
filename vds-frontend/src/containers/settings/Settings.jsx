@@ -82,7 +82,7 @@ class Settings extends Component {
   handleRadioBtn = (e) => {
     let deviceMode = e.target.value;
     confirmAlert({
-      title: "Do you want to switch to " + `${e.target.value}`,
+      title: `Do you want to switch to ${e.target.value}`,
       buttons: [
         {
           label: "Yes",
@@ -112,9 +112,7 @@ class Settings extends Component {
   };
   clearData = () => {
     axios
-      .delete(
-        `${awsUrl}/data`
-      )
+      .delete(`${awsUrl}/data`)
       .then((res) => {
         if (res.status) {
           confirmAlert({
@@ -178,6 +176,7 @@ class Settings extends Component {
                     id="iddriven"
                     name="mode"
                     value="ID_READ_EVENT_DRIVEN"
+                    disabled={this.state.deviceStatus !== "CONNECTED_AOA_MODE"}
                     checked={
                       this.state.deviceMode === "ID_READ_EVENT_DRIVEN" &&
                       "checked"
@@ -193,6 +192,7 @@ class Settings extends Component {
                     id="usbdriven"
                     name="mode"
                     value="USB_EVENT_DRIVEN"
+                    disabled={this.state.deviceStatus !== "CONNECTED_AOA_MODE"}
                     checked={
                       this.state.deviceMode === "USB_EVENT_DRIVEN" && "checked"
                     }
@@ -207,6 +207,7 @@ class Settings extends Component {
                     id="stand"
                     name="mode"
                     value="STANDALONE"
+                    disabled={this.state.deviceStatus !== "CONNECTED_AOA_MODE"}
                     checked={
                       this.state.deviceMode === "STANDALONE" && "checked"
                     }
@@ -221,6 +222,7 @@ class Settings extends Component {
                     id="eseek"
                     name="mode"
                     value="E-SEEK"
+                    disabled={this.state.deviceStatus !== "CONNECTED_AOA_MODE"}
                     checked={this.state.deviceMode === "E-SEEK" && "checked"}
                     onClick={(e) => this.handleRadioBtn(e)}
                   />

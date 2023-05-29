@@ -44,7 +44,7 @@ class Dashboard extends Component {
       const sse = new EventSource(
         "http://localhost:8081/verifier-sdk/sse/read"
       );
-      sse.onmessage = function (e) {
+      sse.addEventListener("SCANNED_DATA", function (e) {
         let time = moment().add(30, "m").format("LT");
         //console.log(e.data);
         if (e.data) {
@@ -57,7 +57,7 @@ class Dashboard extends Component {
           });
           this.saveIdData(e.data);
         }
-      };
+      });
       sse.onerror = function () {
         alert("Server connection closed");
         sse.close();
@@ -70,10 +70,7 @@ class Dashboard extends Component {
       documentNumber: data.data.documentNumber,
     };
     axios
-      .post(
-        `${awsUrl}/data`,
-        idData
-      )
+      .post(`${awsUrl}/data`, idData)
       .then((res) => {
         console.log("response from saveData", res);
         if (res.data && res.status) {
@@ -85,20 +82,7 @@ class Dashboard extends Component {
           } else if (res.data.message === "duplicate") {
             this.setState({
               message: ` Welcome ${data.givenNames} ${data.familyName}, we
-              could find an appointment for you, you are checked in to the
-              walk-in line ${data.time}.`,
-            });
-          } else if (res.data.message === "Generic Error") {
-            this.setState({
-              message: "Verification failed. Please try again after some time",
-            });
-          } else if (
-            res.data.message ===
-            "Service busy with another operation, try after sometime"
-          ) {
-            this.setState({
-              message:
-                "Service is busy with another operation. Please try after sometime",
+              could find that you are already checked in.`,
             });
           } else {
             this.setState({
@@ -108,8 +92,11 @@ class Dashboard extends Component {
         }
       })
       .catch((err) => {
-        console.error("error response", err);
-        return "failed";
+        this.setState({
+          message: `Failed to checkin. Error received: ${err}`,
+        });
+        // console.error("error response", err);
+        // return "failed";
       });
   }
 

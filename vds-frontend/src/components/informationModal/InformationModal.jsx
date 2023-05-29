@@ -22,10 +22,7 @@ const InformationModal = (props) => {
       documentNumber: data.documentNumber,
     };
     axios
-      .post(
-        `${awsUrl}/data`,
-        idData
-      )
+      .post(`${awsUrl}/data`, idData)
       .then((res) => {
         console.log("response from saveData", res);
         if (res.data && res.status) {
@@ -36,23 +33,15 @@ const InformationModal = (props) => {
             setMessage(` Welcome ${data.givenNames} ${data.familyName}, we
               could find an appointment for you, you are checked in to the
               walk-in line ${time}.`);
-          } else if (res.data.message === "Generic Error") {
-            setMessage("Verification failed. Please try again after some time");
-          } else if (
-            res.data.message ===
-            "Service busy with another operation, try after sometime"
-          ) {
-            setMessage(
-              "Service is busy with another operation. Please try after sometime"
-            );
           } else {
             setMessage("");
           }
         }
       })
       .catch((err) => {
-        console.error("error response", err);
-        return "failed";
+        setMessage("Failed to checking. Error received: ", err);
+        // console.error("error response", err);
+        // return "failed";
       });
   }
   function getIdentityInfo() {
