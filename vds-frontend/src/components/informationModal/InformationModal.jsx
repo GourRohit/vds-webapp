@@ -33,8 +33,7 @@ const InformationModal = (props) => {
             your ${time} appointment.`);
           } else if (res.data.message === "duplicate") {
             setMessage(` Welcome ${data.givenNames} ${data.familyName}, we
-              could find an appointment for you, you are checked in to the
-              walk-in line ${time}.`);
+              could find that you are already checked in.`);
           } else {
             setMessage("");
           }
