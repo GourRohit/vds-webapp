@@ -6,9 +6,11 @@ import QRGIF2 from "../../assets/images/Verification_using_NFC.gif";
 import physicalIMG from "../../assets/images/DL_Scan_Back.png";
 import { Button } from "react-bootstrap";
 import { saveIdData } from "../../utils/SaveIdData";
+import Loader from "./Loader";
 
 const InformationModal = (props) => {
   const [message, setMessage] = useState("");
+  let isLoading = true;
 
   useEffect(() => {
     getIdentityInfo();
@@ -19,6 +21,7 @@ const InformationModal = (props) => {
       .get("http://localhost:8081/verifier-sdk/identity/info")
       .then((response) => {
         if (response.data) {
+          isLoading =  false;
           let messageResponse = saveIdData(response.data.data);
           setMessage(messageResponse);
         } else {
@@ -57,13 +60,13 @@ const InformationModal = (props) => {
                 <h3 className="nfc-verification-text">NFC Verification</h3>
               </div>
               <div className="message-wrap">
-                <p>{!message ? "Please wait..." : message}</p>
+              <p>{isLoading ? <Loader /> : message}</p>
               </div>
               <div className="done-btn">
                 <Button
                   size="lg"
-                  variant={message ? "primary" : "secondary"}
-                  disabled={!message}
+                  variant={!isLoading ? "primary" : "secondary"}
+                  disabled={isLoading}
                   onClick={() => props.modalclose(false)}
                 >
                   Done
@@ -84,7 +87,7 @@ const InformationModal = (props) => {
                   <h3>Physical Verification</h3>
                 </div>
                 <div className="message-wrap">
-                  <p>{!message ? "Please wait..." : message}</p>
+                  <p>{isLoading ? <Loader /> : message}</p>
                 </div>
                 <div className="done-btn">
                   <Button

@@ -3,6 +3,7 @@ import moment from "moment";
 import { API_URL } from "../UrlConfig";
 
 export function saveIdData(data) {
+  console.log("In Save ID Data method")
   let message = "";
   let time = moment().add(30, "m").format("LT");
   const idData = {
@@ -16,6 +17,7 @@ export function saveIdData(data) {
         if (res.data.message === "success") {
           message = ` Welcome ${data.givenNames} ${data.familyName}, you are checked in for 
             your ${data.time} appointment.`;
+            console.log("MESSAGE FROM SAVE_ID_DATA", message)
           return message;
         } else if (res.data.message === "duplicate") {
           message = ` Welcome ${data.givenNames} ${data.familyName}, we
