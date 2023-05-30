@@ -5,7 +5,7 @@ import axios from "axios";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import Table from "react-bootstrap/Table";
-import { awsUrl } from "../../UrlConfig";
+import { API_URL } from "../../UrlConfig";
 class Settings extends Component {
   state = {
     deviceStatus: "",
@@ -90,7 +90,6 @@ class Settings extends Component {
         },
         {
           label: "No",
-          //onClick: () => alert('Click No')
         },
       ],
     });
@@ -105,14 +104,13 @@ class Settings extends Component {
         },
         {
           label: "No",
-          //onClick: () => alert('Click No')
         },
       ],
     });
   };
   clearData = () => {
     axios
-      .delete(`${awsUrl}/data`)
+      .delete(`${API_URL}/data`)
       .then((res) => {
         if (res.status) {
           confirmAlert({

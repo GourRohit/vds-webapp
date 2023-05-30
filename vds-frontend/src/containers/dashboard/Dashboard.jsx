@@ -2,10 +2,9 @@ import React, { Component } from "react";
 import Header from "../header/Header";
 import { Button } from "react-bootstrap";
 import axios from "axios";
-import moment from "moment";
 import InformationModal from "../../components/informationModal/InformationModal";
-import { awsUrl } from "../../UrlConfig";
-//import { Container } from "react-bootstrap";
+import { saveIdData } from "../../utils/SaveIdData";
+let INTERVAL = null;
 
 class Dashboard extends Component {
   state = {
@@ -31,31 +30,20 @@ class Dashboard extends Component {
 
   componentDidMount = () => {
     this.getDeviceMode();
-  };
-
-  componentDidMount = () => {
-    this.inerval = setInterval(() => {
+    INTERVAL = setInterval(() => {
       this.getDeviceStatus();
     }, 5000);
-  };
-
-  componentDidMount = () => {
     if (this.state.deviceMode === "ID_READ_EVENT_DRIVEN") {
       const sse = new EventSource(
         "http://localhost:8081/verifier-sdk/sse/read"
       );
       sse.addEventListener("SCANNED_DATA", function (e) {
-        let time = moment().add(30, "m").format("LT");
-        //console.log(e.data);
         if (e.data) {
+          let messageResponse = saveIdData(e.data);
           this.setState({
             recievedIdentityInfo: true,
-            currentTime: time,
-            firstName: e.data.data.givenNames,
-            lastName: e.data.data.familyName,
-            docNumber: e.data.data.documentNumber,
+            message: messageResponse
           });
-          this.saveIdData(e.data);
         }
       });
       sse.onerror = function () {
@@ -64,41 +52,6 @@ class Dashboard extends Component {
       };
     }
   };
-
-  saveIdData(data) {
-    const idData = {
-      documentNumber: data.data.documentNumber,
-    };
-    axios
-      .post(`${awsUrl}/data`, idData)
-      .then((res) => {
-        console.log("response from saveData", res);
-        if (res.data && res.status) {
-          if (res.data.message === "success") {
-            this.setState({
-              message: ` Welcome ${data.givenNames} ${data.familyName}, you are checked in for 
-            your ${data.time} appointment.`,
-            });
-          } else if (res.data.message === "duplicate") {
-            this.setState({
-              message: ` Welcome ${data.givenNames} ${data.familyName}, we
-              could find that you are already checked in.`,
-            });
-          } else {
-            this.setState({
-              message: "",
-            });
-          }
-        }
-      })
-      .catch((err) => {
-        this.setState({
-          message: `Failed to checkin. Error received: ${err}`,
-        });
-        // console.error("error response", err);
-        // return "failed";
-      });
-  }
 
   getDeviceMode = () => {
     axios

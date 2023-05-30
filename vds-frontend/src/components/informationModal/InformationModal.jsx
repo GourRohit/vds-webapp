@@ -1,56 +1,26 @@
 import React, { useState, useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
 import axios from "axios";
-import moment from "moment";
 import QRGIF1 from "../../assets/images/Verification_using_QR.gif";
 import QRGIF2 from "../../assets/images/Verification_using_NFC.gif";
 import physicalIMG from "../../assets/images/DL_Scan_Back.png";
 import { Button } from "react-bootstrap";
-import { awsUrl } from "../../UrlConfig";
+import { saveIdData } from "../../utils/SaveIdData";
 
 const InformationModal = (props) => {
   const [message, setMessage] = useState("");
-  // const [docNumber, setDocNumber] = useState("");
 
   useEffect(() => {
     getIdentityInfo();
   }, []);
 
-  function saveIdData(data) {
-    let time = moment().add(30, "m").format("LT");
-    const idData = {
-      documentNumber: data.documentNumber,
-    };
-    axios
-      .post(`${awsUrl}/data`, idData)
-      .then((res) => {
-        console.log("response from saveData", res);
-        if (res.data && res.status) {
-          if (res.data.message === "success") {
-            setMessage(` Welcome ${data.givenNames} ${data.familyName}, you are checked in for 
-            your ${time} appointment.`);
-          } else if (res.data.message === "duplicate") {
-            setMessage(` Welcome ${data.givenNames} ${data.familyName}, we
-              could find that you are already checked in.`);
-          } else {
-            setMessage("");
-          }
-        }
-      })
-      .catch((err) => {
-        setMessage("Failed to checking. Error received: ", err);
-        // console.error("error response", err);
-        // return "failed";
-      });
-  }
   function getIdentityInfo() {
     axios
       .get("http://localhost:8081/verifier-sdk/identity/info")
       .then((response) => {
         if (response.data) {
-          //setCurrentTime = time;
-          //setDocNumber(response.data.data.documentNumber);
-          saveIdData(response.data.data);
+          let messageResponse = saveIdData(response.data.data);
+          setMessage(messageResponse);
         } else {
           setMessage("");
         }
