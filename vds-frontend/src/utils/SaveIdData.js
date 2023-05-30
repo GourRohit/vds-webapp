@@ -1,6 +1,6 @@
 import axios from "axios";
 import moment from "moment";
-import { API_URL } from "../../UrlConfig";
+import { API_URL } from "../UrlConfig";
 
 export function saveIdData(data) {
   let message = "";
