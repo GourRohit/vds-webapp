@@ -27,8 +27,8 @@ class Dashboard extends Component {
       this.state.deviceMode === "USB_EVENT_DRIVEN"
     );
   };
-
   componentDidMount = () => {
+    console.log("device mode", this.state.deviceMode);
     this.getDeviceMode();
     INTERVAL = setInterval(() => {
       this.getDeviceStatus();
