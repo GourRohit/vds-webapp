@@ -5,6 +5,7 @@ import axios from "axios";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import Table from "react-bootstrap/Table";
+import { API_URL } from "../../UrlConfig";
 class Settings extends Component {
   state = {
     deviceStatus: "",
@@ -56,16 +57,32 @@ class Settings extends Component {
           this.setState({
             deviceMode: value,
           });
+          confirmAlert({
+            title: "Device mode successfully changed",
+            buttons: [
+              {
+                label: "Ok",
+              },
+            ],
+          });
         }
       })
       .catch(function (error) {
+        confirmAlert({
+          title: "Failed to change device mode",
+          buttons: [
+            {
+              label: "Ok",
+            },
+          ],
+        });
         console.log(error);
       });
   };
   handleRadioBtn = (e) => {
     let deviceMode = e.target.value;
     confirmAlert({
-      title: "Do you want to switch to " + `${e.target.value}`,
+      title: `Do you want to switch to ${e.target.value}`,
       buttons: [
         {
           label: "Yes",
@@ -73,7 +90,6 @@ class Settings extends Component {
         },
         {
           label: "No",
-          //onClick: () => alert('Click No')
         },
       ],
     });
@@ -88,16 +104,13 @@ class Settings extends Component {
         },
         {
           label: "No",
-          //onClick: () => alert('Click No')
         },
       ],
     });
   };
   clearData = () => {
     axios
-      .delete(
-        "http://ec2-15-206-123-117.ap-south-1.compute.amazonaws.com:3000/data"
-      )
+      .delete(`${API_URL}/data`)
       .then((res) => {
         if (res.status) {
           confirmAlert({
@@ -161,6 +174,7 @@ class Settings extends Component {
                     id="iddriven"
                     name="mode"
                     value="ID_READ_EVENT_DRIVEN"
+                    disabled={this.state.deviceStatus !== "CONNECTED_AOA_MODE"}
                     checked={
                       this.state.deviceMode === "ID_READ_EVENT_DRIVEN" &&
                       "checked"
@@ -176,6 +190,7 @@ class Settings extends Component {
                     id="usbdriven"
                     name="mode"
                     value="USB_EVENT_DRIVEN"
+                    disabled={this.state.deviceStatus !== "CONNECTED_AOA_MODE"}
                     checked={
                       this.state.deviceMode === "USB_EVENT_DRIVEN" && "checked"
                     }
@@ -190,6 +205,7 @@ class Settings extends Component {
                     id="stand"
                     name="mode"
                     value="STANDALONE"
+                    disabled={this.state.deviceStatus !== "CONNECTED_AOA_MODE"}
                     checked={
                       this.state.deviceMode === "STANDALONE" && "checked"
                     }
@@ -204,6 +220,7 @@ class Settings extends Component {
                     id="eseek"
                     name="mode"
                     value="E-SEEK"
+                    disabled={this.state.deviceStatus !== "CONNECTED_AOA_MODE"}
                     checked={this.state.deviceMode === "E-SEEK" && "checked"}
                     onClick={(e) => this.handleRadioBtn(e)}
                   />

@@ -30,18 +30,18 @@ function createDatabase() {
   });
 }
 
-createTables = () => {
+const createTables = () => {
   db.serialize(() => {
-    db.run("CREATE TABLE CHECKIN_DATA (documentNumber TEXT)");
+    db.run("CREATE TABLE CHECKIN_DATA (documentNumber TEXT, appointmentTime TEXT)");
     console.log("sucessfully create table");
   });
 };
 
-function insertData(docNumber) {
+function insertData(data) {
   return new Promise(function (resolve, reject) {
     return db.run(
-      `INSERT INTO CHECKIN_DATA(documentNumber) VALUES(?)`,
-      [docNumber],
+      `INSERT INTO CHECKIN_DATA(documentNumber, appointmentTime) VALUES(?)`,
+      [data.docNumber, data.appointmentTime ],
       function (error) {
         if (error) {
           return reject(error);
@@ -65,7 +65,7 @@ function checkForDuplicateData(docNumber) {
         return reject(error);
       } else {
         if (rows.length > 0) {
-          return resolve(true);
+          return resolve([true, rows]);
         } else {
           return resolve(false);
         }
@@ -75,17 +75,19 @@ function checkForDuplicateData(docNumber) {
 }
 
 app.post("/data", async (req, res) => {
-  let message;
+  let message, appointmentTime;
   const data = {
     documentNumber: req.body.documentNumber,
+    appointmentTime: req.body.currentTime
   };
-  let isDuplicate = await checkForDuplicateData(data.documentNumber);
+  let [ isDuplicate, rows ] = await checkForDuplicateData(data.documentNumber);
   if (!isDuplicate) {
-    message = await insertData(data.documentNumber);
+    message = await insertData(data);
   } else {
     message = "duplicate";
+    appointmentTime = rows.appointmentTime
   }
-  res.json({ message: message });
+  res.json({ message: message, appointmentTime: appointmentTime });
 });
 function getdataFromDb() {
   return new Promise(function (resolve, reject) {

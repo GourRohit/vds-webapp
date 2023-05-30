@@ -1,57 +1,26 @@
 import React, { useState, useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
 import axios from "axios";
-import moment from "moment";
 import QRGIF1 from "../../assets/images/Verification_using_QR.gif";
 import QRGIF2 from "../../assets/images/Verification_using_NFC.gif";
 import physicalIMG from "../../assets/images/DL_Scan_Back.png";
 import { Button } from "react-bootstrap";
+import { saveIdData } from "../../utils/SaveIdData";
 
 const InformationModal = (props) => {
   const [message, setMessage] = useState("");
-  // const [docNumber, setDocNumber] = useState("");
 
   useEffect(() => {
     getIdentityInfo();
   }, []);
 
-  function saveIdData(data) {
-    var time = moment().add(30, "m").format("LT");
-    const idData = {
-      documentNumber: data.documentNumber,
-    };
-    axios
-      .post(
-        "http://ec2-15-206-123-117.ap-south-1.compute.amazonaws.com:3000/data",
-        idData
-      )
-      .then((res) => {
-        console.log("response from saveData", res);
-        if (res.data && res.status) {
-          if (res.data.message === "success") {
-            setMessage(` Welcome ${data.givenNames} ${data.familyName}, you are checked in for 
-            your ${time} appointment.`);
-          } else if (res.data.message === "duplicate") {
-            setMessage(` Welcome ${data.givenNames} ${data.familyName}, we
-              could find that you are already checked in.`);
-          } else {
-            setMessage("");
-          }
-        }
-      })
-      .catch((err) => {
-        console.error("error response", err);
-        return "failed";
-      });
-  }
   function getIdentityInfo() {
     axios
       .get("http://localhost:8081/verifier-sdk/identity/info")
       .then((response) => {
         if (response.data) {
-          //setCurrentTime = time;
-          //setDocNumber(response.data.data.documentNumber);
-          saveIdData(response.data.data);
+          let messageResponse = saveIdData(response.data.data);
+          setMessage(messageResponse);
         } else {
           setMessage("");
         }
@@ -71,7 +40,7 @@ const InformationModal = (props) => {
       <Modal.Header closeButton>
         <Modal.Title id="example-modal-sizes-title-lg">
           {props.isMobileDLCheck
-            ? "Check in with Mobile DL"
+            ? "Follow instructions to complete ID verification"
             : "Check In with Physical DL"}
         </Modal.Title>
       </Modal.Header>
@@ -88,7 +57,7 @@ const InformationModal = (props) => {
                 <h3 className="nfc-verification-text">NFC Verification</h3>
               </div>
               <div className="message-wrap">
-                <p>{message}</p>
+                <p>{!message ? "Please wait..." : message}</p>
               </div>
               <div className="done-btn">
                 <Button
@@ -115,7 +84,7 @@ const InformationModal = (props) => {
                   <h3>Physical Verification</h3>
                 </div>
                 <div className="message-wrap">
-                  <p>{message}</p>
+                  <p>{!message ? "Please wait..." : message}</p>
                 </div>
                 <div className="done-btn">
                   <Button

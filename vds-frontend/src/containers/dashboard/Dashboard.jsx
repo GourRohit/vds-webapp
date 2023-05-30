@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import Header from "../header/Header";
 import { Button } from "react-bootstrap";
 import axios from "axios";
-import moment from "moment";
 import InformationModal from "../../components/informationModal/InformationModal";
-//import { Container } from "react-bootstrap";
+import { saveIdData } from "../../utils/SaveIdData";
+let INTERVAL = null;
 
 class Dashboard extends Component {
   state = {
@@ -29,36 +29,52 @@ class Dashboard extends Component {
   };
 
   componentDidMount = () => {
-    this.getDeviceinfo();
-    var time = moment().add(30, "m").format("LT");
+    this.getDeviceMode();
+    INTERVAL = setInterval(() => {
+      this.getDeviceStatus();
+    }, 5000);
     if (this.state.deviceMode === "ID_READ_EVENT_DRIVEN") {
       const sse = new EventSource(
         "http://localhost:8081/verifier-sdk/sse/read"
       );
       sse.addEventListener("SCANNED_DATA", function (e) {
-        //console.log(e.data);
         if (e.data) {
+          let messageResponse = saveIdData(e.data);
           this.setState({
             recievedIdentityInfo: true,
-            currentTime: time,
-            firstName: e.data.data.givenNames,
-            lastName: e.data.data.familyName,
-            docNumber: e.data.data.documentNumber,
+            message: messageResponse
           });
-          //this.saveIdData();
         }
       });
+      sse.onerror = function () {
+        alert("Server connection closed");
+        sse.close();
+      };
     }
   };
 
-  getDeviceinfo = () => {
+  getDeviceMode = () => {
     axios
       .get("http://localhost:8081/verifier-sdk/reader/info")
       .then((response) => {
         if (response.data && response.status) {
           this.setState({
-            deviceStatus: response.data.deviceState,
             deviceMode: response.data.usbMode,
+          });
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  getDeviceStatus = () => {
+    axios
+      .get("http://localhost:8081/verifier-sdk/reader/connection/status")
+      .then((response) => {
+        if (response.data && response.status) {
+          this.setState({
+            deviceStatus: response.data.deviceState,
           });
         }
       })
@@ -120,6 +136,9 @@ class Dashboard extends Component {
                 ? "Please switch the device to “autonomous or host trigger mode” to start scanning"
                 : ""}
             </p>
+          </div>
+          <div>
+            <p>{this.state.message}</p>
           </div>
         </div>
       </>
