@@ -34,12 +34,15 @@ class Dashboard extends Component {
       this.getDeviceStatus();
     }, 5000);
     if (this.state.deviceMode === "ID_READ_EVENT_DRIVEN") {
+      console.log("in ID_EVENT_DRIVEN_IF")
       const sse = new EventSource(
         "http://localhost:8081/verifier-sdk/sse/read"
       );
+      console.log("SSE response", sse)
       sse.addEventListener("SCANNED_DATA", function (e) {
         if (e.data) {
           let messageResponse = saveIdData(e.data);
+          console.log("MESSAGE_RESPONSE", messageResponse)
           this.setState({
             recievedIdentityInfo: true,
             message: messageResponse
