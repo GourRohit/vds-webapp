@@ -28,11 +28,11 @@ class Dashboard extends Component {
     );
   };
   componentDidMount = () => {
-    console.log("device mode", this.state.deviceMode);
     this.getDeviceMode();
     INTERVAL = setInterval(() => {
       this.getDeviceStatus();
     }, 5000);
+    console.log("device mode", this.state.deviceMode);
     if (this.state.deviceMode === "ID_READ_EVENT_DRIVEN") {
       console.log("in ID_EVENT_DRIVEN_IF")
       const sse = new EventSource(
