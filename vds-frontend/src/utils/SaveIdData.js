@@ -3,11 +3,11 @@ import moment from "moment";
 import { API_URL } from "../UrlConfig";
 
 export function saveIdData(data) {
-  console.log("In Save ID Data method")
+  console.log("In Save ID Data method", data)
   let message = "";
   let time = moment().add(30, "m").format("LT");
   const idData = {
-    documentNumber: data.data.documentNumber,
+    documentNumber: data.documentNumber,
     currentTime: time
   };
   axios
