@@ -28,10 +28,51 @@ class Dashboard extends Component {
     );
   };
   componentDidMount = () => {
-    this.getDeviceMode();
-    INTERVAL = setInterval(() => {
-      this.getDeviceStatus();
+    this.getDeviceInfo();
+  };
+
+  getDeviceInfo = async() => {
+    await this.getDeviceMode();
+    INTERVAL = setInterval(async() => {
+    await this.getDeviceStatus();
     }, 5000);
+    await this.serverSentEvents();
+  }
+
+  getDeviceMode = () => {
+    axios
+      .get("http://localhost:8081/verifier-sdk/reader/info")
+      .then((response) => {
+        if (response.data && response.status) {
+          console.log("Response.data device mode", response.data)
+          console.log("Response.data.usb device mode", response.data.usbMode)
+          this.setState({
+            deviceMode: response.data.usbMode,
+          });
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  getDeviceStatus = () => {
+    axios
+      .get("http://localhost:8081/verifier-sdk/reader/connection/status")
+      .then((response) => {
+        if (response.data && response.status) {
+          console.log("Device status if", response.data.deviceState)
+          this.setState({
+            deviceStatus: response.data.deviceState,
+          });
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  serverSentEvents = () => {
     console.log("device mode", this.state.deviceMode);
     if (this.state.deviceMode === "ID_READ_EVENT_DRIVEN") {
       console.log("in ID_EVENT_DRIVEN_IF")
@@ -54,37 +95,7 @@ class Dashboard extends Component {
         sse.close();
       };
     }
-  };
-
-  getDeviceMode = () => {
-    axios
-      .get("http://localhost:8081/verifier-sdk/reader/info")
-      .then((response) => {
-        if (response.data && response.status) {
-          this.setState({
-            deviceMode: response.data.usbMode,
-          });
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
-
-  getDeviceStatus = () => {
-    axios
-      .get("http://localhost:8081/verifier-sdk/reader/connection/status")
-      .then((response) => {
-        if (response.data && response.status) {
-          this.setState({
-            deviceStatus: response.data.deviceState,
-          });
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
+  }
 
   getIdentityInfo = (isMdl) => {
     this.setState({ isMdL: isMdl });
