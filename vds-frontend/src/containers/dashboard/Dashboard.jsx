@@ -90,6 +90,9 @@ class Dashboard extends Component {
         alert("Server connection closed");
         sse.close();
       };
+      return () => {
+        sse.close();
+      };
   }
 
   getIdentityInfo = (isMdl) => {

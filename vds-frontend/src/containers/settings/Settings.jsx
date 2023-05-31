@@ -54,7 +54,7 @@ class Settings extends Component {
       })
       .then((response) => {
         console.log("console from change mode response")
-        if (response.data && response.status) {
+        if (response.status) {
           console.log("console from response.data and status")
           this.setState({
             deviceMode: value,
