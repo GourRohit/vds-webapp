@@ -41,7 +41,7 @@ function insertData(data) {
   return new Promise(function (resolve, reject) {
     return db.run(
       `INSERT INTO CHECKIN_DATA(documentNumber, appointmentTime) VALUES(?)`,
-      [data.docNumber, data.appointmentTime ],
+      [data.documentNumber, data.appointmentTime ],
       function (error) {
         if (error) {
           return reject(error);

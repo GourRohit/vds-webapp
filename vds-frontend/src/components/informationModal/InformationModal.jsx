@@ -21,6 +21,7 @@ const InformationModal = (props) => {
       .get("http://localhost:8081/verifier-sdk/identity/info")
       .then((response) => {
         if (response.data) {
+          console.log("response.data.data", response.data)
           isLoading =  false;
           let messageResponse = saveIdData(response.data.data);
           setMessage(messageResponse);

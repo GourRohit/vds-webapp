@@ -36,7 +36,6 @@ class Dashboard extends Component {
     INTERVAL = setInterval(async() => {
     await this.getDeviceStatus();
     }, 5000);
-    await this.serverSentEvents();
   }
 
   getDeviceMode = () => {
@@ -44,8 +43,6 @@ class Dashboard extends Component {
       .get("http://localhost:8081/verifier-sdk/reader/info")
       .then((response) => {
         if (response.data && response.status) {
-          console.log("Response.data device mode", response.data)
-          console.log("Response.data.usb device mode", response.data.usbMode)
           this.setState({
             deviceMode: response.data.usbMode,
           });
@@ -54,6 +51,7 @@ class Dashboard extends Component {
       .catch((error) => {
         console.error(error);
       });
+      this.serverSentEvents();
   };
 
   getDeviceStatus = () => {
@@ -61,7 +59,6 @@ class Dashboard extends Component {
       .get("http://localhost:8081/verifier-sdk/reader/connection/status")
       .then((response) => {
         if (response.data && response.status) {
-          console.log("Device status if", response.data.deviceState)
           this.setState({
             deviceStatus: response.data.deviceState,
           });
@@ -74,13 +71,12 @@ class Dashboard extends Component {
 
   serverSentEvents = () => {
     console.log("device mode", this.state.deviceMode);
-    if (this.state.deviceMode === "ID_READ_EVENT_DRIVEN") {
-      console.log("in ID_EVENT_DRIVEN_IF")
       const sse = new EventSource(
         "http://localhost:8081/verifier-sdk/sse/read"
       );
       console.log("SSE response", sse)
       sse.addEventListener("SCANNED_DATA", function (e) {
+        console.log("from add event listener e.data", e.data)
         if (e.data) {
           let messageResponse = saveIdData(e.data);
           console.log("MESSAGE_RESPONSE", messageResponse)
@@ -94,7 +90,6 @@ class Dashboard extends Component {
         alert("Server connection closed");
         sse.close();
       };
-    }
   }
 
   getIdentityInfo = (isMdl) => {
