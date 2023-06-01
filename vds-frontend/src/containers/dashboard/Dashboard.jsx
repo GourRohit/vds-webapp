@@ -28,15 +28,12 @@ class Dashboard extends Component {
     );
   };
   componentDidMount = () => {
-    this.getDeviceInfo();
-  };
-
-  getDeviceInfo = async() => {
-    await this.getDeviceMode();
-    INTERVAL = setInterval(async() => {
-    await this.getDeviceStatus();
+    this.getDeviceMode();
+    INTERVAL = setInterval(() => {
+      this.getDeviceStatus();
     }, 5000);
-  }
+    this.serverSentEvents();
+  };
 
   getDeviceMode = () => {
     axios
@@ -51,7 +48,6 @@ class Dashboard extends Component {
       .catch((error) => {
         console.error(error);
       });
-      this.serverSentEvents();
   };
 
   getDeviceStatus = () => {
@@ -71,29 +67,41 @@ class Dashboard extends Component {
 
   serverSentEvents = () => {
     console.log("device mode", this.state.deviceMode);
-      const sse = new EventSource(
-        "http://localhost:8081/verifier-sdk/sse/read"
-      );
-      console.log("SSE response", sse)
-      sse.addEventListener("SCANNED_DATA", function (e) {
-        console.log("from add event listener e.data", e.data)
-        if (e.data) {
-          let messageResponse = saveIdData(e.data);
-          console.log("MESSAGE_RESPONSE", messageResponse)
+    const sse = new EventSource("http://localhost:8081/verifier-sdk/sse/read", {
+      withCredentials: true,
+    });
+    console.log("SSE response", sse);
+    sse.onopen = function () {
+      alert("Connection started")
+    }
+    sse.addEventListener(
+      "SCANNED_DATA",
+      function (e) {
+        console.log("from add event listener e.data", e.data);
+        let obj = JSON.parse(e.data);
+        let pretty = JSON.stringify(obj, undefined, 4);
+        document.getElementById("idInfo").value = pretty;
+        console.log("Data parsed from sse", obj);
+
+        if (obj) {
+          let messageResponse = saveIdData(obj);
+          console.log("MESSAGE_RESPONSE", messageResponse);
           this.setState({
             recievedIdentityInfo: true,
-            message: messageResponse
+            message: messageResponse,
           });
         }
-      });
-      sse.onerror = function () {
-        alert("Server connection closed");
-        sse.close();
-      };
-      return () => {
-        sse.close();
-      };
-  }
+      },
+      false
+    );
+    sse.onerror = function () {
+      alert("Server connection closed");
+      sse.close();
+    };
+    return () => {
+      sse.close();
+    };
+  };
 
   getIdentityInfo = (isMdl) => {
     this.setState({ isMdL: isMdl });
