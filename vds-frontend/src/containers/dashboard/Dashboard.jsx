@@ -32,7 +32,9 @@ class Dashboard extends Component {
     INTERVAL = setInterval(() => {
       this.getDeviceStatus();
     }, 5000);
-    this.serverSentEvents();
+    setTimeout(() => {
+      this.serverSentEvents();
+    }, 6000)
   };
 
   getDeviceMode = () => {
@@ -67,21 +69,20 @@ class Dashboard extends Component {
 
   serverSentEvents = () => {
     console.log("device mode", this.state.deviceMode);
-    const sse = new EventSource("http://localhost:8081/verifier-sdk/sse/read", {
-      withCredentials: true,
-    });
-    console.log("SSE response", sse);
-    sse.onopen = function () {
-      alert("Connection started")
-    }
-    sse.addEventListener(
-      "SCANNED_DATA",
-      function (e) {
+      const sse = new EventSource(
+        "http://localhost:8081/verifier-sdk/sse/read",
+        {
+          withCredentials: true,
+        }
+      );
+      console.log("SSE response", sse);
+      sse.onmessage = function (e) {
         console.log("from add event listener e.data", e.data);
         let obj = JSON.parse(e.data);
+        console.log("parsed e.data obj", obj)
         let pretty = JSON.stringify(obj, undefined, 4);
+        console.log("stringify pretty", pretty)
         document.getElementById("idInfo").value = pretty;
-        console.log("Data parsed from sse", obj);
 
         if (obj) {
           let messageResponse = saveIdData(obj);
@@ -91,16 +92,11 @@ class Dashboard extends Component {
             message: messageResponse,
           });
         }
-      },
-      false
-    );
-    sse.onerror = function () {
-      alert("Server connection closed");
-      sse.close();
-    };
-    return () => {
-      sse.close();
-    };
+      };
+      sse.onerror = function () {
+        alert("Server connection closed");
+        sse.close();
+      };
   };
 
   getIdentityInfo = (isMdl) => {
