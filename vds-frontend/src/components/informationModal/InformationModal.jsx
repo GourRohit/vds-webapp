@@ -41,12 +41,14 @@ const InformationModal = (props) => {
         }
       })
       .catch((err) => {
-        message = `Failed to checkin. Error received: ${err}`;
+        setIsLoading(false)
+        message = "Failed to checkin. Error received"
         setMessage(message);
       });
   }
 
   function getIdentityInfo() {
+    let message = "";
     axios
       .get("http://localhost:8081/verifier-sdk/identity/info")
       .then((response) => {
@@ -58,7 +60,9 @@ const InformationModal = (props) => {
         }
       })
       .catch((error) => {
-        console.error(error);
+        setIsLoading(false)
+        message = "Failed to checkin. Error received"
+        setMessage(message)
       });
   }
   return (
