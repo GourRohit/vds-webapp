@@ -14,7 +14,9 @@ export function saveIdData(data) {
     .post(`${API_URL}/data`, idData)
     .then((res) => {
       if (res.data && res.status) {
+        console.log("IN SAVE DATA IF RESPONSE")
         if (res.data.message === "success") {
+          console.log("IN SAVE DATA SUCCESS")
           message = ` Welcome ${data.givenNames} ${data.familyName}, you are checked in for 
             your ${data.time} appointment.`;
             console.log("MESSAGE FROM SAVE_ID_DATA", message)

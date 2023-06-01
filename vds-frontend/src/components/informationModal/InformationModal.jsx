@@ -10,7 +10,7 @@ import Loader from "./Loader";
 
 const InformationModal = (props) => {
   const [message, setMessage] = useState("");
-  let isLoading = true;
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     getIdentityInfo();
@@ -21,8 +21,8 @@ const InformationModal = (props) => {
       .get("http://localhost:8081/verifier-sdk/identity/info")
       .then((response) => {
         if (response.data) {
-          console.log("response.data.data", response.data)
-          isLoading =  false;
+          console.log("response.data", response.data);
+          setIsLoading(false);
           let messageResponse = saveIdData(response.data.data);
           setMessage(messageResponse);
         } else {
@@ -61,7 +61,7 @@ const InformationModal = (props) => {
                 <h3 className="nfc-verification-text">NFC Verification</h3>
               </div>
               <div className="message-wrap">
-              <p>{isLoading ? <Loader /> : message}</p>
+                <p>{isLoading ? <Loader /> : message}</p>
               </div>
               <div className="done-btn">
                 <Button
@@ -93,8 +93,8 @@ const InformationModal = (props) => {
                 <div className="done-btn">
                   <Button
                     size="lg"
-                    variant={message ? "primary" : "secondary"}
-                    disabled={!message}
+                    variant={!isLoading ? "primary" : "secondary"}
+                    disabled={isLoading}
                     onClick={() => props.modalclose(false)}
                   >
                     Done

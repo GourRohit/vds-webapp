@@ -40,7 +40,7 @@ const createTables = () => {
 function insertData(data) {
   return new Promise(function (resolve, reject) {
     return db.run(
-      `INSERT INTO CHECKIN_DATA(documentNumber, appointmentTime) VALUES(?)`,
+      `INSERT INTO CHECKIN_DATA(documentNumber, appointmentTime) VALUES(?,?)`,
       [data.documentNumber, data.appointmentTime ],
       function (error) {
         if (error) {
@@ -56,7 +56,7 @@ function insertData(data) {
 function checkForDuplicateData(docNumber) {
   return new Promise(function (resolve, reject) {
     var query =
-      "SELECT documentNumber FROM CHECKIN_DATA  WHERE documentNumber = " +
+      "SELECT documentNumber, appointmentTime FROM CHECKIN_DATA  WHERE documentNumber = " +
       "'" +
       docNumber +
       "'";
@@ -65,7 +65,7 @@ function checkForDuplicateData(docNumber) {
         return reject(error);
       } else {
         if (rows.length > 0) {
-          return resolve([true, rows]);
+          return resolve(rows);
         } else {
           return resolve(false);
         }
@@ -80,12 +80,12 @@ app.post("/data", async (req, res) => {
     documentNumber: req.body.documentNumber,
     appointmentTime: req.body.currentTime
   };
-  let [ isDuplicate, rows ] = await checkForDuplicateData(data.documentNumber);
-  if (!isDuplicate) {
+  let rows = await checkForDuplicateData(data.documentNumber);
+  if (!rows.length > 0) {
     message = await insertData(data);
   } else {
     message = "duplicate";
-    appointmentTime = rows.appointmentTime
+    appointmentTime = rows[0].appointmentTime
   }
   res.json({ message: message, appointmentTime: appointmentTime });
 });
