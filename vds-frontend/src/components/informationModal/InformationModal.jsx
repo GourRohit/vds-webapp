@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
 import axios from "axios";
+import moment from "moment";
+import { API_URL } from "../../UrlConfig";
 import QRGIF1 from "../../assets/images/Verification_using_QR.gif";
 import QRGIF2 from "../../assets/images/Verification_using_NFC.gif";
 import physicalIMG from "../../assets/images/DL_Scan_Back.png";
 import { Button } from "react-bootstrap";
-import { saveIdData } from "../../utils/SaveIdData";
 import Loader from "./Loader";
 
 const InformationModal = (props) => {
@@ -16,15 +17,42 @@ const InformationModal = (props) => {
     getIdentityInfo();
   }, []);
 
+  function saveIdData(data) {
+    let message = "";
+    let time = moment().add(30, "m").format("LT");
+    const idData = {
+      documentNumber: data.documentNumber,
+      currentTime: time,
+    };
+    axios
+      .post(`${API_URL}/data`, idData)
+      .then((res) => {
+        if (res.data && res.status) {
+          if (res.data.message === "success") {
+            message = ` Welcome ${data.givenNames} ${data.familyName}, you are checked in for 
+              your ${time} appointment.`;
+            setMessage(message);
+          } else if (res.data.message === "duplicate") {
+            message = ` Welcome ${data.givenNames} ${data.familyName}, we
+                could find that you are already checked in for appointment at ${res.data.appointmentTime}`;
+            setMessage(message);
+          }
+          setMessage(message);
+        }
+      })
+      .catch((err) => {
+        message = `Failed to checkin. Error received: ${err}`;
+        setMessage(message);
+      });
+  }
+
   function getIdentityInfo() {
     axios
       .get("http://localhost:8081/verifier-sdk/identity/info")
       .then((response) => {
         if (response.data) {
-          console.log("response.data", response.data);
           setIsLoading(false);
-          let messageResponse = saveIdData(response.data.data);
-          setMessage(messageResponse);
+          saveIdData(response.data.data);
         } else {
           setMessage("");
         }

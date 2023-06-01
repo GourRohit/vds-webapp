@@ -3,7 +3,6 @@ import Header from "../header/Header";
 import { Button } from "react-bootstrap";
 import axios from "axios";
 import InformationModal from "../../components/informationModal/InformationModal";
-import { saveIdData } from "../../utils/SaveIdData";
 let INTERVAL = null;
 
 class Dashboard extends Component {
@@ -32,9 +31,9 @@ class Dashboard extends Component {
     INTERVAL = setInterval(() => {
       this.getDeviceStatus();
     }, 5000);
-    setTimeout(() => {
-      this.serverSentEvents();
-    }, 6000)
+    // setTimeout(() => {
+    //   this.serverSentEvents();
+    // }, 6000)
   };
 
   getDeviceMode = () => {
@@ -67,37 +66,37 @@ class Dashboard extends Component {
       });
   };
 
-  serverSentEvents = () => {
-    console.log("device mode", this.state.deviceMode);
-      const sse = new EventSource(
-        "http://localhost:8081/verifier-sdk/sse/read",
-        {
-          withCredentials: true,
-        }
-      );
-      console.log("SSE response", sse);
-      sse.onmessage = function (e) {
-        console.log("from add event listener e.data", e.data);
-        let obj = JSON.parse(e.data);
-        console.log("parsed e.data obj", obj)
-        let pretty = JSON.stringify(obj, undefined, 4);
-        console.log("stringify pretty", pretty)
-        document.getElementById("idInfo").value = pretty;
+  // serverSentEvents = () => {
+  //   console.log("device mode", this.state.deviceMode);
+  //     const sse = new EventSource(
+  //       "http://localhost:8081/verifier-sdk/sse/read",
+  //       {
+  //         withCredentials: true,
+  //       }
+  //     );
+  //     console.log("SSE response", sse);
+  //     sse.onmessage = function (e) {
+  //       console.log("from add event listener e.data", e.data);
+  //       let obj = JSON.parse(e.data);
+  //       console.log("parsed e.data obj", obj)
+  //       let pretty = JSON.stringify(obj, undefined, 4);
+  //       console.log("stringify pretty", pretty)
+  //       document.getElementById("idInfo").value = pretty;
 
-        if (obj) {
-          let messageResponse = saveIdData(obj);
-          console.log("MESSAGE_RESPONSE", messageResponse);
-          this.setState({
-            recievedIdentityInfo: true,
-            message: messageResponse,
-          });
-        }
-      };
-      sse.onerror = function () {
-        alert("Server connection closed");
-        sse.close();
-      };
-  };
+  //       if (obj) {
+  //         let messageResponse = saveIdData(obj);
+  //         console.log("MESSAGE_RESPONSE", messageResponse);
+  //         this.setState({
+  //           recievedIdentityInfo: true,
+  //           message: messageResponse,
+  //         });
+  //       }
+  //     };
+  //     sse.onerror = function () {
+  //       alert("Server connection closed");
+  //       sse.close();
+  //     };
+  // };
 
   getIdentityInfo = (isMdl) => {
     this.setState({ isMdL: isMdl });

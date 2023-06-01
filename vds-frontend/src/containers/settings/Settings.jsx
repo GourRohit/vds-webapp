@@ -53,9 +53,7 @@ class Settings extends Component {
         },
       })
       .then((response) => {
-        console.log("console from change mode response")
         if (response.status) {
-          console.log("console from response.data and status")
           this.setState({
             deviceMode: value,
           });
@@ -71,7 +69,6 @@ class Settings extends Component {
         }
       })
       .catch(function (error) {
-        console.log("console from change mode error")
         confirmAlert({
           title: "Failed to change device mode",
           buttons: [
