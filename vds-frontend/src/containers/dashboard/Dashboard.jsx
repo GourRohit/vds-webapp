@@ -36,7 +36,7 @@ class Dashboard extends Component {
     INTERVAL = setInterval(() => {
       this.getDeviceStatus();
     }, 5000);
-      this.serverSentEvents();
+    this.serverSentEvents();
   };
 
   getDeviceMode = () => {
@@ -70,6 +70,7 @@ class Dashboard extends Component {
   };
 
   saveIdData(data) {
+    console.log("From save id data", data);
     let time = moment().add(30, "m").format("LT");
     const idData = {
       documentNumber: data.documentNumber,
@@ -91,11 +92,12 @@ class Dashboard extends Component {
               message: ` Welcome ${data.givenNames} ${data.familyName}, we
                 could find that you are already checked in for appointment at ${res.data.appointmentTime}`,
             });
+          } else {
+            this.setState({
+              isLoading: false,
+              message: "",
+            });
           }
-          this.setState({
-            isLoading: false,
-            message: "",
-          });
         }
       })
       .catch((err) => {
@@ -111,7 +113,6 @@ class Dashboard extends Component {
       const sse = new EventSource(
         "http://localhost:8081/verifier-sdk/sse/read"
       );
-      console.log("SSE response", sse);
       sse.addEventListener(
         "SCANNED_DATA",
         (event) => {
@@ -121,7 +122,7 @@ class Dashboard extends Component {
             this.setState({
               recievedIdentityInfo: true,
             });
-            this.saveIdData(obj);
+            this.saveIdData(obj.data);
           }
         },
         false
@@ -152,6 +153,7 @@ class Dashboard extends Component {
     });
   };
   render() {
+    console.log("message from dashboard", this.state.message);
     return (
       <>
         <Header></Header>
