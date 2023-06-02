@@ -2,7 +2,10 @@ import React, { Component } from "react";
 import Header from "../header/Header";
 import { Button } from "react-bootstrap";
 import axios from "axios";
+import moment from "moment";
+import { API_URL } from "../../UrlConfig";
 import InformationModal from "../../components/informationModal/InformationModal";
+import Loader from "../../components/informationModal/Loader";
 let INTERVAL = null;
 
 class Dashboard extends Component {
@@ -18,6 +21,8 @@ class Dashboard extends Component {
     showModal: false,
     isMdL: false,
     message: "",
+    isLoading: true,
+    listening: false,
   };
 
   buttonEnabled = () => {
@@ -31,9 +36,7 @@ class Dashboard extends Component {
     INTERVAL = setInterval(() => {
       this.getDeviceStatus();
     }, 5000);
-    // setTimeout(() => {
-    //   this.serverSentEvents();
-    // }, 6000)
+      this.serverSentEvents();
   };
 
   getDeviceMode = () => {
@@ -66,37 +69,78 @@ class Dashboard extends Component {
       });
   };
 
-  // serverSentEvents = () => {
-  //   console.log("device mode", this.state.deviceMode);
-  //     const sse = new EventSource(
-  //       "http://localhost:8081/verifier-sdk/sse/read",
-  //       {
-  //         withCredentials: true,
-  //       }
-  //     );
-  //     console.log("SSE response", sse);
-  //     sse.onmessage = function (e) {
-  //       console.log("from add event listener e.data", e.data);
-  //       let obj = JSON.parse(e.data);
-  //       console.log("parsed e.data obj", obj)
-  //       let pretty = JSON.stringify(obj, undefined, 4);
-  //       console.log("stringify pretty", pretty)
-  //       document.getElementById("idInfo").value = pretty;
+  saveIdData(data) {
+    let time = moment().add(30, "m").format("LT");
+    const idData = {
+      documentNumber: data.documentNumber,
+      currentTime: time,
+    };
+    axios
+      .post(`${API_URL}/data`, idData)
+      .then((res) => {
+        if (res.data && res.status) {
+          if (res.data.message === "success") {
+            this.setState({
+              isLoading: false,
+              message: ` Welcome ${data.givenNames} ${data.familyName}, you are checked in for 
+              your ${time} appointment`,
+            });
+          } else if (res.data.message === "duplicate") {
+            this.setState({
+              isLoading: false,
+              message: ` Welcome ${data.givenNames} ${data.familyName}, we
+                could find that you are already checked in for appointment at ${res.data.appointmentTime}`,
+            });
+          }
+          this.setState({
+            isLoading: false,
+            message: "",
+          });
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          isLoading: false,
+          message: "Failed to checkin. Error received",
+        });
+      });
+  }
 
-  //       if (obj) {
-  //         let messageResponse = saveIdData(obj);
-  //         console.log("MESSAGE_RESPONSE", messageResponse);
-  //         this.setState({
-  //           recievedIdentityInfo: true,
-  //           message: messageResponse,
-  //         });
-  //       }
-  //     };
-  //     sse.onerror = function () {
-  //       alert("Server connection closed");
-  //       sse.close();
-  //     };
-  // };
+  serverSentEvents = () => {
+    if (!this.state.listening) {
+      const sse = new EventSource(
+        "http://localhost:8081/verifier-sdk/sse/read"
+      );
+      console.log("SSE response", sse);
+      sse.addEventListener(
+        "SCANNED_DATA",
+        (event) => {
+          let obj = JSON.parse(event.data);
+          console.log("parsed e.data obj", obj);
+          if (obj) {
+            this.setState({
+              recievedIdentityInfo: true,
+            });
+            this.saveIdData(obj);
+          }
+        },
+        false
+      );
+      sse.onerror = function (event) {
+        console.log(event.target.readyState);
+        if (event.target.readyState === EventSource.CLOSED) {
+          console.log("SSE closed (" + event.target.readyState + ")");
+        }
+        sse.close();
+      };
+      sse.onopen = (event) => {
+        console.log("connection opened");
+      };
+      this.setState({
+        listening: true,
+      });
+    }
+  };
 
   getIdentityInfo = (isMdl) => {
     this.setState({ isMdL: isMdl });
@@ -153,7 +197,7 @@ class Dashboard extends Component {
             </p>
           </div>
           <div>
-            <p>{this.state.message}</p>
+            <p>{this.state.isLoading ? <Loader /> : this.state.message}</p>
           </div>
         </div>
       </>
