@@ -1,1 +1,1 @@
-web: sudo vds-backend/index.js
+web: node vds-backend/index.js
