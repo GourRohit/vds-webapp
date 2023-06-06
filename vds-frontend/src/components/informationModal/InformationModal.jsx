@@ -44,7 +44,7 @@ const InformationModal = (props) => {
       .catch((err) => {
         setIsLoading(false);
         setIsError(true);
-        message = `Check-in failed showing ${err}`;
+        message = "Check-in Failed";
         setMessage(message);
       });
   }
@@ -64,7 +64,7 @@ const InformationModal = (props) => {
       .catch((error) => {
         setIsLoading(false);
         setIsError(true);
-        message = `Check-in failed showing ${error}`;
+        message = "Check-in Failed";
         setMessage(message);
       });
   }
