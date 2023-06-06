@@ -3,9 +3,11 @@ import Header from "../header/Header";
 import { Button } from "react-bootstrap";
 import axios from "axios";
 import moment from "moment";
-import { API_URL } from "../../UrlConfig";
+import { API_URL, VDS_URL } from "../../UrlConfig";
 import InformationModal from "../../components/informationModal/InformationModal";
-import Loader from "../../components/informationModal/Loader";
+import QRGIF1 from "../../assets/images/Verification_using_QR.gif";
+import QRGIF2 from "../../assets/images/Verification_using_NFC.gif";
+import physicalIMG from "../../assets/images/DL_Scan_Back.png";
 let INTERVAL = null;
 
 class Dashboard extends Component {
@@ -22,6 +24,7 @@ class Dashboard extends Component {
     isMdL: false,
     message: "",
     isLoading: true,
+    isError: false,
     listening: false,
   };
 
@@ -41,7 +44,7 @@ class Dashboard extends Component {
 
   getDeviceMode = () => {
     axios
-      .get("http://localhost:8081/verifier-sdk/reader/info")
+      .get(`${VDS_URL}/reader/info`)
       .then((response) => {
         if (response.data && response.status) {
           this.setState({
@@ -56,7 +59,7 @@ class Dashboard extends Component {
 
   getDeviceStatus = () => {
     axios
-      .get("http://localhost:8081/verifier-sdk/reader/connection/status")
+      .get(`${VDS_URL}/reader/connection/status`)
       .then((response) => {
         if (response.data && response.status) {
           this.setState({
@@ -83,7 +86,7 @@ class Dashboard extends Component {
           if (res.data.message === "success") {
             this.setState({
               isLoading: false,
-              message: ` Welcome ${data.givenNames} ${data.familyName}, you are checked in for 
+              message: ` Welcome ${data.givenNames} ${data.familyName}, you are checked in for
               your ${time} appointment`,
             });
           } else if (res.data.message === "duplicate") {
@@ -103,7 +106,8 @@ class Dashboard extends Component {
       .catch((err) => {
         this.setState({
           isLoading: false,
-          message: "Failed to checkin. Error received",
+          isError: true,
+          message: `Check-in Failed ${err}`,
         });
       });
   }
@@ -111,7 +115,7 @@ class Dashboard extends Component {
   serverSentEvents = () => {
     if (!this.state.listening) {
       const sse = new EventSource(
-        "http://localhost:8081/verifier-sdk/sse/read"
+        `${VDS_URL}/sse/read`
       );
       sse.addEventListener(
         "SCANNED_DATA",
@@ -167,28 +171,49 @@ class Dashboard extends Component {
         )}
         <div className="page-container">
           <p>Welcome to Mocktana Department of Motor Vehicles </p>
-          <div className="button-wrap">
-            <Button
-              variant={this.buttonEnabled() ? "primary" : "secondary"}
-              onClick={() => this.getIdentityInfo(false)}
-              disabled={!this.buttonEnabled()}
-              className="db-button"
-            >
-              Check in with <br /> <span className="big-text">Physical DL</span>
-            </Button>
-            <Button
-              variant={this.buttonEnabled() ? "primary" : "secondary"}
-              onClick={() => this.getIdentityInfo(true)}
-              disabled={!this.buttonEnabled()}
-              className="db-button"
-            >
-              Check in with <br /> <span className="big-text"> Mobile DL</span>
-            </Button>
-          </div>
+          {this.state.deviceMode !== "ID_READ_EVENT_DRIVEN" && (
+            <div className="button-wrap">
+              <Button
+                variant={this.buttonEnabled() ? "primary" : "secondary"}
+                onClick={() => this.getIdentityInfo(false)}
+                disabled={!this.buttonEnabled()}
+                className="db-button"
+              >
+                Check in with <br />{" "}
+                <span className="big-text">Physical DL</span>
+              </Button>
+              <Button
+                variant={this.buttonEnabled() ? "primary" : "secondary"}
+                onClick={() => this.getIdentityInfo(true)}
+                disabled={!this.buttonEnabled()}
+                className="db-button"
+              >
+                Check in with <br />{" "}
+                <span className="big-text"> Mobile DL</span>
+              </Button>
+            </div>
+          )}
+          {this.state.deviceMode === "ID_READ_EVENT_DRIVEN" && (
+            <>
+              <div className="dashboard-image-wrap">
+                <img className="dashboard-img" src={QRGIF1} alt="qr-gif"></img>
+                <img
+                  className="dashboard-img"
+                  src={physicalIMG}
+                  alt="physicalImg"
+                ></img>
+                <img className="dashboard-img" src={QRGIF2} alt="nfc-gif"></img>
+              </div>
+              <div className="dashboard-name-wrap">
+                <h3>QR Verification</h3>
+                <h3>Physical Verification</h3>
+                <h3>NFC Verification</h3>
+              </div>
+            </>
+          )}
           <div className="user-message-wrap">
-            <p className="error-msg">
               {this.state.deviceStatus === "NOT_CONNECTED"
-                ? "Please connect the device and try again."
+                ? <span className="error-msg">Please connect the device and try again</span>
                 : this.state.deviceStatus === "CONNECTED_AOA_MODE" &&
                   this.state.deviceMode === "ID_READ_EVENT_DRIVEN"
                 ? "Tap or scan your mobile DL or physical DL to check in"
@@ -196,10 +221,9 @@ class Dashboard extends Component {
                   this.state.deviceMode !== "USB_EVENT_DRIVEN"
                 ? "Please switch the device to “autonomous or host trigger mode” to start scanning"
                 : ""}
-            </p>
           </div>
           <div>
-            <p>{this.state.isLoading ? <Loader /> : this.state.message}</p>
+            <p className={this.state.isError && "error-msg"}>{this.state.message}</p>
           </div>
         </div>
       </>

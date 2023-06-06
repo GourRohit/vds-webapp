@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
 import axios from "axios";
 import moment from "moment";
-import { API_URL } from "../../UrlConfig";
+import { API_URL, VDS_URL } from "../../UrlConfig";
 import QRGIF1 from "../../assets/images/Verification_using_QR.gif";
 import QRGIF2 from "../../assets/images/Verification_using_NFC.gif";
 import physicalIMG from "../../assets/images/DL_Scan_Back.png";
@@ -12,6 +12,7 @@ import Loader from "./Loader";
 const InformationModal = (props) => {
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     getIdentityInfo();
@@ -41,8 +42,9 @@ const InformationModal = (props) => {
         }
       })
       .catch((err) => {
-        setIsLoading(false)
-        message = "Failed to checkin. Error received"
+        setIsLoading(false);
+        setIsError(true);
+        message = `Check-in failed showing ${err}`;
         setMessage(message);
       });
   }
@@ -50,7 +52,7 @@ const InformationModal = (props) => {
   function getIdentityInfo() {
     let message = "";
     axios
-      .get("http://localhost:8081/verifier-sdk/identity/info")
+      .get(`${VDS_URL}/identity/info`)
       .then((response) => {
         if (response.data) {
           setIsLoading(false);
@@ -60,9 +62,10 @@ const InformationModal = (props) => {
         }
       })
       .catch((error) => {
-        setIsLoading(false)
-        message = "Failed to checkin. Error received"
-        setMessage(message)
+        setIsLoading(false);
+        setIsError(true);
+        message = `Check-in failed showing ${error}`;
+        setMessage(message);
       });
   }
   return (
@@ -93,7 +96,9 @@ const InformationModal = (props) => {
                 <h3 className="nfc-verification-text">NFC Verification</h3>
               </div>
               <div className="message-wrap">
-                <p>{isLoading ? <Loader /> : message}</p>
+                <p className={isError && "error-msg"}>
+                  {isLoading ? <Loader /> : message}
+                </p>
               </div>
               <div className="done-btn">
                 <Button
@@ -120,7 +125,13 @@ const InformationModal = (props) => {
                   <h3>Physical Verification</h3>
                 </div>
                 <div className="message-wrap">
-                  <p>{isLoading ? <Loader /> : message}</p>
+                  <p className={isError && "error-msg"}>
+                    {isLoading ? (
+                      <span className="info-message">Please scan your ID</span>
+                    ) : (
+                      message
+                    )}
+                  </p>
                 </div>
                 <div className="done-btn">
                   <Button

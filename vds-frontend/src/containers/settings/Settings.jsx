@@ -5,7 +5,7 @@ import axios from "axios";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import Table from "react-bootstrap/Table";
-import { API_URL } from "../../UrlConfig";
+import { API_URL, VDS_URL } from "../../UrlConfig";
 class Settings extends Component {
   state = {
     deviceStatus: "",
@@ -20,7 +20,7 @@ class Settings extends Component {
 
   getReaderinfo = (isData) => {
     axios
-      .get("http://localhost:8081/verifier-sdk/reader/info")
+      .get(`${VDS_URL}/reader/info`)
       .then((response) => {
         if (response.data) {
           this.setState({
@@ -46,7 +46,7 @@ class Settings extends Component {
   };
   changeMode = (value) => {
     axios
-      .post("http://localhost:8081/verifier-sdk/reader/properties", {
+      .post(`${VDS_URL}/reader/properties`, {
         setting: "USB_mode",
         value: {
           mode: value,
@@ -142,6 +142,16 @@ class Settings extends Component {
         <Header />
         <Container>
           <Row>
+            <div className="settings-breadcrumb">
+              <ul class="breadcrumb">
+                <li>
+                  <a className="breadcrumb-text" href="/">Home</a>
+                </li>
+                <li>
+                  <a className="breadcrumb-text" href="/dashboard/settings">Settings</a>
+                </li>
+              </ul>
+            </div>
             <Col md={6}>
               <Row className="device-status">
                 <Col md={3}>
