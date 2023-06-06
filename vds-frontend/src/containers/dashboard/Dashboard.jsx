@@ -171,7 +171,7 @@ class Dashboard extends Component {
         )}
         <div className="page-container">
           <p>Welcome to Mocktana Department of Motor Vehicles </p>
-          {this.state.deviceMode === "USB_EVENT_DRIVEN" && (
+          {this.state.deviceMode !== "ID_READ_EVENT_DRIVEN" && (
             <div className="button-wrap">
               <Button
                 variant={this.buttonEnabled() ? "primary" : "secondary"}
