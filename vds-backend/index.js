@@ -115,7 +115,7 @@ app.delete("/data", async (req, res) => {
 // serve up production assets
 app.use(express.static("../vds-frontend/build"));
 
-app.get("*", (req, res) => {
+app.get("/", (req, res) => {
   res.sendFile(
     path.resolve(__dirname, "../vds-frontend", "build", "index.html")
   );
