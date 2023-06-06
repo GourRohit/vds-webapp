@@ -10,6 +10,8 @@ app.use(express.json());
 const sqlite3 = require("sqlite3").verbose();
 //const db = new sqlite3.Database(":memory:");
 
+// serve up production assets
+app.use(express.static("../vds-frontend/build"));
 
 let db = new sqlite3.Database("./vds.db", sqlite3.OPEN_READWRITE, (err) => {
   if (err && err.code == "SQLITE_CANTOPEN") {
@@ -113,14 +115,11 @@ app.delete("/data", async (req, res) => {
   });
 });
 
-app.get("/", (req, res) => {
+app.get("*", (req, res) => {
   res.sendFile(
     path.resolve(__dirname, "../vds-frontend", "build", "index.html")
   );
 });
-
-// serve up production assets
-app.use(express.static("../vds-frontend/build"));
 
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
