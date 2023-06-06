@@ -107,7 +107,7 @@ class Dashboard extends Component {
         this.setState({
           isLoading: false,
           isError: true,
-          message: `Check-in Failed ${err}`,
+          message: "Check-in Failed"
         });
       });
   }
@@ -218,8 +218,8 @@ class Dashboard extends Component {
                   this.state.deviceMode === "ID_READ_EVENT_DRIVEN"
                 ? "Tap or scan your mobile DL or physical DL to check in"
                 : this.state.deviceMode !== "ID_READ_EVENT_DRIVEN" &&
-                  this.state.deviceMode !== "USB_EVENT_DRIVEN"
-                ? "Please switch the device to “autonomous or host trigger mode” to start scanning"
+                  this.state.deviceMode !== "USB_EVENT_DRIVEN" && this.state.deviceStatus === "CONNECTED_AOA_MODE"
+                ? "Please change the device operation mode to activate reading"
                 : ""}
           </div>
           <div>
