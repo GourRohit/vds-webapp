@@ -10,6 +10,9 @@ app.use(express.json());
 const sqlite3 = require("sqlite3").verbose();
 //const db = new sqlite3.Database(":memory:");
 
+// serve up production assets
+app.use(express.static("../vds-frontend/build"));
+
 let db = new sqlite3.Database("./vds.db", sqlite3.OPEN_READWRITE, (err) => {
   if (err && err.code == "SQLITE_CANTOPEN") {
     createDatabase();
@@ -111,9 +114,6 @@ app.delete("/data", async (req, res) => {
     res.json({ message: "Successfully deleted checkin data" });
   });
 });
-
-// serve up production assets
-app.use(express.static("../vds-frontend/build"));
 
 app.get("*", (req, res) => {
   res.sendFile(
