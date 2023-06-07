@@ -26,7 +26,7 @@ const InformationModal = (props) => {
       currentTime: time,
     };
     axios
-      .post(`${API_URL}/data`, idData)
+      .post(`${API_URL}data`, idData)
       .then((res) => {
         if (res.data && res.status) {
           if (res.data.message === "success") {
@@ -92,11 +92,11 @@ const InformationModal = (props) => {
                 <img src={QRGIF2} alt="nfc-gif"></img>
               </div>
               <div className="name-wrap">
-                <h3 className="qr-verification-text">QR Verification</h3>
-                <h3 className="nfc-verification-text">NFC Verification</h3>
+                <h3 className="qr-verification-text">QR Code Presentation</h3>
+                <h3 className="nfc-verification-text">NFC Presentation</h3>
               </div>
               <div className="message-wrap">
-                <p className={isError && "error-msg"}>
+                <p className={isError ? "error-msg" : "info-message"}>
                   {isLoading ? <Loader /> : message}
                 </p>
               </div>
@@ -121,13 +121,10 @@ const InformationModal = (props) => {
                     alt="physicalImg"
                   ></img>
                 </div>
-                <div className="physical-verification">
-                  <h3>Physical Verification</h3>
-                </div>
                 <div className="message-wrap">
-                  <p className={isError && "error-msg"}>
+                  <p className={isError ? "error-msg" : "info-message"}>
                     {isLoading ? (
-                      <span className="info-message">Please scan your ID</span>
+                      <span>Please scan 2d barcode at the back of your DL</span>
                     ) : (
                       message
                     )}

@@ -111,7 +111,7 @@ class Settings extends Component {
   };
   clearData = () => {
     axios
-      .delete(`${API_URL}/data`)
+      .delete(`${API_URL}data`)
       .then((res) => {
         if (res.status) {
           confirmAlert({
