@@ -80,7 +80,7 @@ class Dashboard extends Component {
       currentTime: time,
     };
     axios
-      .post(`${API_URL}/data`, idData)
+      .post(`${API_URL}data`, idData)
       .then((res) => {
         if (res.data && res.status) {
           if (res.data.message === "success") {
@@ -205,9 +205,9 @@ class Dashboard extends Component {
                 <img className="dashboard-img" src={QRGIF2} alt="nfc-gif"></img>
               </div>
               <div className="dashboard-name-wrap">
-                <h3>QR Verification</h3>
-                <h3>Physical Verification</h3>
-                <h3>NFC Verification</h3>
+                <h3>QR Code Presentation</h3>
+                <h3>Physical ID Presentation</h3>
+                <h3>NFC Presentation</h3>
               </div>
             </>
           )}
@@ -223,7 +223,7 @@ class Dashboard extends Component {
                 : ""}
           </div>
           <div>
-            <p className={this.state.isError && "error-msg"}>{this.state.message}</p>
+            <p className={this.state.isError ? "error-msg" : "info-message"}>{this.state.message}</p>
           </div>
         </div>
       </>
