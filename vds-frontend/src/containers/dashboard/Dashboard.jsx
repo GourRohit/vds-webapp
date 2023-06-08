@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Navigate } from "react-router";
 import Header from "../header/Header";
 import { Button } from "react-bootstrap";
 import axios from "axios";
@@ -162,12 +163,7 @@ class Dashboard extends Component {
       <>
         <Header></Header>
         {this.state.showModal && (
-          <InformationModal
-            show={this.state.showModal}
-            modalclose={this.handleModal}
-            isMobileDLCheck={this.state.isMdL}
-            message={this.state.message}
-          ></InformationModal>
+          <Navigate to="/checkin" state={this.state}/>
         )}
         <div className="page-container">
           <p>Welcome to Mocktana Department of Motor Vehicles </p>

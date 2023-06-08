@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useLocation } from 'react-router-dom';
 import Modal from "react-bootstrap/Modal";
 import axios from "axios";
 import moment from "moment";
@@ -8,11 +9,16 @@ import QRGIF2 from "../../assets/images/Verification_using_NFC.gif";
 import physicalIMG from "../../assets/images/DL_Scan_Back.png";
 import { Button } from "react-bootstrap";
 import Loader from "./Loader";
+import Header from "../../containers/header/Header";
+import { Navigate } from "react-router";
+import CheckinMessage from "./CheckinMessage";
 
 const InformationModal = (props) => {
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
+  const location = useLocation();
+  const data = location.state;
 
   useEffect(() => {
     getIdentityInfo();
@@ -69,83 +75,71 @@ const InformationModal = (props) => {
       });
   }
   return (
-    <Modal
-      size="lg"
-      show={props.show}
-      onHide={props.modalclose}
-      aria-labelledby="example-modal-sizes-title-lg"
-      centered
-    >
-      <Modal.Header closeButton>
-        <Modal.Title id="example-modal-sizes-title-lg">
-          {props.isMobileDLCheck
-            ? "Follow instructions to complete ID verification"
-            : "Check In with Physical DL"}
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <div className="modal-wrap">
-          {props.isMobileDLCheck ? (
-            <>
-              <div className="image-wrap">
-                <img src={QRGIF1} alt="qr-gif"></img>
-                <img src={QRGIF2} alt="nfc-gif"></img>
-              </div>
-              <div className="name-wrap">
-                <h3 className="qr-verification-text">QR Code Presentation</h3>
-                <h3 className="nfc-verification-text">NFC Presentation</h3>
-              </div>
-              <div className="message-wrap">
-                <p className={isError ? "error-msg" : "info-message"}>
-                  {isLoading ? <Loader /> : message}
-                </p>
-              </div>
-              <div className="done-btn">
-                <Button
-                  size="lg"
-                  variant={!isLoading ? "primary" : "secondary"}
-                  disabled={isLoading}
-                  onClick={() => props.modalclose(false)}
-                >
-                  Done
-                </Button>
-              </div>
-            </>
-          ) : (
-            <>
-              <div className="modal-wrap">
-                <div className="image-wrap">
-                  <img
-                    className="plImg"
-                    src={physicalIMG}
-                    alt="physicalImg"
-                  ></img>
-                </div>
-                <div className="message-wrap">
-                  <p className={isError ? "error-msg" : "info-message"}>
-                    {isLoading ? (
-                      <span>Please scan 2d barcode at the back of your DL</span>
-                    ) : (
-                      message
-                    )}
-                  </p>
-                </div>
-                <div className="done-btn">
-                  <Button
-                    size="lg"
-                    variant={!isLoading ? "primary" : "secondary"}
-                    disabled={isLoading}
-                    onClick={() => props.modalclose(false)}
-                  >
-                    Done
-                  </Button>
-                </div>
-              </div>
-            </>
-          )}
+  <div className="information-modal">
+  <Header/>
+    {!props.isMobileDLCheck
+      ? <span className="information-modal-text-span">Follow instructions to complete ID verification</span>
+      : <span className="information-modal-text-span">Check In with Physical DL</span>
+      }
+    <div className="modal-wrap">
+    {!props.isMobileDLCheck ? (
+      <>
+        <div className="information-modal-image-wrap">
+          <img className="information-modal-image" src={QRGIF1} alt="qr-gif"></img>
+          <img className="information-modal-image" src={QRGIF2} alt="nfc-gif"></img>
         </div>
-      </Modal.Body>
-    </Modal>
+        <div className="information-modal-name-wrap">
+          <h3 className="information-modal-qr-verification-text">QR Code Presentation</h3>
+          <h3 className="information-modal-nfc-verification-text">NFC Presentation</h3>
+        </div>
+        <div className="message-wrap">
+          <p className={isError ? "error-msg" : "info-message"}>
+            {isLoading ? <Loader /> : message}
+          </p>
+        </div>
+        {/* <div className="done-btn">
+          <Button
+            size="lg"
+            variant={!isLoading ? "primary" : "secondary"}
+            disabled={isLoading}
+            onClick={() => props.modalclose(false)}
+          >
+            Done
+          </Button>
+        </div> */}
+      </>
+    ) : (
+      <>
+          <div className="information-modal-image-wrap">
+            <img
+              className="information-modal-image"
+              src={physicalIMG}
+              alt="physicalImg"
+            ></img>
+          </div>
+          <div className="message-wrap">
+            <p className={isError ? "error-msg" : "info-message"}>
+              {isLoading ? (
+                <span>Please scan 2d barcode at the back of your DL</span>
+              ) : (
+                message
+              )}
+            </p>
+          </div>
+          {/* <div className="done-btn">
+            <Button
+              size="lg"
+              variant={!isLoading ? "primary" : "secondary"}
+              disabled={isLoading}
+              onClick={() => props.modalclose(false)}
+            >
+              Done
+            </Button>
+          </div> */}
+      </>
+    )}
+  </div>
+  </div>
   );
 };
 export default InformationModal;
