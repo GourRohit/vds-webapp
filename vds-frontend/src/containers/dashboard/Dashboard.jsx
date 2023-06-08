@@ -215,20 +215,18 @@ class Dashboard extends Component {
             </>
           )}
           <div className="user-message-wrap">
-            {this.state.deviceStatus === "NOT_CONNECTED" ? (
-              <span className="error-msg">
-                Please connect the device and try again
-              </span>
-            ) : this.state.deviceStatus === "CONNECTED_AOA_MODE" &&
-              this.state.deviceMode === "ID_READ_EVENT_DRIVEN" ? (
-              "Tap or scan your mobile DL or physical DL to check in"
-            ) : this.state.deviceMode !== "ID_READ_EVENT_DRIVEN" &&
-              this.state.deviceMode !== "USB_EVENT_DRIVEN" &&
-              this.state.deviceStatus === "CONNECTED_AOA_MODE" ? (
-              "Please change the device operation mode to activate reading"
-            ) : (
-              ""
-            )}
+              {this.state.deviceStatus === "NOT_CONNECTED"
+                ? <span className="error-msg">Please connect the device and try again</span>
+                : this.state.deviceStatus === "CONNECTED_AOA_MODE" &&
+                  this.state.deviceMode === "ID_READ_EVENT_DRIVEN" && this.state.message === ""
+                ? "Tap or scan your mobile DL or physical DL to check in"
+                : this.state.deviceMode !== "ID_READ_EVENT_DRIVEN" &&
+                  this.state.deviceMode !== "USB_EVENT_DRIVEN" && this.state.deviceStatus === "CONNECTED_AOA_MODE"
+                ? "Please change the device operation mode to activate reading"
+                : ""}
+          </div>
+          <div>
+            <p className={this.state.isError ? "error-msg" : "info-message"}>{this.state.message}</p>
           </div>
         </div>
       </>
