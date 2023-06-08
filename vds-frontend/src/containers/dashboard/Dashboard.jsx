@@ -5,7 +5,6 @@ import { Button } from "react-bootstrap";
 import axios from "axios";
 import moment from "moment";
 import { API_URL, VDS_URL } from "../../UrlConfig";
-import InformationModal from "../../components/informationModal/InformationModal";
 import QRGIF1 from "../../assets/images/Verification_using_QR.gif";
 import QRGIF2 from "../../assets/images/Verification_using_NFC.gif";
 import physicalIMG from "../../assets/images/DL_Scan_Back.png";
@@ -13,8 +12,8 @@ let INTERVAL = null;
 
 class Dashboard extends Component {
   state = {
-    deviceMode: "USB_EVENT_DRIVEN",
-    deviceStatus: "CONNECTED_AOA_MODE",
+    deviceMode: "",
+    deviceStatus: "",
     recievedIdentityInfo: false,
     currentTime: null,
     firstName: "",
@@ -27,6 +26,7 @@ class Dashboard extends Component {
     isLoading: true,
     isError: false,
     listening: false,
+    checkinMessage: false,
   };
 
   buttonEnabled = () => {
@@ -74,10 +74,7 @@ class Dashboard extends Component {
   };
 
   saveIdData(data) {
-    console.log("From save id data", data);
-    let time = moment()
-      .add(30, "m")
-      .format("LT");
+    let time = moment().add(30, "m").format("LT");
     const idData = {
       documentNumber: data.documentNumber,
       currentTime: time,
@@ -112,6 +109,7 @@ class Dashboard extends Component {
           isError: true,
           message: "Check-in Failed",
         });
+        this.navigateToCheckinMessage(this.state.message);
       });
   }
 
@@ -122,17 +120,19 @@ class Dashboard extends Component {
         "SCANNED_DATA",
         (event) => {
           let obj = JSON.parse(event.data);
-          console.log("parsed e.data obj", obj);
           if (obj) {
             this.setState({
               recievedIdentityInfo: true,
             });
             this.saveIdData(obj.data);
+            setTimeout(() => {
+              this.navigateToCheckinMessage(this.state.message);
+            }, 5000);
           }
         },
         false
       );
-      sse.onerror = function(event) {
+      sse.onerror = function (event) {
         console.log(event.target.readyState);
         if (event.target.readyState === EventSource.CLOSED) {
           console.log("SSE closed (" + event.target.readyState + ")");
@@ -148,6 +148,13 @@ class Dashboard extends Component {
     }
   };
 
+  navigateToCheckinMessage(message) {
+    console.log("in navigate checkin message", message);
+    this.setState({
+      checkinMessage: true,
+    });
+  }
+
   getIdentityInfo = (isMdl) => {
     this.setState({ isMdL: isMdl });
     this.handleModal(true);
@@ -158,10 +165,12 @@ class Dashboard extends Component {
     });
   };
   render() {
-    console.log("message from dashboard", this.state.message);
     return (
       <>
         <Header></Header>
+        {this.state.checkinMessage ? (
+          <Navigate to="checkin/message" state={this.state.message} />
+        ) : null}
         {this.state.showModal && <Navigate to="/checkin" state={this.state} />}
         <div className="page-container">
           <p>Welcome to Mocktana Department of Motor Vehicles </p>
@@ -220,11 +229,6 @@ class Dashboard extends Component {
             ) : (
               ""
             )}
-          </div>
-          <div>
-            <p className={this.state.isError ? "error-msg" : "info-message"}>
-              {this.state.message}
-            </p>
           </div>
         </div>
       </>

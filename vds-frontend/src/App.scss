@@ -188,12 +188,6 @@ button.btn-secondary:disabled {
 .btn-row {
   margin-bottom: 40px;
 }
-.done-btn {
-  display: flex;
-  justify-content: center;
-  margin-right: 30px;
-  margin-bottom: 10px;
-}
 .info-message {
   color: black;
 }
@@ -244,4 +238,24 @@ ul.breadcrumb li a:hover {
 }
 .information-modal-qr-verification-text {
   margin-right: 130px;
+}
+.checkin-message {
+  display: flex;
+  justify-content: center;
+  margin-top: 30%;
+  font-family: sans-serif;
+  font-size: 200%;
+}
+.checkin-error-message {
+  display: flex;
+  justify-content: center;
+  margin-top: 30%;
+  font-family: sans-serif;
+  font-size: 200%;
+  color: red;
+}
+.done-btn {
+  display: flex;
+  justify-content: center;
+  margin-top: 5%;
 }

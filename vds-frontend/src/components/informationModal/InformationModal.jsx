@@ -1,33 +1,28 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import Modal from "react-bootstrap/Modal";
 import axios from "axios";
 import moment from "moment";
 import { API_URL, VDS_URL } from "../../UrlConfig";
 import QRGIF1 from "../../assets/images/Verification_using_QR.gif";
 import QRGIF2 from "../../assets/images/Verification_using_NFC.gif";
 import physicalIMG from "../../assets/images/DL_Scan_Back.png";
-import { Button } from "react-bootstrap";
 import Loader from "./Loader";
 import Header from "../../containers/header/Header";
 import { Navigate } from "react-router";
-import CheckinMessage from "./CheckinMessage";
 
-const InformationModal = (props) => {
+const InformationModal = () => {
   const [message, setMessage] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
-  const [isError, setIsError] = useState(false);
+  const [checkinMessage, setCheckinMessage] = useState(false);
   const location = useLocation();
   const data = location.state;
 
   useEffect(() => {
     getIdentityInfo();
   }, []);
+
   function saveIdData(data) {
     let message = "";
-    let time = moment()
-      .add(30, "m")
-      .format("LT");
+    let time = moment().add(30, "m").format("LT");
     const idData = {
       documentNumber: data.documentNumber,
       currentTime: time,
@@ -49,8 +44,6 @@ const InformationModal = (props) => {
         }
       })
       .catch((err) => {
-        setIsLoading(false);
-        setIsError(true);
         message = "Check-in Failed";
         setMessage(message);
       });
@@ -62,20 +55,23 @@ const InformationModal = (props) => {
       .get(`${VDS_URL}/identity/info`)
       .then((response) => {
         if (response.data) {
-          setIsLoading(false);
           saveIdData(response.data.data);
+          setTimeout(() => {
+            navigateToCheckinMessage();
+          }, 5000);
         } else {
           setMessage("");
         }
       })
       .catch((error) => {
-        setIsLoading(false);
-        setIsError(true);
         message = "Check-in Failed";
         setMessage(message);
+        navigateToCheckinMessage();
       });
   }
-  console.log("props", data.isMdL);
+  function navigateToCheckinMessage() {
+    setCheckinMessage(true);
+  }
   return (
     <div className="information-modal">
       <Header />
@@ -89,6 +85,7 @@ const InformationModal = (props) => {
         </span>
       )}
       <div className="modal-wrap">
+        {checkinMessage ? <Navigate to="message" state={message} /> : null}
         {data.isMdL ? (
           <>
             <div className="information-modal-image-wrap">
@@ -112,20 +109,10 @@ const InformationModal = (props) => {
               </h3>
             </div>
             <div className="message-wrap">
-              <p className={isError ? "error-msg" : "info-message"}>
-                {isLoading ? <Loader /> : message}
+              <p>
+                <Loader />
               </p>
             </div>
-            {/* <div className="done-btn">
-          <Button
-            size="lg"
-            variant={!isLoading ? "primary" : "secondary"}
-            disabled={isLoading}
-            onClick={() => props.modalclose(false)}
-          >
-            Done
-          </Button>
-        </div> */}
           </>
         ) : (
           <>
@@ -137,24 +124,10 @@ const InformationModal = (props) => {
               ></img>
             </div>
             <div className="message-wrap">
-              <p className={isError ? "error-msg" : "info-message"}>
-                {isLoading ? (
-                  <span>Please scan 2d barcode at the back of your DL</span>
-                ) : (
-                  message
-                )}
+              <p>
+                <span>Please scan 2D barcode at the back of your DL</span>
               </p>
             </div>
-            {/* <div className="done-btn">
-            <Button
-              size="lg"
-              variant={!isLoading ? "primary" : "secondary"}
-              disabled={isLoading}
-              onClick={() => props.modalclose(false)}
-            >
-              Done
-            </Button>
-          </div> */}
           </>
         )}
       </div>
