@@ -13,8 +13,8 @@ let INTERVAL = null;
 
 class Dashboard extends Component {
   state = {
-    deviceMode: "",
-    deviceStatus: "",
+    deviceMode: "USB_EVENT_DRIVEN",
+    deviceStatus: "CONNECTED_AOA_MODE",
     recievedIdentityInfo: false,
     currentTime: null,
     firstName: "",
@@ -75,7 +75,9 @@ class Dashboard extends Component {
 
   saveIdData(data) {
     console.log("From save id data", data);
-    let time = moment().add(30, "m").format("LT");
+    let time = moment()
+      .add(30, "m")
+      .format("LT");
     const idData = {
       documentNumber: data.documentNumber,
       currentTime: time,
@@ -108,16 +110,14 @@ class Dashboard extends Component {
         this.setState({
           isLoading: false,
           isError: true,
-          message: "Check-in Failed"
+          message: "Check-in Failed",
         });
       });
   }
 
   serverSentEvents = () => {
     if (!this.state.listening) {
-      const sse = new EventSource(
-        `${VDS_URL}/sse/read`
-      );
+      const sse = new EventSource(`${VDS_URL}/sse/read`);
       sse.addEventListener(
         "SCANNED_DATA",
         (event) => {
@@ -132,7 +132,7 @@ class Dashboard extends Component {
         },
         false
       );
-      sse.onerror = function (event) {
+      sse.onerror = function(event) {
         console.log(event.target.readyState);
         if (event.target.readyState === EventSource.CLOSED) {
           console.log("SSE closed (" + event.target.readyState + ")");
@@ -162,9 +162,7 @@ class Dashboard extends Component {
     return (
       <>
         <Header></Header>
-        {this.state.showModal && (
-          <Navigate to="/checkin" state={this.state}/>
-        )}
+        {this.state.showModal && <Navigate to="/checkin" state={this.state} />}
         <div className="page-container">
           <p>Welcome to Mocktana Department of Motor Vehicles </p>
           {this.state.deviceMode !== "ID_READ_EVENT_DRIVEN" && (
@@ -208,18 +206,25 @@ class Dashboard extends Component {
             </>
           )}
           <div className="user-message-wrap">
-              {this.state.deviceStatus === "NOT_CONNECTED"
-                ? <span className="error-msg">Please connect the device and try again</span>
-                : this.state.deviceStatus === "CONNECTED_AOA_MODE" &&
-                  this.state.deviceMode === "ID_READ_EVENT_DRIVEN"
-                ? "Tap or scan your mobile DL or physical DL to check in"
-                : this.state.deviceMode !== "ID_READ_EVENT_DRIVEN" &&
-                  this.state.deviceMode !== "USB_EVENT_DRIVEN" && this.state.deviceStatus === "CONNECTED_AOA_MODE"
-                ? "Please change the device operation mode to activate reading"
-                : ""}
+            {this.state.deviceStatus === "NOT_CONNECTED" ? (
+              <span className="error-msg">
+                Please connect the device and try again
+              </span>
+            ) : this.state.deviceStatus === "CONNECTED_AOA_MODE" &&
+              this.state.deviceMode === "ID_READ_EVENT_DRIVEN" ? (
+              "Tap or scan your mobile DL or physical DL to check in"
+            ) : this.state.deviceMode !== "ID_READ_EVENT_DRIVEN" &&
+              this.state.deviceMode !== "USB_EVENT_DRIVEN" &&
+              this.state.deviceStatus === "CONNECTED_AOA_MODE" ? (
+              "Please change the device operation mode to activate reading"
+            ) : (
+              ""
+            )}
           </div>
           <div>
-            <p className={this.state.isError ? "error-msg" : "info-message"}>{this.state.message}</p>
+            <p className={this.state.isError ? "error-msg" : "info-message"}>
+              {this.state.message}
+            </p>
           </div>
         </div>
       </>

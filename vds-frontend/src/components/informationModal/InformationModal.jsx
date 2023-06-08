@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from 'react-router-dom';
+import { useLocation } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
 import axios from "axios";
 import moment from "moment";
@@ -23,10 +23,11 @@ const InformationModal = (props) => {
   useEffect(() => {
     getIdentityInfo();
   }, []);
-
   function saveIdData(data) {
     let message = "";
-    let time = moment().add(30, "m").format("LT");
+    let time = moment()
+      .add(30, "m")
+      .format("LT");
     const idData = {
       documentNumber: data.documentNumber,
       currentTime: time,
@@ -74,30 +75,48 @@ const InformationModal = (props) => {
         setMessage(message);
       });
   }
+  console.log("props", data.isMdL);
   return (
-  <div className="information-modal">
-  <Header/>
-    {!props.isMobileDLCheck
-      ? <span className="information-modal-text-span">Follow instructions to complete ID verification</span>
-      : <span className="information-modal-text-span">Check In with Physical DL</span>
-      }
-    <div className="modal-wrap">
-    {!props.isMobileDLCheck ? (
-      <>
-        <div className="information-modal-image-wrap">
-          <img className="information-modal-image" src={QRGIF1} alt="qr-gif"></img>
-          <img className="information-modal-image" src={QRGIF2} alt="nfc-gif"></img>
-        </div>
-        <div className="information-modal-name-wrap">
-          <h3 className="information-modal-qr-verification-text">QR Code Presentation</h3>
-          <h3 className="information-modal-nfc-verification-text">NFC Presentation</h3>
-        </div>
-        <div className="message-wrap">
-          <p className={isError ? "error-msg" : "info-message"}>
-            {isLoading ? <Loader /> : message}
-          </p>
-        </div>
-        {/* <div className="done-btn">
+    <div className="information-modal">
+      <Header />
+      {data.isMdL ? (
+        <span className="information-modal-text-span">
+          Follow instructions to complete ID verification
+        </span>
+      ) : (
+        <span className="information-modal-text-span">
+          Check In with Physical DL
+        </span>
+      )}
+      <div className="modal-wrap">
+        {data.isMdL ? (
+          <>
+            <div className="information-modal-image-wrap">
+              <img
+                className="information-modal-image"
+                src={QRGIF1}
+                alt="qr-gif"
+              ></img>
+              <img
+                className="information-modal-image"
+                src={QRGIF2}
+                alt="nfc-gif"
+              ></img>
+            </div>
+            <div className="information-modal-name-wrap">
+              <h3 className="information-modal-qr-verification-text">
+                QR Code Presentation
+              </h3>
+              <h3 className="information-modal-nfc-verification-text">
+                NFC Presentation
+              </h3>
+            </div>
+            <div className="message-wrap">
+              <p className={isError ? "error-msg" : "info-message"}>
+                {isLoading ? <Loader /> : message}
+              </p>
+            </div>
+            {/* <div className="done-btn">
           <Button
             size="lg"
             variant={!isLoading ? "primary" : "secondary"}
@@ -107,26 +126,26 @@ const InformationModal = (props) => {
             Done
           </Button>
         </div> */}
-      </>
-    ) : (
-      <>
-          <div className="information-modal-image-wrap">
-            <img
-              className="information-modal-image"
-              src={physicalIMG}
-              alt="physicalImg"
-            ></img>
-          </div>
-          <div className="message-wrap">
-            <p className={isError ? "error-msg" : "info-message"}>
-              {isLoading ? (
-                <span>Please scan 2d barcode at the back of your DL</span>
-              ) : (
-                message
-              )}
-            </p>
-          </div>
-          {/* <div className="done-btn">
+          </>
+        ) : (
+          <>
+            <div className="information-modal-image-wrap">
+              <img
+                className="information-modal-image"
+                src={physicalIMG}
+                alt="physicalImg"
+              ></img>
+            </div>
+            <div className="message-wrap">
+              <p className={isError ? "error-msg" : "info-message"}>
+                {isLoading ? (
+                  <span>Please scan 2d barcode at the back of your DL</span>
+                ) : (
+                  message
+                )}
+              </p>
+            </div>
+            {/* <div className="done-btn">
             <Button
               size="lg"
               variant={!isLoading ? "primary" : "secondary"}
@@ -136,10 +155,10 @@ const InformationModal = (props) => {
               Done
             </Button>
           </div> */}
-      </>
-    )}
-  </div>
-  </div>
+          </>
+        )}
+      </div>
+    </div>
   );
 };
 export default InformationModal;
