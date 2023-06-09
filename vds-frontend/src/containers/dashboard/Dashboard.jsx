@@ -1,10 +1,10 @@
 import React, { Component } from "react";
+import { Navigate } from "react-router";
 import Header from "../header/Header";
 import { Button } from "react-bootstrap";
 import axios from "axios";
 import moment from "moment";
 import { API_URL, VDS_URL } from "../../UrlConfig";
-import InformationModal from "../../components/informationModal/InformationModal";
 import QRGIF1 from "../../assets/images/Verification_using_QR.gif";
 import QRGIF2 from "../../assets/images/Verification_using_NFC.gif";
 import physicalIMG from "../../assets/images/DL_Scan_Back.png";
@@ -26,6 +26,7 @@ class Dashboard extends Component {
     isLoading: true,
     isError: false,
     listening: false,
+    checkinMessage: false,
   };
 
   buttonEnabled = () => {
@@ -73,7 +74,6 @@ class Dashboard extends Component {
   };
 
   saveIdData(data) {
-    console.log("From save id data", data);
     let time = moment().add(30, "m").format("LT");
     const idData = {
       documentNumber: data.documentNumber,
@@ -107,26 +107,27 @@ class Dashboard extends Component {
         this.setState({
           isLoading: false,
           isError: true,
-          message: "Check-in Failed"
+          message: "Check-in Failed",
         });
+        this.navigateToCheckinMessage(this.state.message);
       });
   }
 
   serverSentEvents = () => {
     if (!this.state.listening) {
-      const sse = new EventSource(
-        `${VDS_URL}/sse/read`
-      );
+      const sse = new EventSource(`${VDS_URL}/sse/read`);
       sse.addEventListener(
         "SCANNED_DATA",
         (event) => {
           let obj = JSON.parse(event.data);
-          console.log("parsed e.data obj", obj);
           if (obj) {
             this.setState({
               recievedIdentityInfo: true,
             });
             this.saveIdData(obj.data);
+            setTimeout(() => {
+              this.navigateToCheckinMessage(this.state.message);
+            }, 5000);
           }
         },
         false
@@ -147,6 +148,13 @@ class Dashboard extends Component {
     }
   };
 
+  navigateToCheckinMessage(message) {
+    console.log("in navigate checkin message", message);
+    this.setState({
+      checkinMessage: true,
+    });
+  }
+
   getIdentityInfo = (isMdl) => {
     this.setState({ isMdL: isMdl });
     this.handleModal(true);
@@ -157,18 +165,13 @@ class Dashboard extends Component {
     });
   };
   render() {
-    console.log("message from dashboard", this.state.message);
     return (
       <>
         <Header></Header>
-        {this.state.showModal && (
-          <InformationModal
-            show={this.state.showModal}
-            modalclose={this.handleModal}
-            isMobileDLCheck={this.state.isMdL}
-            message={this.state.message}
-          ></InformationModal>
-        )}
+        {this.state.checkinMessage ? (
+          <Navigate to="checkin/message" state={this.state.message} />
+        ) : null}
+        {this.state.showModal && <Navigate to="/checkin" state={this.state} />}
         <div className="page-container">
           <p>Welcome to Mocktana Department of Motor Vehicles </p>
           {this.state.deviceMode !== "ID_READ_EVENT_DRIVEN" && (
