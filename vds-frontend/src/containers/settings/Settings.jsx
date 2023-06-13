@@ -5,17 +5,15 @@ import axios from "axios";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import Table from "react-bootstrap/Table";
-import { API_URL, VDS_URL } from "../../UrlConfig";
+import { VDS_URL, BASE_URL } from "../../UrlConfig";
+import { Link } from "react-router-dom";
+
 class Settings extends Component {
   state = {
-    deviceStatus: "",
+    deviceStatus: localStorage.getItem("deviceStatus"),
     readerData: [],
     isData: false,
-    deviceMode: "",
-  };
-
-  componentDidMount = () => {
-    this.getReaderinfo(false);
+    deviceMode: localStorage.getItem("deviceMode"),
   };
 
   getReaderinfo = (isData) => {
@@ -57,6 +55,7 @@ class Settings extends Component {
           this.setState({
             deviceMode: value,
           });
+          localStorage.setItem("deviceMode", value);
           confirmAlert({
             title: "Device mode successfully changed",
             buttons: [
@@ -65,7 +64,6 @@ class Settings extends Component {
               },
             ],
           });
-          this.getReaderinfo(false);
         }
       })
       .catch(function (error) {
@@ -111,7 +109,7 @@ class Settings extends Component {
   };
   clearData = () => {
     axios
-      .delete(`${API_URL}data`)
+      .delete(`${BASE_URL}/data`)
       .then((res) => {
         if (res.status) {
           confirmAlert({
@@ -145,10 +143,14 @@ class Settings extends Component {
             <div className="settings-breadcrumb">
               <ul class="breadcrumb">
                 <li>
-                  <a className="breadcrumb-text" href="/">Home</a>
+                  <Link className="breadcrumb-text" to="/">
+                    Home
+                  </Link>
                 </li>
                 <li>
-                  <a className="breadcrumb-text" href="/dashboard/settings">Settings</a>
+                  <Link className="breadcrumb-text" to="/dashboard/settings">
+                    Settings
+                  </Link>
                 </li>
               </ul>
             </div>
