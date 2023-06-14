@@ -58,7 +58,7 @@ const InformationModal = () => {
           saveIdData(response.data.data);
           setTimeout(() => {
             navigateToCheckinMessage();
-          }, 1000);
+          }, 1500);
         } else {
           setMessage("");
         }
