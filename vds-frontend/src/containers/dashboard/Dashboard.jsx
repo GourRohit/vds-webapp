@@ -13,7 +13,6 @@ let INTERVAL = null;
 class Dashboard extends Component {
   state = {
     deviceMode: "",
-    deviceStatus: "",
     recievedIdentityInfo: false,
     currentTime: null,
     firstName: "",
@@ -29,16 +28,16 @@ class Dashboard extends Component {
 
   buttonEnabled = () => {
     return (
-      this.state.deviceStatus === "CONNECTED_AOA_MODE" &&
+      this.props.deviceStatus === "CONNECTED_AOA_MODE" &&
       this.state.deviceMode === "USB_EVENT_DRIVEN"
     );
   };
   componentDidMount = () => {
     this.getDeviceMode();
-    this.getDeviceStatus();
-    INTERVAL = setInterval(() => {
-      this.getDeviceStatus();
-    }, 5000);
+    // this.getDeviceStatus();
+    // INTERVAL = setInterval(() => {
+    //   this.getDeviceStatus();
+    // }, 5000);
     setTimeout(() => {
       this.serverSentEvents();
     }, 2000);
@@ -60,21 +59,21 @@ class Dashboard extends Component {
       });
   };
 
-  getDeviceStatus = () => {
-    axios
-      .get(`${VDS_URL}/reader/connection/status`)
-      .then((response) => {
-        if (response.data && response.status) {
-          this.setState({
-            deviceStatus: response.data.deviceState,
-          });
-          localStorage.setItem("deviceStatus", response.data.deviceState);
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
+  // getDeviceStatus = () => {
+  //   axios
+  //     .get(`${VDS_URL}/reader/connection/status`)
+  //     .then((response) => {
+  //       if (response.data && response.status) {
+  //         this.setState({
+  //           deviceStatus: response.data.deviceState,
+  //         });
+  //         localStorage.setItem("deviceStatus", response.data.deviceState);
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     });
+  // };
 
   saveIdData(data) {
     let time = moment().add(30, "m").format("LT");
@@ -163,6 +162,7 @@ class Dashboard extends Component {
     });
   };
   render() {
+    console.log("Dashboard this.props.deviceStatus from App.js", this.props.deviceStatus);
     return (
       <>
         <Header></Header>
@@ -213,17 +213,17 @@ class Dashboard extends Component {
             </>
           )}
           <div className="user-message-wrap">
-            {this.state.deviceStatus === "NOT_CONNECTED" ? (
+            {this.props.deviceStatus === "NOT_CONNECTED" ? (
               <span className="error-msg">
                 Please connect the device and try again
               </span>
-            ) : this.state.deviceStatus === "CONNECTED_AOA_MODE" &&
+            ) : this.props.deviceStatus === "CONNECTED_AOA_MODE" &&
               this.state.deviceMode === "ID_READ_EVENT_DRIVEN" &&
               this.state.message === "" ? (
               "Tap or scan your mobile DL or physical DL to check in"
             ) : this.state.deviceMode !== "ID_READ_EVENT_DRIVEN" &&
               this.state.deviceMode !== "USB_EVENT_DRIVEN" &&
-              this.state.deviceStatus === "CONNECTED_AOA_MODE" ? (
+              this.props.deviceStatus === "CONNECTED_AOA_MODE" ? (
               "Please change the device operation mode to activate reading"
             ) : (
               ""

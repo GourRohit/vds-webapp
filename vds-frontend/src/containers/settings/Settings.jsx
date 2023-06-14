@@ -135,6 +135,7 @@ class Settings extends Component {
       });
   };
   render() {
+    console.log("Settings this.props.deviceStatus from App.js", this.props.deviceStatus);
     return (
       <>
         <Header />
@@ -163,14 +164,14 @@ class Settings extends Component {
                   <img
                     className="status-btn"
                     src={
-                      this.state.deviceStatus === "CONNECTED_AOA_MODE"
+                      this.props.deviceStatus === "CONNECTED_AOA_MODE"
                         ? require("../../assets/images/connected_.png")
                         : require("../../assets/images/not_connected.png")
                     }
                     height={15}
                     alt="connectionStatus"
                   />{" "}
-                  {this.state.deviceStatus === "CONNECTED_AOA_MODE"
+                  {this.props.deviceStatus === "CONNECTED_AOA_MODE"
                     ? "CONNECTED"
                     : "NOT CONNECTED"}
                 </Col>
@@ -187,7 +188,7 @@ class Settings extends Component {
                     id="iddriven"
                     name="mode"
                     value="ID_READ_EVENT_DRIVEN"
-                    disabled={this.state.deviceStatus !== "CONNECTED_AOA_MODE"}
+                    disabled={this.props.deviceStatus !== "CONNECTED_AOA_MODE"}
                     checked={
                       this.state.deviceMode === "ID_READ_EVENT_DRIVEN" &&
                       "checked"
@@ -203,7 +204,7 @@ class Settings extends Component {
                     id="usbdriven"
                     name="mode"
                     value="USB_EVENT_DRIVEN"
-                    disabled={this.state.deviceStatus !== "CONNECTED_AOA_MODE"}
+                    disabled={this.props.deviceStatus !== "CONNECTED_AOA_MODE"}
                     checked={
                       this.state.deviceMode === "USB_EVENT_DRIVEN" && "checked"
                     }
@@ -218,7 +219,7 @@ class Settings extends Component {
                     id="stand"
                     name="mode"
                     value="STANDALONE"
-                    disabled={this.state.deviceStatus !== "CONNECTED_AOA_MODE"}
+                    disabled={this.props.deviceStatus !== "CONNECTED_AOA_MODE"}
                     checked={
                       this.state.deviceMode === "STANDALONE" && "checked"
                     }
@@ -233,7 +234,7 @@ class Settings extends Component {
                     id="eseek"
                     name="mode"
                     value="E-SEEK"
-                    disabled={this.state.deviceStatus !== "CONNECTED_AOA_MODE"}
+                    disabled={this.props.deviceStatus !== "CONNECTED_AOA_MODE"}
                     checked={this.state.deviceMode === "E-SEEK" && "checked"}
                     onClick={(e) => this.handleRadioBtn(e)}
                   />
@@ -250,11 +251,11 @@ class Settings extends Component {
                     className="info-btn"
                     onClick={() => this.getReaderinfo(true)}
                     variant={
-                      this.state.deviceStatus === "CONNECTED_AOA_MODE"
+                      this.props.deviceStatus === "CONNECTED_AOA_MODE"
                         ? "primary"
                         : "secondary"
                     }
-                    disabled={this.state.deviceStatus === "NOT_CONNECTED"}
+                    disabled={this.props.deviceStatus === "NOT_CONNECTED"}
                   >
                     Fetch Reader Info
                   </Button>
@@ -266,7 +267,7 @@ class Settings extends Component {
                 </Col>
               </Row>
               <Row className={this.state.isData ? "info-box" : ""}>
-                {this.state.deviceStatus === "CONNECTED_AOA_MODE" &&
+                {this.props.deviceStatus === "CONNECTED_AOA_MODE" &&
                 this.state.isData ? (
                   <Col md={12}>
                     <Table hover size="sm">
