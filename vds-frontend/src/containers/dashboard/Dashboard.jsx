@@ -23,8 +23,6 @@ class Dashboard extends Component {
     showModal: false,
     isMdL: false,
     message: "",
-    isLoading: true,
-    isError: false,
     listening: false,
     checkinMessage: false,
   };
@@ -37,10 +35,13 @@ class Dashboard extends Component {
   };
   componentDidMount = () => {
     this.getDeviceMode();
+    this.getDeviceStatus();
     INTERVAL = setInterval(() => {
       this.getDeviceStatus();
     }, 5000);
-    this.serverSentEvents();
+    setTimeout(() => {
+      this.serverSentEvents();
+    }, 2000);
   };
 
   getDeviceMode = () => {
@@ -51,7 +52,7 @@ class Dashboard extends Component {
           this.setState({
             deviceMode: response.data.usbMode,
           });
-          localStorage.setItem("deviceMode", this.state.deviceMode);
+          localStorage.setItem("deviceMode", response.data.usbMode);
         }
       })
       .catch((error) => {
@@ -67,7 +68,7 @@ class Dashboard extends Component {
           this.setState({
             deviceStatus: response.data.deviceState,
           });
-          localStorage.setItem("deviceStatus", this.state.deviceStatus);
+          localStorage.setItem("deviceStatus", response.data.deviceState);
         }
       })
       .catch((error) => {
@@ -87,19 +88,16 @@ class Dashboard extends Component {
         if (res.data && res.status) {
           if (res.data.message === "success") {
             this.setState({
-              isLoading: false,
               message: ` Welcome ${data.givenNames} ${data.familyName}, you are checked in for
               your ${time} appointment`,
             });
           } else if (res.data.message === "duplicate") {
             this.setState({
-              isLoading: false,
               message: ` Welcome ${data.givenNames} ${data.familyName}, we
                 could find that you are already checked in for appointment at ${res.data.appointmentTime}`,
             });
           } else {
             this.setState({
-              isLoading: false,
               message: "",
             });
           }
@@ -107,8 +105,6 @@ class Dashboard extends Component {
       })
       .catch((err) => {
         this.setState({
-          isLoading: false,
-          isError: true,
           message: "Check-in Failed",
         });
         this.navigateToCheckinMessage(this.state.message);
@@ -116,7 +112,7 @@ class Dashboard extends Component {
   }
 
   serverSentEvents = () => {
-    if (!this.state.listening) {
+    if (!this.state.listening && this.state.deviceMode === "ID_READ_EVENT_DRIVEN") {
       const sse = new EventSource(`${VDS_URL}/sse/read`);
       sse.addEventListener(
         "SCANNED_DATA",
@@ -129,7 +125,7 @@ class Dashboard extends Component {
             this.saveIdData(obj.data);
             setTimeout(() => {
               this.navigateToCheckinMessage(this.state.message);
-            }, 1000);
+            }, 1500);
           }
         },
         false
@@ -143,10 +139,10 @@ class Dashboard extends Component {
       };
       sse.onopen = (event) => {
         console.log("connection opened");
+        this.setState({
+          listening: true,
+        });
       };
-      this.setState({
-        listening: true,
-      });
     }
   };
 
