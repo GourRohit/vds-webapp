@@ -13,7 +13,7 @@ import { Navigate } from "react-router";
 
 const InformationModal = () => {
   const [message, setMessage] = useState("");
-  const [checkinMessage, setCheckinMessage] = useState(false);
+  const [checkinCompleted, setCheckinCompleted] = useState(false);
   const location = useLocation();
   const data = location.state;
   let time = moment().add(30, "m").format("LT");
@@ -29,11 +29,11 @@ const InformationModal = () => {
               console.log("RES", res);
               if (res.data && res.status) {
                 if (res.data.message === "success") {
-                  responseMessage = ` Welcome ${response.data.data.givenNames} ${response.data.data.familyName}, you are checked in for 
+                  responseMessage = ` Welcome ${response.data.data.givenNames} ${response.data.data.familyName}, You are checked in for 
                 your ${time} appointment.`;
                   setMessage(responseMessage);
                 } else if (res.data.message === "duplicate") {
-                  responseMessage = ` Welcome ${response.data.data.givenNames} ${response.data.data.familyName}, we
+                  responseMessage = ` Welcome ${response.data.data.givenNames} ${response.data.data.familyName}, We
                   could find that you are already checked in for appointment at ${res.data.appointmentTime}`;
                   setMessage(responseMessage);
                 } else {
@@ -45,12 +45,17 @@ const InformationModal = () => {
               console.log("in .then navigation", responseMessage);
               navigateToCheckinMessage(responseMessage);
             })
+            .catch((error) => {
+              responseMessage = "Your check-in could not be completed";
+              setMessage(responseMessage);
+              navigateToCheckinMessage(responseMessage);
+            });
         } else {
           setMessage("");
         }
       })
       .catch((error) => {
-        responseMessage = "Check-in Failed";
+        responseMessage = "Your check-in could not be completed";
         setMessage(responseMessage);
         navigateToCheckinMessage(responseMessage);
       });
@@ -58,7 +63,7 @@ const InformationModal = () => {
 
   function navigateToCheckinMessage(message) {
     console.log("in navigate checkin message", message);
-    setCheckinMessage(true);
+    setCheckinCompleted(true);
   }
   return (
     <div className="information-modal">
@@ -73,7 +78,7 @@ const InformationModal = () => {
         </span>
       )}
       <div className="modal-wrap">
-        {checkinMessage ? <Navigate to="message" state={message} /> : null}
+        {checkinCompleted ? <Navigate to="message" state={message} /> : null}
         {data.isMdL ? (
           <>
             <div className="information-modal-image-wrap">

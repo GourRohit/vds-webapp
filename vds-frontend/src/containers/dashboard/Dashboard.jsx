@@ -73,13 +73,13 @@ class Dashboard extends Component {
                   if (res.data.message === "success") {
                     console.log("SSE SUCCESS")
                     this.setState({
-                      message: ` Welcome ${obj.data.givenNames} ${obj.data.familyName}, you are checked in for
+                      message: ` Welcome ${obj.data.givenNames} ${obj.data.familyName}, You are checked in for
                     your ${time} appointment`,
                     });
                   } else if (res.data.message === "duplicate") {
                     console.log("SSE DUPLICATE")
                     this.setState({
-                      message: ` Welcome ${obj.data.givenNames} ${obj.data.familyName}, we
+                      message: ` Welcome ${obj.data.givenNames} ${obj.data.familyName}, We
                       could find that you are already checked in for appointment at ${res.data.appointmentTime}`,
                     });
                   } else {
@@ -95,7 +95,7 @@ class Dashboard extends Component {
               .catch((err) => {
                 console.log("SSE CATCH")
                 this.setState({
-                  message: "Check-in Failed",
+                  message: "Your check-in could not be completed",
                 })
                 this.navigateToCheckinMessage(this.state.message);
               });

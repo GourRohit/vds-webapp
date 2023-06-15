@@ -21,7 +21,7 @@ function CheckinMessage() {
       <Header />
       <div
         className={
-          message === "Check-in Failed"
+          message === "Your check-in could not be completed"
             ? "checkin-error-message"
             : "checkin-message"
         }
