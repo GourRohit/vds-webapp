@@ -54,6 +54,7 @@ class Dashboard extends Component {
   };
 
   serverSentEvents = () => {
+    console.log("IN SSE")
     let time = moment().add(30, "m").format("LT");
     if (!this.state.listening) {
       const sse = new EventSource(`${VDS_URL}/sse/read`);
@@ -67,13 +68,16 @@ class Dashboard extends Component {
             });
             saveIdData(obj.data)
               .then((res) => {
+                console.log("SSE RES.DATA", res.data)
                 if (res.data && res.status) {
                   if (res.data.message === "success") {
+                    console.log("SSE SUCCESS")
                     this.setState({
                       message: ` Welcome ${obj.data.givenNames} ${obj.data.familyName}, you are checked in for
                     your ${time} appointment`,
                     });
                   } else if (res.data.message === "duplicate") {
+                    console.log("SSE DUPLICATE")
                     this.setState({
                       message: ` Welcome ${obj.data.givenNames} ${obj.data.familyName}, we
                       could find that you are already checked in for appointment at ${res.data.appointmentTime}`,
@@ -89,11 +93,11 @@ class Dashboard extends Component {
                 this.navigateToCheckinMessage(this.state.message);
               })
               .catch((err) => {
+                console.log("SSE CATCH")
                 this.setState({
                   message: "Check-in Failed",
-                }).then(() => {
-                  this.navigateToCheckinMessage(this.state.message);
-                });
+                })
+                this.navigateToCheckinMessage(this.state.message);
               });
           }
         },

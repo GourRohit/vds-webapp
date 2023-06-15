@@ -19,42 +19,40 @@ const InformationModal = () => {
   let time = moment().add(30, "m").format("LT");
 
   useEffect(() => {
+    let responseMessage;
     getIdentityInfo()
       .then((response) => {
         console.log("RES.DATA", response.data);
         if (response.data) {
           saveIdData(response.data.data)
             .then((res) => {
+              console.log("RES", res);
               if (res.data && res.status) {
                 if (res.data.message === "success") {
-                  message = ` Welcome ${data.givenNames} ${data.familyName}, you are checked in for 
+                  responseMessage = ` Welcome ${response.data.data.givenNames} ${response.data.data.familyName}, you are checked in for 
                 your ${time} appointment.`;
-                  setMessage(message);
+                  setMessage(responseMessage);
                 } else if (res.data.message === "duplicate") {
-                  message = ` Welcome ${data.givenNames} ${data.familyName}, we
+                  responseMessage = ` Welcome ${response.data.data.givenNames} ${response.data.data.familyName}, we
                   could find that you are already checked in for appointment at ${res.data.appointmentTime}`;
+                  setMessage(responseMessage);
+                } else {
                   setMessage(message);
                 }
-                setMessage(message);
               }
             })
-            .catch((err) => {
-              message = "Check-in Failed";
-              setMessage(message);
-            });
-          console.log("in save id data response");
+            .then((responseMessage) => {
+              console.log("in .then navigation", responseMessage);
+              navigateToCheckinMessage(responseMessage);
+            })
         } else {
           setMessage("");
         }
       })
-      .then(() => {
-        console.log("in .then navigation");
-        navigateToCheckinMessage(message);
-      })
       .catch((error) => {
-        message = "Check-in Failed";
-        setMessage(message);
-        navigateToCheckinMessage(message);
+        responseMessage = "Check-in Failed";
+        setMessage(responseMessage);
+        navigateToCheckinMessage(responseMessage);
       });
   }, []);
 
