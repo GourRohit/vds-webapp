@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
 import { API_URL, VDS_URL } from "../../UrlConfig";
+import { getIdentityInfo, saveIdData } from "../../services/Utils";
 import QRGIF1 from "../../assets/images/Verification_using_QR.gif";
 import QRGIF2 from "../../assets/images/Verification_using_NFC.gif";
 import physicalIMG from "../../assets/images/DL_Scan_Back.png";
@@ -15,61 +16,50 @@ const InformationModal = () => {
   const [checkinMessage, setCheckinMessage] = useState(false);
   const location = useLocation();
   const data = location.state;
+  let time = moment().add(30, "m").format("LT");
 
   useEffect(() => {
-    getIdentityInfo();
-  }, []);
-
-  function saveIdData(data) {
-    let message = "";
-    let time = moment().add(30, "m").format("LT");
-    const idData = {
-      documentNumber: data.documentNumber,
-      currentTime: time,
-    };
-    axios
-      .post(`${API_URL}data`, idData)
-      .then((res) => {
-        if (res.data && res.status) {
-          if (res.data.message === "success") {
-            message = ` Welcome ${data.givenNames} ${data.familyName}, you are checked in for 
-              your ${time} appointment.`;
-            setMessage(message);
-          } else if (res.data.message === "duplicate") {
-            message = ` Welcome ${data.givenNames} ${data.familyName}, we
-                could find that you are already checked in for appointment at ${res.data.appointmentTime}`;
-            setMessage(message);
-          }
-          setMessage(message);
-        }
-      })
-      .catch((err) => {
-        message = "Check-in Failed";
-        setMessage(message);
-      });
-  }
-
-  function getIdentityInfo() {
-    let message = "";
-    axios
-      .get(`${VDS_URL}/identity/info`)
+    getIdentityInfo()
       .then((response) => {
+        console.log("RES.DATA", response.data);
         if (response.data) {
-          saveIdData(response.data.data);
-          setTimeout(() => {
-            navigateToCheckinMessage();
-          }, 1500);
+          saveIdData(response.data.data)
+            .then((res) => {
+              if (res.data && res.status) {
+                if (res.data.message === "success") {
+                  message = ` Welcome ${data.givenNames} ${data.familyName}, you are checked in for 
+                your ${time} appointment.`;
+                  setMessage(message);
+                } else if (res.data.message === "duplicate") {
+                  message = ` Welcome ${data.givenNames} ${data.familyName}, we
+                  could find that you are already checked in for appointment at ${res.data.appointmentTime}`;
+                  setMessage(message);
+                }
+                setMessage(message);
+              }
+            })
+            .catch((err) => {
+              message = "Check-in Failed";
+              setMessage(message);
+            });
+          console.log("in save id data response");
         } else {
           setMessage("");
         }
       })
+      .then(() => {
+        console.log("in .then navigation");
+        navigateToCheckinMessage(message);
+      })
       .catch((error) => {
         message = "Check-in Failed";
         setMessage(message);
-        navigateToCheckinMessage();
+        navigateToCheckinMessage(message);
       });
-  }
-  function navigateToCheckinMessage() {
+  }, []);
+
+  function navigateToCheckinMessage(message) {
+    console.log("in navigate checkin message", message);
     setCheckinMessage(true);
   }
   return (
