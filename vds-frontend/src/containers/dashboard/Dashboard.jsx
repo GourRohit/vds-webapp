@@ -14,7 +14,7 @@ let INTERVAL = null;
 class Dashboard extends Component {
   state = {
     deviceMode: "",
-    deviceStatus: localStorage.getItem("deviceStatus"),
+    deviceStatus: this.props.deviceStatus,
     recievedIdentityInfo: false,
     currentTime: null,
     firstName: "",
@@ -38,14 +38,13 @@ class Dashboard extends Component {
     getDeviceMode()
       .then((response) => {
         if (response.data && response.status) {
+          localStorage.setItem("deviceMode", response.data.usbMode);
           this.setState({
             deviceMode: response.data.usbMode,
-          }).then(() => {
-            if (this.state.deviceMode === "HOLDER_DRIVEN") {
-              this.serverSentEvents();
-            }
-          });
-          localStorage.setItem("deviceMode", response.data.usbMode);
+          })
+          if (response.data.usbMode === "HOLDER_DRIVEN") {
+            this.serverSentEvents();
+          }
         }
       })
       .catch((error) => {
@@ -136,10 +135,6 @@ class Dashboard extends Component {
     });
   };
   render() {
-    console.log(
-      "Dashboard this.state.deviceStatus from App.js",
-      this.state.deviceStatus
-    );
     return (
       <>
         <Header></Header>
