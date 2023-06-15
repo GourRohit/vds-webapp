@@ -135,6 +135,7 @@ class Settings extends Component {
       });
   };
   render() {
+    console.log("Settings this.state.deviceStatus from App.js", this.state.deviceStatus);
     return (
       <>
         <Header />

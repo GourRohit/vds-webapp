@@ -13,7 +13,7 @@ let INTERVAL = null;
 class Dashboard extends Component {
   state = {
     deviceMode: "",
-    deviceStatus: "",
+    deviceStatus: localStorage.getItem("deviceStatus"),
     recievedIdentityInfo: false,
     currentTime: null,
     firstName: "",
@@ -35,10 +35,10 @@ class Dashboard extends Component {
   };
   componentDidMount = () => {
     this.getDeviceMode();
-    this.getDeviceStatus();
-    INTERVAL = setInterval(() => {
-      this.getDeviceStatus();
-    }, 5000);
+    // this.getDeviceStatus();
+    // INTERVAL = setInterval(() => {
+    //   this.getDeviceStatus();
+    // }, 5000);
     setTimeout(() => {
       this.serverSentEvents();
     }, 2000);
@@ -60,21 +60,21 @@ class Dashboard extends Component {
       });
   };
 
-  getDeviceStatus = () => {
-    axios
-      .get(`${VDS_URL}/reader/connection/status`)
-      .then((response) => {
-        if (response.data && response.status) {
-          this.setState({
-            deviceStatus: response.data.deviceState,
-          });
-          localStorage.setItem("deviceStatus", response.data.deviceState);
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
+  // getDeviceStatus = () => {
+  //   axios
+  //     .get(`${VDS_URL}/reader/connection/status`)
+  //     .then((response) => {
+  //       if (response.data && response.status) {
+  //         this.setState({
+  //           deviceStatus: response.data.deviceState,
+  //         });
+  //         localStorage.setItem("deviceStatus", response.data.deviceState);
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     });
+  // };
 
   saveIdData(data) {
     let time = moment().add(30, "m").format("LT");
@@ -163,6 +163,7 @@ class Dashboard extends Component {
     });
   };
   render() {
+    console.log("Dashboard this.state.deviceStatus from App.js", this.state.deviceStatus);
     return (
       <>
         <Header></Header>
