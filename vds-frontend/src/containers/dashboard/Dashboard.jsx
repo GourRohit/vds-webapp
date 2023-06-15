@@ -31,7 +31,7 @@ class Dashboard extends Component {
   buttonEnabled = () => {
     return (
       this.state.deviceStatus === "CONNECTED_AOA_MODE" &&
-      this.state.deviceMode === "USB_EVENT_DRIVEN"
+      this.state.deviceMode === "HOST_DRIVEN"
     );
   };
   componentDidMount = () => {
@@ -41,7 +41,7 @@ class Dashboard extends Component {
           this.setState({
             deviceMode: response.data.usbMode,
           }).then(() => {
-            if (this.state.deviceMode === "ID_READ_EVENT_DRIVEN") {
+            if (this.state.deviceMode === "HOLDER_DRIVEN") {
               this.serverSentEvents();
             }
           });
@@ -149,7 +149,7 @@ class Dashboard extends Component {
         {this.state.showModal && <Navigate to="/checkin" state={this.state} />}
         <div className="page-container">
           <p>Welcome to Mocktana Department of Motor Vehicles </p>
-          {this.state.deviceMode !== "ID_READ_EVENT_DRIVEN" && (
+          {this.state.deviceMode !== "HOLDER_DRIVEN" && (
             <div className="button-wrap">
               <Button
                 variant={this.buttonEnabled() ? "primary" : "secondary"}
@@ -171,7 +171,7 @@ class Dashboard extends Component {
               </Button>
             </div>
           )}
-          {this.state.deviceMode === "ID_READ_EVENT_DRIVEN" && (
+          {this.state.deviceMode === "HOLDER_DRIVEN" && (
             <>
               <div className="dashboard-image-wrap">
                 <img className="dashboard-img" src={QRGIF1} alt="qr-gif"></img>
@@ -195,11 +195,11 @@ class Dashboard extends Component {
                 Please connect the device and try again
               </span>
             ) : this.state.deviceStatus === "CONNECTED_AOA_MODE" &&
-              this.state.deviceMode === "ID_READ_EVENT_DRIVEN" &&
+              this.state.deviceMode === "HOLDER_DRIVEN" &&
               this.state.message === "" ? (
               "Tap or scan your mobile DL or physical DL to check in"
-            ) : this.state.deviceMode !== "ID_READ_EVENT_DRIVEN" &&
-              this.state.deviceMode !== "USB_EVENT_DRIVEN" &&
+            ) : this.state.deviceMode !== "HOLDER_DRIVEN" &&
+              this.state.deviceMode !== "HOST_DRIVEN" &&
               this.state.deviceStatus === "CONNECTED_AOA_MODE" ? (
               "Please change the device operation mode to activate reading"
             ) : (

@@ -154,31 +154,31 @@ class Settings extends Component {
                     type="radio"
                     id="iddriven"
                     name="mode"
-                    value="ID_READ_EVENT_DRIVEN"
+                    value="HOLDER_DRIVEN"
                     disabled={this.state.deviceStatus !== "CONNECTED_AOA_MODE"}
                     checked={
-                      this.state.deviceMode === "ID_READ_EVENT_DRIVEN" &&
+                      this.state.deviceMode === "HOLDER_DRIVEN" &&
                       "checked"
                     }
                     onClick={(e) => this.handleRadioBtn(e)}
                   />
                   <label for="iddriven" className="radio-label">
-                    ID_READ_EVENT_DRIVEN
+                  HOLDER_DRIVEN
                   </label>
                   <br />
                   <input
                     type="radio"
                     id="usbdriven"
                     name="mode"
-                    value="USB_EVENT_DRIVEN"
+                    value="HOST_DRIVEN"
                     disabled={this.state.deviceStatus !== "CONNECTED_AOA_MODE"}
                     checked={
-                      this.state.deviceMode === "USB_EVENT_DRIVEN" && "checked"
+                      this.state.deviceMode === "HOST_DRIVEN" && "checked"
                     }
                     onClick={(e) => this.handleRadioBtn(e)}
                   />
                   <label for="usbdriven" className="radio-label">
-                    USB_EVENT_DRIVEN
+                  HOST_DRIVEN
                   </label>
                   <br />
                   <input
@@ -200,13 +200,13 @@ class Settings extends Component {
                     type="radio"
                     id="eseek"
                     name="mode"
-                    value="E-SEEK"
+                    value="VELOCIRAPTOR"
                     disabled={this.state.deviceStatus !== "CONNECTED_AOA_MODE"}
-                    checked={this.state.deviceMode === "E-SEEK" && "checked"}
+                    checked={this.state.deviceMode === "VELOCIRAPTOR" && "checked"}
                     onClick={(e) => this.handleRadioBtn(e)}
                   />
                   <label for="eseek" className="radio-label">
-                    E-SEEK
+                  VELOCIRAPTOR
                   </label>
                 </Col>
               </Row>
