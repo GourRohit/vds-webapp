@@ -7,6 +7,7 @@ import "react-confirm-alert/src/react-confirm-alert.css";
 import Table from "react-bootstrap/Table";
 import { VDS_URL, BASE_URL } from "../../UrlConfig";
 import { Link } from "react-router-dom";
+import { getReaderinfo, clearData, changeMode } from "../../services/Utils";
 
 class Settings extends Component {
   state = {
@@ -16,68 +17,6 @@ class Settings extends Component {
     deviceMode: localStorage.getItem("deviceMode"),
   };
 
-  getReaderinfo = (isData) => {
-    axios
-      .get(`${VDS_URL}/reader/info`)
-      .then((response) => {
-        if (response.data) {
-          this.setState({
-            readerData: response.data,
-            isData: isData,
-            deviceStatus: response.data.deviceState,
-            deviceMode: response.data.usbMode,
-          });
-        } else {
-          this.setState({
-            readerData: [],
-            isData: false,
-          });
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-        this.setState({
-          readerData: [],
-          isData: false,
-        });
-      });
-  };
-  changeMode = (value) => {
-    axios
-      .post(`${VDS_URL}/reader/properties`, {
-        setting: "USB_mode",
-        value: {
-          mode: value,
-        },
-      })
-      .then((response) => {
-        if (response.status) {
-          this.setState({
-            deviceMode: value,
-          });
-          localStorage.setItem("deviceMode", value);
-          confirmAlert({
-            title: "Device mode successfully changed",
-            buttons: [
-              {
-                label: "Ok",
-              },
-            ],
-          });
-        }
-      })
-      .catch(function (error) {
-        confirmAlert({
-          title: "Failed to change device mode",
-          buttons: [
-            {
-              label: "Ok",
-            },
-          ],
-        });
-        console.log(error);
-      });
-  };
   handleRadioBtn = (e) => {
     let deviceMode = e.target.value;
     confirmAlert({
@@ -85,7 +24,35 @@ class Settings extends Component {
       buttons: [
         {
           label: "Yes",
-          onClick: () => this.changeMode(deviceMode),
+          onClick: () =>
+            changeMode(deviceMode)
+              .then((response) => {
+                if (response.status) {
+                  this.setState({
+                    deviceMode: deviceMode,
+                  });
+                  localStorage.setItem("deviceMode", deviceMode);
+                  confirmAlert({
+                    title: "Device mode successfully changed",
+                    buttons: [
+                      {
+                        label: "Ok",
+                      },
+                    ],
+                  });
+                }
+              })
+              .catch(function (error) {
+                confirmAlert({
+                  title: "Failed to change device mode",
+                  buttons: [
+                    {
+                      label: "Ok",
+                    },
+                  ],
+                });
+                console.log(error);
+              }),
         },
         {
           label: "No",
@@ -99,7 +66,31 @@ class Settings extends Component {
       buttons: [
         {
           label: "Yes",
-          onClick: () => this.clearData(),
+          onClick: () =>
+            clearData()
+              .then((res) => {
+                if (res.status) {
+                  confirmAlert({
+                    title: "Checkin data cleared successfully",
+                    buttons: [
+                      {
+                        label: "Ok",
+                      },
+                    ],
+                  });
+                }
+              })
+              .catch((error) => {
+                console.error(error);
+                confirmAlert({
+                  title: "Failed to clear checkin data",
+                  buttons: [
+                    {
+                      label: "Ok",
+                    },
+                  ],
+                });
+              }),
         },
         {
           label: "No",
@@ -107,35 +98,11 @@ class Settings extends Component {
       ],
     });
   };
-  clearData = () => {
-    axios
-      .delete(`${BASE_URL}/data`)
-      .then((res) => {
-        if (res.status) {
-          confirmAlert({
-            title: "Checkin data cleared successfully",
-            buttons: [
-              {
-                label: "Ok",
-              },
-            ],
-          });
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-        confirmAlert({
-          title: "Failed to clear checkin data",
-          buttons: [
-            {
-              label: "Ok",
-            },
-          ],
-        });
-      });
-  };
   render() {
-    console.log("Settings this.state.deviceStatus from App.js", this.state.deviceStatus);
+    console.log(
+      "Settings this.state.deviceStatus from App.js",
+      this.state.deviceStatus
+    );
     return (
       <>
         <Header />
@@ -249,7 +216,31 @@ class Settings extends Component {
                 <Col md={7} className="reader-info-btn">
                   <Button
                     className="info-btn"
-                    onClick={() => this.getReaderinfo(true)}
+                    onClick={() =>
+                      getReaderinfo()
+                        .then((response) => {
+                          if (response.data) {
+                            this.setState({
+                              readerData: response.data,
+                              isData: true,
+                              deviceStatus: response.data.deviceState,
+                              deviceMode: response.data.usbMode,
+                            });
+                          } else {
+                            this.setState({
+                              readerData: [],
+                              isData: false,
+                            });
+                          }
+                        })
+                        .catch((error) => {
+                          console.error(error);
+                          this.setState({
+                            readerData: [],
+                            isData: false,
+                          });
+                        })
+                    }
                     variant={
                       this.state.deviceStatus === "CONNECTED_AOA_MODE"
                         ? "primary"

@@ -5,6 +5,7 @@ import { Button } from "react-bootstrap";
 import axios from "axios";
 import moment from "moment";
 import { API_URL, VDS_URL } from "../../UrlConfig";
+import { getDeviceMode, saveIdData } from "../../services/Utils";
 import QRGIF1 from "../../assets/images/Verification_using_QR.gif";
 import QRGIF2 from "../../assets/images/Verification_using_NFC.gif";
 import physicalIMG from "../../assets/images/DL_Scan_Back.png";
@@ -34,23 +35,15 @@ class Dashboard extends Component {
     );
   };
   componentDidMount = () => {
-    this.getDeviceMode();
-    // this.getDeviceStatus();
-    // INTERVAL = setInterval(() => {
-    //   this.getDeviceStatus();
-    // }, 5000);
-    setTimeout(() => {
-      this.serverSentEvents();
-    }, 2000);
-  };
-
-  getDeviceMode = () => {
-    axios
-      .get(`${VDS_URL}/reader/info`)
+    getDeviceMode()
       .then((response) => {
         if (response.data && response.status) {
           this.setState({
             deviceMode: response.data.usbMode,
+          }).then(() => {
+            if (this.state.deviceMode === "ID_READ_EVENT_DRIVEN") {
+              this.serverSentEvents();
+            }
           });
           localStorage.setItem("deviceMode", response.data.usbMode);
         }
@@ -60,59 +53,10 @@ class Dashboard extends Component {
       });
   };
 
-  // getDeviceStatus = () => {
-  //   axios
-  //     .get(`${VDS_URL}/reader/connection/status`)
-  //     .then((response) => {
-  //       if (response.data && response.status) {
-  //         this.setState({
-  //           deviceStatus: response.data.deviceState,
-  //         });
-  //         localStorage.setItem("deviceStatus", response.data.deviceState);
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //     });
-  // };
-
-  saveIdData(data) {
-    let time = moment().add(30, "m").format("LT");
-    const idData = {
-      documentNumber: data.documentNumber,
-      currentTime: time,
-    };
-    axios
-      .post(`${API_URL}data`, idData)
-      .then((res) => {
-        if (res.data && res.status) {
-          if (res.data.message === "success") {
-            this.setState({
-              message: ` Welcome ${data.givenNames} ${data.familyName}, you are checked in for
-              your ${time} appointment`,
-            });
-          } else if (res.data.message === "duplicate") {
-            this.setState({
-              message: ` Welcome ${data.givenNames} ${data.familyName}, we
-                could find that you are already checked in for appointment at ${res.data.appointmentTime}`,
-            });
-          } else {
-            this.setState({
-              message: "",
-            });
-          }
-        }
-      })
-      .catch((err) => {
-        this.setState({
-          message: "Check-in Failed",
-        });
-        this.navigateToCheckinMessage(this.state.message);
-      });
-  }
-
   serverSentEvents = () => {
-    if (!this.state.listening && this.state.deviceMode === "ID_READ_EVENT_DRIVEN") {
+    console.log("IN SSE")
+    let time = moment().add(30, "m").format("LT");
+    if (!this.state.listening) {
       const sse = new EventSource(`${VDS_URL}/sse/read`);
       sse.addEventListener(
         "SCANNED_DATA",
@@ -122,10 +66,39 @@ class Dashboard extends Component {
             this.setState({
               recievedIdentityInfo: true,
             });
-            this.saveIdData(obj.data);
-            setTimeout(() => {
-              this.navigateToCheckinMessage(this.state.message);
-            }, 1500);
+            saveIdData(obj.data)
+              .then((res) => {
+                console.log("SSE RES.DATA", res.data)
+                if (res.data && res.status) {
+                  if (res.data.message === "success") {
+                    console.log("SSE SUCCESS")
+                    this.setState({
+                      message: ` Welcome ${obj.data.givenNames} ${obj.data.familyName}, You are checked in for
+                    your ${time} appointment`,
+                    });
+                  } else if (res.data.message === "duplicate") {
+                    console.log("SSE DUPLICATE")
+                    this.setState({
+                      message: ` Welcome ${obj.data.givenNames} ${obj.data.familyName}, We
+                      could find that you are already checked in for appointment at ${res.data.appointmentTime}`,
+                    });
+                  } else {
+                    this.setState({
+                      message: "",
+                    });
+                  }
+                }
+              })
+              .then(() => {
+                this.navigateToCheckinMessage(this.state.message);
+              })
+              .catch((err) => {
+                console.log("SSE CATCH")
+                this.setState({
+                  message: "Your check-in could not be completed",
+                })
+                this.navigateToCheckinMessage(this.state.message);
+              });
           }
         },
         false
@@ -163,7 +136,10 @@ class Dashboard extends Component {
     });
   };
   render() {
-    console.log("Dashboard this.state.deviceStatus from App.js", this.state.deviceStatus);
+    console.log(
+      "Dashboard this.state.deviceStatus from App.js",
+      this.state.deviceStatus
+    );
     return (
       <>
         <Header></Header>
