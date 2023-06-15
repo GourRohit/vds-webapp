@@ -13,6 +13,7 @@ let INTERVAL = null;
 class Dashboard extends Component {
   state = {
     deviceMode: "",
+    deviceStatus: localStorage.getItem("deviceStatus"),
     recievedIdentityInfo: false,
     currentTime: null,
     firstName: "",
@@ -28,7 +29,7 @@ class Dashboard extends Component {
 
   buttonEnabled = () => {
     return (
-      this.props.deviceStatus === "CONNECTED_AOA_MODE" &&
+      this.state.deviceStatus === "CONNECTED_AOA_MODE" &&
       this.state.deviceMode === "USB_EVENT_DRIVEN"
     );
   };
@@ -162,7 +163,7 @@ class Dashboard extends Component {
     });
   };
   render() {
-    console.log("Dashboard this.props.deviceStatus from App.js", this.props.deviceStatus);
+    console.log("Dashboard this.state.deviceStatus from App.js", this.state.deviceStatus);
     return (
       <>
         <Header></Header>
@@ -213,17 +214,17 @@ class Dashboard extends Component {
             </>
           )}
           <div className="user-message-wrap">
-            {this.props.deviceStatus === "NOT_CONNECTED" ? (
+            {this.state.deviceStatus === "NOT_CONNECTED" ? (
               <span className="error-msg">
                 Please connect the device and try again
               </span>
-            ) : this.props.deviceStatus === "CONNECTED_AOA_MODE" &&
+            ) : this.state.deviceStatus === "CONNECTED_AOA_MODE" &&
               this.state.deviceMode === "ID_READ_EVENT_DRIVEN" &&
               this.state.message === "" ? (
               "Tap or scan your mobile DL or physical DL to check in"
             ) : this.state.deviceMode !== "ID_READ_EVENT_DRIVEN" &&
               this.state.deviceMode !== "USB_EVENT_DRIVEN" &&
-              this.props.deviceStatus === "CONNECTED_AOA_MODE" ? (
+              this.state.deviceStatus === "CONNECTED_AOA_MODE" ? (
               "Please change the device operation mode to activate reading"
             ) : (
               ""
