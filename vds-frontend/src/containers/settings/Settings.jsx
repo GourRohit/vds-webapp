@@ -1,13 +1,11 @@
 import React, { Component } from "react";
 import { Col, Container, Row, Button } from "react-bootstrap";
 import Header from "../header/Header";
-import axios from "axios";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import Table from "react-bootstrap/Table";
-import { VDS_URL, BASE_URL } from "../../UrlConfig";
 import { Link } from "react-router-dom";
-import { getReaderinfo, clearData, changeMode } from "../../services/Utils";
+import { getReaderinfo, clearData, setReaderProperties } from "../../services/Utils";
 
 class Settings extends Component {
   state = {
@@ -25,7 +23,7 @@ class Settings extends Component {
         {
           label: "Yes",
           onClick: () =>
-            changeMode(deviceMode)
+          setReaderProperties(deviceMode)
               .then((response) => {
                 if (response.status) {
                   this.setState({
@@ -99,10 +97,6 @@ class Settings extends Component {
     });
   };
   render() {
-    console.log(
-      "Settings this.state.deviceStatus from App.js",
-      this.state.deviceStatus
-    );
     return (
       <>
         <Header />
