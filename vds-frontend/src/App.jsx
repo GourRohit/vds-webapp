@@ -23,7 +23,6 @@ function App() {
       .then((response) => {
         if (response.data && response.status) {
           setDeviceStatus(response.data.deviceState);
-          localStorage.setItem("deviceStatus", response.data.deviceState);
         }
       })
       .catch((error) => {
