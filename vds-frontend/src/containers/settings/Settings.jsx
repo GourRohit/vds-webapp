@@ -11,7 +11,7 @@ import { getReaderinfo, clearData, changeMode } from "../../services/Utils";
 
 class Settings extends Component {
   state = {
-    deviceStatus: localStorage.getItem("deviceStatus"),
+    deviceStatus: this.props.deviceStatus,
     readerData: [],
     isData: false,
     deviceMode: localStorage.getItem("deviceMode"),

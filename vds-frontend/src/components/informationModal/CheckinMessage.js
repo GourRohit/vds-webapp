@@ -12,7 +12,7 @@ function CheckinMessage() {
   useEffect(() => {
     setTimeout(() => {
       setTime(true);
-    }, 10000);
+    }, 7000);
     setTime(false);
   }, []);
   return (

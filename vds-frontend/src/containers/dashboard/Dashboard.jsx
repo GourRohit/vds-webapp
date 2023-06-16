@@ -14,7 +14,7 @@ let INTERVAL = null;
 class Dashboard extends Component {
   state = {
     deviceMode: "",
-    deviceStatus: localStorage.getItem("deviceStatus"),
+    deviceStatus: this.props.deviceStatus,
     recievedIdentityInfo: false,
     currentTime: null,
     firstName: "",
@@ -38,14 +38,13 @@ class Dashboard extends Component {
     getDeviceMode()
       .then((response) => {
         if (response.data && response.status) {
+          localStorage.setItem("deviceMode", response.data.usbMode);
           this.setState({
             deviceMode: response.data.usbMode,
-          }).then(() => {
-            if (this.state.deviceMode === "HOLDER_DRIVEN") {
-              this.serverSentEvents();
-            }
-          });
-          localStorage.setItem("deviceMode", response.data.usbMode);
+          })
+          if (response.data.usbMode === "HOLDER_DRIVEN") {
+            this.serverSentEvents();
+          }
         }
       })
       .catch((error) => {
@@ -73,13 +72,13 @@ class Dashboard extends Component {
                   if (res.data.message === "success") {
                     console.log("SSE SUCCESS")
                     this.setState({
-                      message: ` Welcome ${obj.data.givenNames} ${obj.data.familyName}, You are checked in for
+                      message: ` Welcome ${obj.data.givenNames} ${obj.data.familyName}, you are checked in for
                     your ${time} appointment`,
                     });
                   } else if (res.data.message === "duplicate") {
                     console.log("SSE DUPLICATE")
                     this.setState({
-                      message: ` Welcome ${obj.data.givenNames} ${obj.data.familyName}, We
+                      message: ` Welcome ${obj.data.givenNames} ${obj.data.familyName}, we
                       could find that you are already checked in for appointment at ${res.data.appointmentTime}`,
                     });
                   } else {
@@ -136,10 +135,6 @@ class Dashboard extends Component {
     });
   };
   render() {
-    console.log(
-      "Dashboard this.state.deviceStatus from App.js",
-      this.state.deviceStatus
-    );
     return (
       <>
         <Header></Header>
