@@ -10,6 +10,16 @@ import { getDeviceStatus } from "./services/Utils";
 function App() {
   const [deviceStatus, setDeviceStatus] = useState("");
   useEffect(() => {
+    fetchDeviceStatus();
+    const interval = setInterval(() => {
+      fetchDeviceStatus();
+    }, 5000);
+    return () => {
+      clearInterval(interval);
+    };
+  });
+
+  const fetchDeviceStatus = () => {
     getDeviceStatus()
       .then((response) => {
         if (response.data && response.status) {
@@ -19,21 +29,8 @@ function App() {
       .catch((error) => {
         console.error(error);
       });
-    const interval = setInterval(() => {
-      getDeviceStatus()
-        .then((response) => {
-          if (response.data && response.status) {
-            setDeviceStatus(response.data.deviceState);
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    }, 5000);
-    return () => {
-      clearInterval(interval);
-    };
-  });
+  };
+
   return (
     <div className="wrapper">
       <BrowserRouter>
