@@ -1,19 +1,18 @@
 import React, { Component } from "react";
+import { Navigate } from "react-router";
 import Header from "../header/Header";
 import { Button } from "react-bootstrap";
-import axios from "axios";
 import moment from "moment";
-import { API_URL, VDS_URL } from "../../UrlConfig";
-import InformationModal from "../../components/informationModal/InformationModal";
+import { VDS_URL } from "../../UrlConfig";
+import { getReaderinfo, saveIdData } from "../../services/Utils";
 import QRGIF1 from "../../assets/images/Verification_using_QR.gif";
 import QRGIF2 from "../../assets/images/Verification_using_NFC.gif";
 import physicalIMG from "../../assets/images/DL_Scan_Back.png";
-let INTERVAL = null;
 
 class Dashboard extends Component {
   state = {
     deviceMode: "",
-    deviceStatus: "",
+    deviceStatus: this.props.deviceStatus,
     recievedIdentityInfo: false,
     currentTime: null,
     firstName: "",
@@ -23,110 +22,75 @@ class Dashboard extends Component {
     showModal: false,
     isMdL: false,
     message: "",
-    isLoading: true,
-    isError: false,
     listening: false,
+    checkinMessage: false,
   };
 
   buttonEnabled = () => {
     return (
       this.state.deviceStatus === "CONNECTED_AOA_MODE" &&
-      this.state.deviceMode === "USB_EVENT_DRIVEN"
+      this.state.deviceMode === "HOST_DRIVEN"
     );
   };
   componentDidMount = () => {
-    this.getDeviceMode();
-    INTERVAL = setInterval(() => {
-      this.getDeviceStatus();
-    }, 5000);
-    this.serverSentEvents();
-  };
-
-  getDeviceMode = () => {
-    axios
-      .get(`${VDS_URL}/reader/info`)
+    getReaderinfo()
       .then((response) => {
         if (response.data && response.status) {
+          localStorage.setItem("deviceMode", response.data.usbMode);
           this.setState({
             deviceMode: response.data.usbMode,
-          });
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
-
-  getDeviceStatus = () => {
-    axios
-      .get(`${VDS_URL}/reader/connection/status`)
-      .then((response) => {
-        if (response.data && response.status) {
-          this.setState({
-            deviceStatus: response.data.deviceState,
-          });
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
-
-  saveIdData(data) {
-    console.log("From save id data", data);
-    let time = moment().add(30, "m").format("LT");
-    const idData = {
-      documentNumber: data.documentNumber,
-      currentTime: time,
-    };
-    axios
-      .post(`${API_URL}data`, idData)
-      .then((res) => {
-        if (res.data && res.status) {
-          if (res.data.message === "success") {
-            this.setState({
-              isLoading: false,
-              message: ` Welcome ${data.givenNames} ${data.familyName}, you are checked in for
-              your ${time} appointment`,
-            });
-          } else if (res.data.message === "duplicate") {
-            this.setState({
-              isLoading: false,
-              message: ` Welcome ${data.givenNames} ${data.familyName}, we
-                could find that you are already checked in for appointment at ${res.data.appointmentTime}`,
-            });
-          } else {
-            this.setState({
-              isLoading: false,
-              message: "",
-            });
+          })
+          if (response.data.usbMode === "HOLDER_DRIVEN") {
+            this.serverSentEvents();
           }
         }
       })
-      .catch((err) => {
-        this.setState({
-          isLoading: false,
-          isError: true,
-          message: "Check-in Failed"
-        });
+      .catch((error) => {
+        console.error(error);
       });
-  }
+  };
 
   serverSentEvents = () => {
+    let time = moment().add(30, "m").format("LT");
     if (!this.state.listening) {
-      const sse = new EventSource(
-        `${VDS_URL}/sse/read`
-      );
+      const sse = new EventSource(`${VDS_URL}/sse/read`);
       sse.addEventListener(
         "SCANNED_DATA",
         (event) => {
           let obj = JSON.parse(event.data);
-          console.log("parsed e.data obj", obj);
           if (obj) {
             this.setState({
               recievedIdentityInfo: true,
             });
-            this.saveIdData(obj.data);
+            saveIdData(obj.data)
+              .then((res) => {
+                if (res.data && res.status) {
+                  if (res.data.message === "success") {
+                    this.setState({
+                      message: ` Welcome ${obj.data.givenNames} ${obj.data.familyName}, you are checked in for
+                    your ${time} appointment`,
+                    });
+                  } else if (res.data.message === "duplicate") {
+                    this.setState({
+                      message: ` Welcome ${obj.data.givenNames} ${obj.data.familyName}, we
+                      could find that you are already checked in for appointment at ${res.data.appointmentTime}`,
+                    });
+                  } else {
+                    this.setState({
+                      message: "",
+                    });
+                  }
+                }
+              })
+              .then(() => {
+                this.navigateToCheckinMessage();
+              })
+              .catch((err) => {
+                this.setState({
+                  message: "Your check-in could not be completed",
+                })
+                this.navigateToCheckinMessage();
+              });
           }
         },
         false
@@ -140,12 +104,18 @@ class Dashboard extends Component {
       };
       sse.onopen = (event) => {
         console.log("connection opened");
+        this.setState({
+          listening: true,
+        });
       };
-      this.setState({
-        listening: true,
-      });
     }
   };
+
+  navigateToCheckinMessage() {
+    this.setState({
+      checkinMessage: true,
+    });
+  }
 
   getIdentityInfo = (isMdl) => {
     this.setState({ isMdL: isMdl });
@@ -157,21 +127,16 @@ class Dashboard extends Component {
     });
   };
   render() {
-    console.log("message from dashboard", this.state.message);
     return (
       <>
         <Header></Header>
-        {this.state.showModal && (
-          <InformationModal
-            show={this.state.showModal}
-            modalclose={this.handleModal}
-            isMobileDLCheck={this.state.isMdL}
-            message={this.state.message}
-          ></InformationModal>
-        )}
+        {this.state.checkinMessage ? (
+          <Navigate to="checkin/message" state={this.state.message} />
+        ) : null}
+        {this.state.showModal && <Navigate to="/checkin" state={this.state} />}
         <div className="page-container">
           <p>Welcome to Mocktana Department of Motor Vehicles </p>
-          {this.state.deviceMode !== "ID_READ_EVENT_DRIVEN" && (
+          {this.state.deviceMode !== "HOLDER_DRIVEN" && (
             <div className="button-wrap">
               <Button
                 variant={this.buttonEnabled() ? "primary" : "secondary"}
@@ -193,7 +158,7 @@ class Dashboard extends Component {
               </Button>
             </div>
           )}
-          {this.state.deviceMode === "ID_READ_EVENT_DRIVEN" && (
+          {this.state.deviceMode === "HOLDER_DRIVEN" && (
             <>
               <div className="dashboard-image-wrap">
                 <img className="dashboard-img" src={QRGIF1} alt="qr-gif"></img>
@@ -205,25 +170,28 @@ class Dashboard extends Component {
                 <img className="dashboard-img" src={QRGIF2} alt="nfc-gif"></img>
               </div>
               <div className="dashboard-name-wrap">
-                <h3>QR Code Presentation</h3>
-                <h3>Physical ID Presentation</h3>
-                <h3>NFC Presentation</h3>
+                <h3 className="dashboard-name-text">QR Code</h3>
+                <h3 className="dashboard-name-text">Physical ID</h3>
+                <h3 className="dashboard-name-text">NFC</h3>
               </div>
             </>
           )}
           <div className="user-message-wrap">
-              {this.state.deviceStatus === "NOT_CONNECTED"
-                ? <span className="error-msg">Please connect the device and try again</span>
-                : this.state.deviceStatus === "CONNECTED_AOA_MODE" &&
-                  this.state.deviceMode === "ID_READ_EVENT_DRIVEN" && this.state.message === ""
-                ? "Tap or scan your mobile DL or physical DL to check in"
-                : this.state.deviceMode !== "ID_READ_EVENT_DRIVEN" &&
-                  this.state.deviceMode !== "USB_EVENT_DRIVEN" && this.state.deviceStatus === "CONNECTED_AOA_MODE"
-                ? "Please change the device operation mode to activate reading"
-                : ""}
-          </div>
-          <div>
-            <p className={this.state.isError ? "error-msg" : "info-message"}>{this.state.message}</p>
+            {this.state.deviceStatus === "NOT_CONNECTED" ? (
+              <span className="error-msg">
+                Please connect the device and try again
+              </span>
+            ) : this.state.deviceStatus === "CONNECTED_AOA_MODE" &&
+              this.state.deviceMode === "HOLDER_DRIVEN" &&
+              this.state.message === "" ? (
+              "Tap or scan your mobile DL or physical DL to check in"
+            ) : this.state.deviceMode !== "HOLDER_DRIVEN" &&
+              this.state.deviceMode !== "HOST_DRIVEN" &&
+              this.state.deviceStatus === "CONNECTED_AOA_MODE" ? (
+              "Please change the device operation mode to activate reading"
+            ) : (
+              ""
+            )}
           </div>
         </div>
       </>
