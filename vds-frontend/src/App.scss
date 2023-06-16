@@ -57,7 +57,7 @@
   }
   .user-message-wrap {
     margin-top: 45px;
-    font-size: 18px;
+    font-size: 24px;
     .error-msg {
       color: red;
     }
@@ -155,6 +155,10 @@ button.btn-secondary:disabled {
 .dashboard-name-wrap {
   display: flex;
   justify-content: space-around;
+  margin-right: 20px;
+}
+.dashboard-name-text {
+  font-size: 22px;
 }
 .qr-verification-text {
   margin-left: 17px;
@@ -174,7 +178,7 @@ button.btn-secondary:disabled {
   text-align: center;
   margin-top: 40px;
   margin-bottom: 5%;
-  font-size: 22px;
+  font-size: 24px;
   color: black;
 }
 .device-status {
@@ -238,24 +242,26 @@ ul.breadcrumb li a:hover {
 }
 .information-modal-name-wrap {
   display: flex;
-  justify-content: center;
-  margin-right: 40px;
+  justify-content: space-evenly;
 }
 .information-modal-qr-verification-text {
-  margin-right: 130px;
+  margin-left: 25px;
+  font-size: 22px;
+}
+.information-modal-nfc-verification-text {
+  margin-right: 60px;
+  font-size: 22px;
 }
 .checkin-message {
   display: flex;
   justify-content: center;
   margin-top: 20%;
-  font-family: sans-serif;
   font-size: 250%;
 }
 .checkin-error-message {
   display: flex;
   justify-content: center;
   margin-top: 20%;
-  font-family: sans-serif;
   font-size: 250%;
   color: red;
 }

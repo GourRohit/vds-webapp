@@ -2,14 +2,12 @@ import React, { Component } from "react";
 import { Navigate } from "react-router";
 import Header from "../header/Header";
 import { Button } from "react-bootstrap";
-import axios from "axios";
 import moment from "moment";
-import { API_URL, VDS_URL } from "../../UrlConfig";
-import { getDeviceMode, saveIdData } from "../../services/Utils";
+import { VDS_URL } from "../../UrlConfig";
+import { getReaderinfo, saveIdData } from "../../services/Utils";
 import QRGIF1 from "../../assets/images/Verification_using_QR.gif";
 import QRGIF2 from "../../assets/images/Verification_using_NFC.gif";
 import physicalIMG from "../../assets/images/DL_Scan_Back.png";
-let INTERVAL = null;
 
 class Dashboard extends Component {
   state = {
@@ -35,7 +33,7 @@ class Dashboard extends Component {
     );
   };
   componentDidMount = () => {
-    getDeviceMode()
+    getReaderinfo()
       .then((response) => {
         if (response.data && response.status) {
           localStorage.setItem("deviceMode", response.data.usbMode);
@@ -53,7 +51,6 @@ class Dashboard extends Component {
   };
 
   serverSentEvents = () => {
-    console.log("IN SSE")
     let time = moment().add(30, "m").format("LT");
     if (!this.state.listening) {
       const sse = new EventSource(`${VDS_URL}/sse/read`);
@@ -67,16 +64,13 @@ class Dashboard extends Component {
             });
             saveIdData(obj.data)
               .then((res) => {
-                console.log("SSE RES.DATA", res.data)
                 if (res.data && res.status) {
                   if (res.data.message === "success") {
-                    console.log("SSE SUCCESS")
                     this.setState({
                       message: ` Welcome ${obj.data.givenNames} ${obj.data.familyName}, you are checked in for
                     your ${time} appointment`,
                     });
                   } else if (res.data.message === "duplicate") {
-                    console.log("SSE DUPLICATE")
                     this.setState({
                       message: ` Welcome ${obj.data.givenNames} ${obj.data.familyName}, we
                       could find that you are already checked in for appointment at ${res.data.appointmentTime}`,
@@ -89,14 +83,13 @@ class Dashboard extends Component {
                 }
               })
               .then(() => {
-                this.navigateToCheckinMessage(this.state.message);
+                this.navigateToCheckinMessage();
               })
               .catch((err) => {
-                console.log("SSE CATCH")
                 this.setState({
                   message: "Your check-in could not be completed",
                 })
-                this.navigateToCheckinMessage(this.state.message);
+                this.navigateToCheckinMessage();
               });
           }
         },
@@ -118,8 +111,7 @@ class Dashboard extends Component {
     }
   };
 
-  navigateToCheckinMessage(message) {
-    console.log("in navigate checkin message", message);
+  navigateToCheckinMessage() {
     this.setState({
       checkinMessage: true,
     });
@@ -178,9 +170,9 @@ class Dashboard extends Component {
                 <img className="dashboard-img" src={QRGIF2} alt="nfc-gif"></img>
               </div>
               <div className="dashboard-name-wrap">
-                <h3>QR Code Presentation</h3>
-                <h3>Physical ID Presentation</h3>
-                <h3>NFC Presentation</h3>
+                <h3 className="dashboard-name-text">QR Code</h3>
+                <h3 className="dashboard-name-text">Physical ID</h3>
+                <h3 className="dashboard-name-text">NFC</h3>
               </div>
             </>
           )}

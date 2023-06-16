@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import axios from "axios";
 import moment from "moment";
-import { API_URL, VDS_URL } from "../../UrlConfig";
 import { getIdentityInfo, saveIdData } from "../../services/Utils";
 import QRGIF1 from "../../assets/images/Verification_using_QR.gif";
 import QRGIF2 from "../../assets/images/Verification_using_NFC.gif";
@@ -22,11 +20,9 @@ const InformationModal = () => {
     let responseMessage;
     getIdentityInfo()
       .then((response) => {
-        console.log("RES.DATA", response.data);
         if (response.data) {
           saveIdData(response.data.data)
             .then((res) => {
-              console.log("RES", res);
               if (res.data && res.status) {
                 if (res.data.message === "success") {
                   responseMessage = ` Welcome ${response.data.data.givenNames} ${response.data.data.familyName}, you are checked in for 
@@ -42,7 +38,6 @@ const InformationModal = () => {
               }
             })
             .then((responseMessage) => {
-              console.log("in .then navigation", responseMessage);
               navigateToCheckinMessage(responseMessage);
             })
             .catch((error) => {
@@ -62,7 +57,6 @@ const InformationModal = () => {
   }, []);
 
   function navigateToCheckinMessage(message) {
-    console.log("in navigate checkin message", message);
     setCheckinCompleted(true);
   }
   return (
@@ -95,10 +89,10 @@ const InformationModal = () => {
             </div>
             <div className="information-modal-name-wrap">
               <h3 className="information-modal-qr-verification-text">
-                QR Code Presentation
+                QR Code
               </h3>
               <h3 className="information-modal-nfc-verification-text">
-                NFC Presentation
+                NFC
               </h3>
             </div>
             <div className="message-wrap">
