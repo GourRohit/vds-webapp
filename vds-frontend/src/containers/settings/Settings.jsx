@@ -45,7 +45,10 @@ class Settings extends Component {
           });
         }
       })
-      .catch(function (error) {
+      .catch((error) => {
+        this.setState({
+          isLoading: false,
+        });
         confirmAlert({
           title: "Failed to change device mode",
           buttons: [
@@ -305,7 +308,7 @@ class Settings extends Component {
               </Col>
             </Row>
             <Row className="spinner">
-            {this.state.isLoading ? <FadeLoader color="#66ff99" /> : null}
+            {this.state.isLoading ? <FadeLoader color="#1aff66" /> : null}
             </Row>
           </div>
         </Container>
