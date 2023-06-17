@@ -20,7 +20,7 @@ const InformationModal = () => {
     let responseMessage;
     getIdentityInfo()
       .then((response) => {
-        if (response.data) {
+        if (response.data.docType === "IDENTITY") {
           saveIdData(response.data.data)
             .then((res) => {
               if (res.data && res.status) {
@@ -37,14 +37,17 @@ const InformationModal = () => {
                 }
               }
             })
-            .then((responseMessage) => {
-              navigateToCheckinMessage(responseMessage);
+            .then(() => {
+              navigateToCheckinMessage();
             })
             .catch((error) => {
               responseMessage = "Your check-in could not be completed";
               setMessage(responseMessage);
-              navigateToCheckinMessage(responseMessage);
+              navigateToCheckinMessage();
             });
+        } else if (response.data.docType === "QR_CODE") {
+          setMessage(response.data.data.qrCodeData);
+          navigateToCheckinMessage();
         } else {
           setMessage("");
         }
@@ -52,11 +55,11 @@ const InformationModal = () => {
       .catch((error) => {
         responseMessage = "Your check-in could not be completed";
         setMessage(responseMessage);
-        navigateToCheckinMessage(responseMessage);
+        navigateToCheckinMessage();
       });
   }, []);
 
-  function navigateToCheckinMessage(message) {
+  function navigateToCheckinMessage() {
     setCheckinCompleted(true);
   }
   return (
@@ -91,9 +94,7 @@ const InformationModal = () => {
               <h3 className="information-modal-qr-verification-text">
                 QR Code
               </h3>
-              <h3 className="information-modal-nfc-verification-text">
-                NFC
-              </h3>
+              <h3 className="information-modal-nfc-verification-text">NFC</h3>
             </div>
             <div className="message-wrap">
               <p>
