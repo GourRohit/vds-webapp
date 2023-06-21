@@ -11,6 +11,7 @@ export function saveIdData(data) {
   const idData = {
     documentNumber: data.documentNumber,
     currentTime: time,
+    portrait: data.portrait,
   };
   return axios.post(`${API_URL}data`, idData);
 }

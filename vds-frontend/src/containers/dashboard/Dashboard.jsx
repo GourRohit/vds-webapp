@@ -24,6 +24,7 @@ class Dashboard extends Component {
     message: "",
     listening: false,
     checkinMessage: false,
+    portrait: "",
   };
 
   buttonEnabled = () => {
@@ -39,7 +40,7 @@ class Dashboard extends Component {
           localStorage.setItem("deviceMode", response.data.usbMode);
           this.setState({
             deviceMode: response.data.usbMode,
-          })
+          });
           if (response.data.usbMode === "HOLDER_DRIVEN") {
             this.serverSentEvents();
           }
@@ -69,11 +70,13 @@ class Dashboard extends Component {
                     this.setState({
                       message: ` Welcome ${obj.data.givenNames} ${obj.data.familyName}, you are checked in for
                     your ${time} appointment`,
+                      portrait: obj.data.portrait,
                     });
                   } else if (res.data.message === "duplicate") {
                     this.setState({
                       message: ` Welcome ${obj.data.givenNames} ${obj.data.familyName}, we
                       could find that you are already checked in for appointment at ${res.data.appointmentTime}`,
+                      portrait: res.data.portrait,
                     });
                   } else {
                     this.setState({
@@ -88,7 +91,7 @@ class Dashboard extends Component {
               .catch((err) => {
                 this.setState({
                   message: "Your check-in could not be completed",
-                })
+                });
                 this.navigateToCheckinMessage();
               });
           }
@@ -131,7 +134,7 @@ class Dashboard extends Component {
       <>
         <Header></Header>
         {this.state.checkinMessage ? (
-          <Navigate to="checkin/message" state={this.state.message} />
+          <Navigate to="checkin/message" state={this.state} />
         ) : null}
         {this.state.showModal && <Navigate to="/checkin" state={this.state} />}
         <div className="page-container">

@@ -11,10 +11,12 @@ import { Navigate } from "react-router";
 
 const InformationModal = () => {
   const [message, setMessage] = useState("");
+  const [portrait, setPortrait] = useState("");
   const [checkinCompleted, setCheckinCompleted] = useState(false);
   const location = useLocation();
   const data = location.state;
   let time = moment().add(30, "m").format("LT");
+  let props = { message, portrait };
 
   useEffect(() => {
     let responseMessage;
@@ -28,10 +30,12 @@ const InformationModal = () => {
                   responseMessage = ` Welcome ${response.data.data.givenNames} ${response.data.data.familyName}, you are checked in for 
                 your ${time} appointment.`;
                   setMessage(responseMessage);
+                  setPortrait(response.data.data.portrait);
                 } else if (res.data.message === "duplicate") {
                   responseMessage = ` Welcome ${response.data.data.givenNames} ${response.data.data.familyName}, we
                   could find that you are already checked in for appointment at ${res.data.appointmentTime}`;
                   setMessage(responseMessage);
+                  setPortrait(res.data.portrait);
                 } else {
                   setMessage(message);
                 }
@@ -75,7 +79,7 @@ const InformationModal = () => {
         </span>
       )}
       <div className="modal-wrap">
-        {checkinCompleted ? <Navigate to="message" state={message} /> : null}
+        {checkinCompleted ? <Navigate to="message" state={props} /> : null}
         {data.isMdL ? (
           <>
             <div className="information-modal-image-wrap">

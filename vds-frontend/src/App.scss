@@ -256,9 +256,15 @@ ul.breadcrumb li a:hover {
   display: flex;
   justify-content: center;
   width: 75%;
-  margin: 20% auto 0;
+  margin: 0 auto 0;
   font-size: 250%;
   text-align: center
+}
+.checkin-message-no-portrait {
+  margin: 20% auto 0
+}
+.checkin-message-portrait {
+  margin: 0 auto 0
 }
 .checkin-error-message {
   display: flex;
@@ -277,4 +283,13 @@ ul.breadcrumb li a:hover {
 .spinner {
   display: flex;
   justify-content: center;
+}
+.portrait {
+  margin-top: 12%;
+  margin-bottom: 5%;
+  display: flex;
+  justify-content: center;
+}
+.portrait-img {
+  width: 20%;
 }

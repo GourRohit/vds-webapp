@@ -11,7 +11,7 @@ const sqlite3 = require("sqlite3").verbose();
 //const db = new sqlite3.Database(":memory:");
 
 // serve up production assets
-app.use(express.static(path.join(__dirname, '../vds-frontend/build')))
+app.use(express.static(path.join(__dirname, "../vds-frontend/build")));
 
 let db = new sqlite3.Database("./vds.db", sqlite3.OPEN_READWRITE, (err) => {
   if (err && err.code == "SQLITE_CANTOPEN") {
@@ -35,7 +35,9 @@ function createDatabase() {
 
 const createTables = () => {
   db.serialize(() => {
-    db.run("CREATE TABLE CHECKIN_DATA (documentNumber TEXT, appointmentTime TEXT)");
+    db.run(
+      "CREATE TABLE CHECKIN_DATA (documentNumber TEXT, appointmentTime TEXT, portrait TEXT)"
+    );
     console.log("sucessfully create table");
   });
 };
@@ -43,8 +45,8 @@ const createTables = () => {
 function insertData(data) {
   return new Promise(function (resolve, reject) {
     return db.run(
-      `INSERT INTO CHECKIN_DATA(documentNumber, appointmentTime) VALUES(?,?)`,
-      [data.documentNumber, data.appointmentTime ],
+      `INSERT INTO CHECKIN_DATA(documentNumber, appointmentTime, portrait) VALUES(?,?,?)`,
+      [data.documentNumber, data.appointmentTime, data.portrait],
       function (error) {
         if (error) {
           return reject(error);
@@ -59,7 +61,7 @@ function insertData(data) {
 function checkForDuplicateData(docNumber) {
   return new Promise(function (resolve, reject) {
     var query =
-      "SELECT documentNumber, appointmentTime FROM CHECKIN_DATA  WHERE documentNumber = " +
+      "SELECT documentNumber, appointmentTime, portrait FROM CHECKIN_DATA  WHERE documentNumber = " +
       "'" +
       docNumber +
       "'";
@@ -78,19 +80,25 @@ function checkForDuplicateData(docNumber) {
 }
 
 app.post("/data", async (req, res) => {
-  let message, appointmentTime;
+  let message, appointmentTime, portrait;
   const data = {
     documentNumber: req.body.documentNumber,
-    appointmentTime: req.body.currentTime
+    appointmentTime: req.body.currentTime,
+    portrait: req.body.portrait,
   };
   let rows = await checkForDuplicateData(data.documentNumber);
   if (!rows.length > 0) {
     message = await insertData(data);
   } else {
     message = "duplicate";
-    appointmentTime = rows[0].appointmentTime
+    appointmentTime = rows[0].appointmentTime;
+    portrait = rows[0].portrait;
   }
-  res.json({ message: message, appointmentTime: appointmentTime });
+  res.json({
+    message: message,
+    appointmentTime: appointmentTime,
+    portrait: portrait,
+  });
 });
 function getdataFromDb() {
   return new Promise(function (resolve, reject) {
