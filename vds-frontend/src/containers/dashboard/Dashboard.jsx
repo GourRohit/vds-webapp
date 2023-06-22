@@ -107,7 +107,7 @@ class Dashboard extends Component {
       );
       sse.onerror = function (event) {
         this.setState({
-          message: "Your check-in could not be completed",
+          message: "Could not establish connection with VDS",
         });
         this.navigateToCheckinMessage();
         console.log(event.target.readyState);
