@@ -63,42 +63,53 @@ class Dashboard extends Component {
             this.setState({
               recievedIdentityInfo: true,
             });
-            saveIdData(obj.data)
-              .then((res) => {
-                if (res.data && res.status) {
-                  if (res.data.message === "success") {
-                    this.setState({
-                      message: ` Welcome ${obj.data.givenNames} ${obj.data.familyName}, you are checked in for
+            if (obj.docType === "IDENTITY") {
+              saveIdData(obj.data)
+                .then((res) => {
+                  if (res.data && res.status) {
+                    if (res.data.message === "success") {
+                      this.setState({
+                        message: ` Welcome ${obj.data.givenNames} ${obj.data.familyName}, you are checked in for
                     your ${time} appointment`,
-                      portrait: obj.data.portrait,
-                    });
-                  } else if (res.data.message === "duplicate") {
-                    this.setState({
-                      message: ` Welcome ${obj.data.givenNames} ${obj.data.familyName}, we
+                        portrait: obj.data.portrait,
+                      });
+                    } else if (res.data.message === "duplicate") {
+                      this.setState({
+                        message: ` Welcome ${obj.data.givenNames} ${obj.data.familyName}, we
                       could find that you are already checked in for appointment at ${res.data.appointmentTime}`,
-                      portrait: res.data.portrait,
-                    });
-                  } else {
-                    this.setState({
-                      message: "",
-                    });
+                        portrait: res.data.portrait,
+                      });
+                    } else {
+                      this.setState({
+                        message: "",
+                      });
+                    }
                   }
-                }
-              })
-              .then(() => {
-                this.navigateToCheckinMessage();
-              })
-              .catch((err) => {
-                this.setState({
-                  message: "Your check-in could not be completed",
+                })
+                .then(() => {
+                  this.navigateToCheckinMessage();
+                })
+                .catch((err) => {
+                  this.setState({
+                    message: "Your check-in could not be completed",
+                  });
+                  this.navigateToCheckinMessage();
                 });
-                this.navigateToCheckinMessage();
+            } else if (obj.docType === "QR_CODE") {
+              this.setState({
+                message: obj.data.qrCodeData,
               });
+              this.navigateToCheckinMessage();
+            }
           }
         },
         false
       );
       sse.onerror = function (event) {
+        this.setState({
+          message: "Your check-in could not be completed",
+        });
+        this.navigateToCheckinMessage();
         console.log(event.target.readyState);
         if (event.target.readyState === EventSource.CLOSED) {
           console.log("SSE closed (" + event.target.readyState + ")");
