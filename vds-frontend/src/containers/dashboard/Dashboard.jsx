@@ -34,6 +34,7 @@ class Dashboard extends Component {
     );
   };
   componentDidMount = () => {
+    if(this.state.deviceStatus !== ""){
     getReaderinfo()
       .then((response) => {
         if (response.data && response.status) {
@@ -49,6 +50,7 @@ class Dashboard extends Component {
       .catch((error) => {
         console.error(error);
       });
+    }
   };
 
   serverSentEvents = () => {
