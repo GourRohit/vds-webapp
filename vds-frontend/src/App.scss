@@ -113,9 +113,6 @@
 button.btn-secondary:disabled {
   cursor: not-allowed;
 }
-.info-btn {
-  margin-left: 100px;
-}
 .reader-response {
   margin-left: 180px;
 }
@@ -189,6 +186,8 @@ button.btn-secondary:disabled {
   margin-top: 25px;
 }
 .reader-info-btn {
+  display: flex;
+  justify-content: center;
   margin-top: 160px;
 }
 .container {

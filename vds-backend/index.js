@@ -1,10 +1,28 @@
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
+const moment = require("moment");
+const cron = require("node-cron");
 const PORT = 3000;
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+// Schedule a task to run every minute
+cron.schedule("* * * * *", () => {
+  const currentTimestamp = moment().format("LT");
+  // Clear check-in data for each person where appointment time is reached
+  const sqlQuery = `DELETE FROM CHECKIN_DATA WHERE appointmentTime <= '${currentTimestamp}'`;
+  db.serialize(() => {
+    db.run(sqlQuery, (error, results, fields) => {
+      if (error) {
+        console.log("Error executing delete query:", error);
+      } else {
+        console.log(`Check-in data deleted till '${currentTimestamp}'`);
+      }
+    });
+  });
+});
 
 /*****Database ******/
 const sqlite3 = require("sqlite3").verbose();
@@ -114,13 +132,6 @@ app.get("/data", async (req, res) => {
     identitydata.push(row.documentNumber);
   });
   res.json({ data: identitydata });
-});
-
-app.delete("/data", async (req, res) => {
-  db.serialize(() => {
-    db.run("DELETE FROM CHECKIN_DATA");
-    res.json({ message: "Successfully deleted checkin data" });
-  });
 });
 
 app.get("*", (req, res) => {
