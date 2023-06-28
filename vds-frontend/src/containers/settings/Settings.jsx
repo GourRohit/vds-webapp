@@ -76,44 +76,7 @@ class Settings extends Component {
       ],
     });
   };
-  handleClearBtn = () => {
-    confirmAlert({
-      title: "Do you want to clear data?",
-      buttons: [
-        {
-          label: "Yes",
-          onClick: () =>
-            clearData()
-              .then((res) => {
-                if (res.status) {
-                  confirmAlert({
-                    title: "Checkin data cleared successfully",
-                    buttons: [
-                      {
-                        label: "Ok",
-                      },
-                    ],
-                  });
-                }
-              })
-              .catch((error) => {
-                console.error(error);
-                confirmAlert({
-                  title: "Failed to clear checkin data",
-                  buttons: [
-                    {
-                      label: "Ok",
-                    },
-                  ],
-                });
-              }),
-        },
-        {
-          label: "No",
-        },
-      ],
-    });
-  };
+
   render() {
     return (
       <>
@@ -240,7 +203,7 @@ class Settings extends Component {
               </Col>
               <Col md={6}>
                 <Row className="btn-row">
-                  <Col md={7} className="reader-info-btn">
+                  <Col md={12} className="reader-info-btn">
                     <Button
                       className="info-btn"
                       onClick={() =>
@@ -276,11 +239,6 @@ class Settings extends Component {
                       disabled={this.state.deviceStatus === "NOT_CONNECTED"}
                     >
                       Fetch Reader Info
-                    </Button>
-                  </Col>
-                  <Col md={5}>
-                    <Button variant="primary" onClick={this.handleClearBtn}>
-                      Clear Checkin Data
                     </Button>
                   </Col>
                 </Row>
