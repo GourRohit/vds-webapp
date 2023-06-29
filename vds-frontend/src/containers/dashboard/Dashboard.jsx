@@ -208,6 +208,9 @@ class Dashboard extends Component {
             ) : (
               ""
             )}
+            {this.state.deviceStatus === "VDS_NOT_RUNNING" && (
+              <span className="error-msg">VDS is not running</span>
+            )}
           </div>
         </div>
       </>

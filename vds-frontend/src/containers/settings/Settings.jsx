@@ -8,7 +8,6 @@ import Table from "react-bootstrap/Table";
 import { Link } from "react-router-dom";
 import {
   getReaderinfo,
-  clearData,
   setReaderProperties,
 } from "../../services/Utils";
 
@@ -121,7 +120,9 @@ class Settings extends Component {
                     />{" "}
                     {this.state.deviceStatus === "CONNECTED_AOA_MODE"
                       ? "CONNECTED"
-                      : "NOT CONNECTED"}
+                      : (this.state.deviceStatus === "VDS_NOT_RUNNING"
+                      ? "VDS NOT RUNNING"
+                      : "Tap2iD NOT CONNECTED")}
                   </Col>
                 </Row>
                 <Row>

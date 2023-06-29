@@ -27,7 +27,10 @@ function App() {
         }
       })
       .catch((error) => {
-        console.error(error);
+        console.log("ERROR", error)
+        if(error.message === "Network Error") {
+          setDeviceStatus("VDS_NOT_RUNNING")
+        }
       });
   };
 
