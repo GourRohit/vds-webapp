@@ -6,14 +6,11 @@
   height: 4.6875rem;
   width: 100%;
   .navBar-linkwrap {
-    margin-left: 220px;
+    margin-left: 500px;
     width: 65%;
     justify-content: space-around;
     .mid-logo {
       width: 15%;
-      margin-top: 6px;
-      margin-right: 8px;
-      margin-left: 120px;
     }
     .mid-label {
       margin-top: 19px;
@@ -40,6 +37,7 @@
     .setting-link {
       display: flex;
       cursor: pointer;
+      text-decoration: none;
     }
   }
 }
