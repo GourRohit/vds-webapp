@@ -8,8 +8,7 @@ function CheckinMessage() {
   const [time, setTime] = useState(false);
   const location = useLocation();
   const message = location.state.message;
-  const portrait = location.state.portrait;
-  console.log("data", location);
+  const portrait = `data:image/webp;base64,${location.state.portrait}`;
   useEffect(() => {
     setTimeout(() => {
       setTime(true);
@@ -20,14 +19,14 @@ function CheckinMessage() {
     <>
       {time ? navigate("/") : navigate("checkin/message")}
       <Header />
-      {portrait !== "" && (
+      {portrait !== "data:image/webp;base64," && (
         <div className="portrait">
           <img className="portrait-img" src={portrait} alt="portrait" />
         </div>
       )}
       <div
         className={
-          portrait === ""
+          portrait === "data:image/webp;base64,"
             ? "checkin-message-no-portrait"
             : "checkin-message-portrait"
         }
