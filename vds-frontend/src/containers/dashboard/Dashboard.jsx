@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Navigate } from "react-router";
 import Header from "../header/Header";
 import { Button } from "react-bootstrap";
-import moment from "moment";
 import { VDS_URL } from "../../UrlConfig";
 import { getReaderinfo, saveIdData } from "../../services/Utils";
 import QRGIF1 from "../../assets/images/Verification_using_QR.gif";
@@ -54,7 +53,6 @@ class Dashboard extends Component {
   };
 
   serverSentEvents = () => {
-    let time = moment().add(30, "m").format("LT");
     if (!this.state.listening) {
       const sse = new EventSource(`${VDS_URL}/sse/read`);
       sse.addEventListener(
@@ -72,7 +70,7 @@ class Dashboard extends Component {
                     if (res.data.message === "success") {
                       this.setState({
                         message: ` Welcome ${obj.data.givenNames} ${obj.data.familyName}, you are checked in for
-                    your ${time} appointment`,
+                    your ${res.data.appointmentTime} appointment`,
                         portrait: obj.data.portrait,
                       });
                     } else if (res.data.message === "duplicate") {

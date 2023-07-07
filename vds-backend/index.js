@@ -10,15 +10,17 @@ app.use(express.json());
 
 // Schedule a task to run every minute
 cron.schedule("* * * * *", () => {
-  const currentTimestamp = moment().format("LT");
+  // Returns the current epoch time in milliseconds
+  const currentEpochTime = Date.now();
+  const currentTimestamp = moment(parseInt(currentEpochTime)).format("h:mm A");
   // Clear check-in data for each person where appointment time is reached
-  const sqlQuery = `DELETE FROM CHECKIN_DATA WHERE appointmentTime <= '${currentTimestamp}'`;
+  const sqlQuery = `DELETE FROM CHECKIN_DATA WHERE appointmentTime <= '${currentEpochTime}'`;
   db.serialize(() => {
     db.run(sqlQuery, (error, results, fields) => {
       if (error) {
         console.log("Error executing delete query:", error);
       } else {
-        console.log(`Check-in data deleted till '${currentTimestamp}'`);
+        console.log(`Check-in data cleared till '${currentTimestamp}'`);
       }
     });
   });
@@ -69,7 +71,7 @@ function insertData(data) {
         if (error) {
           return reject(error);
         } else {
-          return resolve("success");
+          return resolve();
         }
       }
     );
@@ -98,18 +100,32 @@ function checkForDuplicateData(docNumber) {
 }
 
 app.post("/data", async (req, res) => {
+  // Returns the current epoch time in milliseconds
+  const currentEpochTime = Date.now();
+  // Create a new Date object with the epoch time
+  const date = new Date(currentEpochTime);
+  // Add 30 minutes to the Date object
+  date.setMinutes(date.getMinutes() + 30);
+  // date to epoch conversion
+  const time = date.getTime();
   let message, appointmentTime, portrait;
   const data = {
     documentNumber: req.body.documentNumber,
-    appointmentTime: req.body.currentTime,
+    appointmentTime: time,
     portrait: req.body.portrait,
   };
   let rows = await checkForDuplicateData(data.documentNumber);
+  const convertEpochToTime = (time) => {
+    return moment(parseInt(time)).format("h:mm A");
+  };
   if (!rows.length > 0) {
-    message = await insertData(data);
+    await insertData(data);
+    message = "success";
+    appointmentTime = convertEpochToTime(data.appointmentTime);
+    portrait = data.portrait;
   } else {
     message = "duplicate";
-    appointmentTime = rows[0].appointmentTime;
+    appointmentTime = convertEpochToTime(rows[0].appointmentTime);
     portrait = rows[0].portrait;
   }
   res.json({

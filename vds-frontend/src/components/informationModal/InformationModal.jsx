@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import moment from "moment";
 import { getIdentityInfo, saveIdData } from "../../services/Utils";
 import QRGIF1 from "../../assets/images/Verification_using_QR.gif";
 import QRGIF2 from "../../assets/images/Verification_using_NFC.gif";
@@ -15,7 +14,6 @@ const InformationModal = () => {
   const [checkinCompleted, setCheckinCompleted] = useState(false);
   const location = useLocation();
   const data = location.state;
-  let time = moment().add(30, "m").format("LT");
   let props = { message, portrait };
 
   useEffect(() => {
@@ -28,7 +26,7 @@ const InformationModal = () => {
               if (res.data && res.status) {
                 if (res.data.message === "success") {
                   responseMessage = ` Welcome ${response.data.data.givenNames} ${response.data.data.familyName}, you are checked in for 
-                your ${time} appointment.`;
+                your ${res.data.appointmentTime} appointment.`;
                   setMessage(responseMessage);
                   setPortrait(response.data.data.portrait);
                 } else if (res.data.message === "duplicate") {
