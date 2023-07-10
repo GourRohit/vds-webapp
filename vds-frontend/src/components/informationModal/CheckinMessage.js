@@ -7,8 +7,8 @@ function CheckinMessage() {
   let navigate = useNavigate();
   const [time, setTime] = useState(false);
   const location = useLocation();
-  const message = location.state;
-  console.log("data", location);
+  const message = location.state.message;
+  const portrait = `data:image/webp;base64,${location.state.portrait}`;
   useEffect(() => {
     setTimeout(() => {
       setTime(true);
@@ -19,17 +19,30 @@ function CheckinMessage() {
     <>
       {time ? navigate("/") : navigate("checkin/message")}
       <Header />
+      {portrait !== "data:image/webp;base64," && (
+        <div className="portrait">
+          <img className="portrait-img" src={portrait} alt="portrait" />
+        </div>
+      )}
       <div
         className={
-          message === "Your check-in could not be completed"
-            ? "checkin-error-message"
-            : "checkin-message"
+          portrait === "data:image/webp;base64,"
+            ? "checkin-message-no-portrait"
+            : "checkin-message-portrait"
         }
       >
-        {message}
+        <div
+          className={
+            message === "Your check-in could not be completed"
+              ? "checkin-error-message"
+              : "checkin-message"
+          }
+        >
+          {message}
+        </div>
       </div>
       <div className="done-btn">
-        <Button onClick={()=> navigate("/")} size="lg" variant="primary">
+        <Button onClick={() => navigate("/")} size="lg" variant="primary">
           Done
         </Button>
       </div>

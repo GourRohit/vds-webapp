@@ -1,18 +1,16 @@
 import axios from "axios";
-import moment from "moment";
-import { VDS_URL, API_URL, BASE_URL } from "../UrlConfig";
+import { VDS_URL, BASE_URL } from "../UrlConfig";
 
 export function getDeviceStatus() {
   return axios.get(`${VDS_URL}/reader/connection/status`);
 }
 
 export function saveIdData(data) {
-  let time = moment().add(30, "m").format("LT");
   const idData = {
     documentNumber: data.documentNumber,
-    currentTime: time,
+    portrait: data.portrait,
   };
-  return axios.post(`${API_URL}data`, idData);
+  return axios.post(`${BASE_URL}/data`, idData);
 }
 
 export function getIdentityInfo() {

@@ -6,14 +6,11 @@
   height: 4.6875rem;
   width: 100%;
   .navBar-linkwrap {
-    margin-left: 220px;
+    margin-left: 500px;
     width: 65%;
     justify-content: space-around;
     .mid-logo {
       width: 15%;
-      margin-top: 6px;
-      margin-right: 8px;
-      margin-left: 120px;
     }
     .mid-label {
       margin-top: 19px;
@@ -40,6 +37,7 @@
     .setting-link {
       display: flex;
       cursor: pointer;
+      text-decoration: none;
     }
   }
 }
@@ -112,9 +110,6 @@
 }
 button.btn-secondary:disabled {
   cursor: not-allowed;
-}
-.info-btn {
-  margin-left: 100px;
 }
 .reader-response {
   margin-left: 180px;
@@ -189,6 +184,8 @@ button.btn-secondary:disabled {
   margin-top: 25px;
 }
 .reader-info-btn {
+  display: flex;
+  justify-content: center;
   margin-top: 160px;
 }
 .container {
@@ -256,9 +253,15 @@ ul.breadcrumb li a:hover {
   display: flex;
   justify-content: center;
   width: 75%;
-  margin: 20% auto 0;
+  margin: 0 auto 0;
   font-size: 250%;
   text-align: center
+}
+.checkin-message-no-portrait {
+  margin: 20% auto 0
+}
+.checkin-message-portrait {
+  margin: 0 auto 0
 }
 .checkin-error-message {
   display: flex;
@@ -277,4 +280,13 @@ ul.breadcrumb li a:hover {
 .spinner {
   display: flex;
   justify-content: center;
+}
+.portrait {
+  margin-top: 12%;
+  margin-bottom: 5%;
+  display: flex;
+  justify-content: center;
+}
+.portrait-img {
+  width: 20%;
 }

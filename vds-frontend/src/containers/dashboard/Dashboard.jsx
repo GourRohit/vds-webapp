@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Navigate } from "react-router";
 import Header from "../header/Header";
 import { Button } from "react-bootstrap";
-import moment from "moment";
 import { VDS_URL } from "../../UrlConfig";
 import { getReaderinfo, saveIdData } from "../../services/Utils";
 import QRGIF1 from "../../assets/images/Verification_using_QR.gif";
@@ -24,6 +23,7 @@ class Dashboard extends Component {
     message: "",
     listening: false,
     checkinMessage: false,
+    portrait: "",
   };
 
   buttonEnabled = () => {
@@ -33,13 +33,14 @@ class Dashboard extends Component {
     );
   };
   componentDidMount = () => {
+    if(this.state.deviceStatus !== ""){
     getReaderinfo()
       .then((response) => {
         if (response.data && response.status) {
           localStorage.setItem("deviceMode", response.data.usbMode);
           this.setState({
             deviceMode: response.data.usbMode,
-          })
+          });
           if (response.data.usbMode === "HOLDER_DRIVEN") {
             this.serverSentEvents();
           }
@@ -48,10 +49,10 @@ class Dashboard extends Component {
       .catch((error) => {
         console.error(error);
       });
+    }
   };
 
   serverSentEvents = () => {
-    let time = moment().add(30, "m").format("LT");
     if (!this.state.listening) {
       const sse = new EventSource(`${VDS_URL}/sse/read`);
       sse.addEventListener(
@@ -62,40 +63,53 @@ class Dashboard extends Component {
             this.setState({
               recievedIdentityInfo: true,
             });
-            saveIdData(obj.data)
-              .then((res) => {
-                if (res.data && res.status) {
-                  if (res.data.message === "success") {
-                    this.setState({
-                      message: ` Welcome ${obj.data.givenNames} ${obj.data.familyName}, you are checked in for
-                    your ${time} appointment`,
-                    });
-                  } else if (res.data.message === "duplicate") {
-                    this.setState({
-                      message: ` Welcome ${obj.data.givenNames} ${obj.data.familyName}, we
+            if (obj.docType === "IDENTITY") {
+              saveIdData(obj.data)
+                .then((res) => {
+                  if (res.data && res.status) {
+                    if (res.data.message === "success") {
+                      this.setState({
+                        message: ` Welcome ${obj.data.givenNames} ${obj.data.familyName}, you are checked in for
+                    your ${res.data.appointmentTime} appointment`,
+                        portrait: obj.data.portrait,
+                      });
+                    } else if (res.data.message === "duplicate") {
+                      this.setState({
+                        message: ` Welcome ${obj.data.givenNames} ${obj.data.familyName}, we
                       could find that you are already checked in for appointment at ${res.data.appointmentTime}`,
-                    });
-                  } else {
-                    this.setState({
-                      message: "",
-                    });
+                        portrait: res.data.portrait,
+                      });
+                    } else {
+                      this.setState({
+                        message: "",
+                      });
+                    }
                   }
-                }
-              })
-              .then(() => {
-                this.navigateToCheckinMessage();
-              })
-              .catch((err) => {
-                this.setState({
-                  message: "Your check-in could not be completed",
                 })
-                this.navigateToCheckinMessage();
+                .then(() => {
+                  this.navigateToCheckinMessage();
+                })
+                .catch((err) => {
+                  this.setState({
+                    message: "Your check-in could not be completed",
+                  });
+                  this.navigateToCheckinMessage();
+                });
+            } else if (obj.docType === "QR_CODE") {
+              this.setState({
+                message: obj.data.qrCodeData,
               });
+              this.navigateToCheckinMessage();
+            }
           }
         },
         false
       );
       sse.onerror = function (event) {
+        this.setState({
+          message: "Could not establish connection with VDS",
+        });
+        this.navigateToCheckinMessage();
         console.log(event.target.readyState);
         if (event.target.readyState === EventSource.CLOSED) {
           console.log("SSE closed (" + event.target.readyState + ")");
@@ -131,7 +145,7 @@ class Dashboard extends Component {
       <>
         <Header></Header>
         {this.state.checkinMessage ? (
-          <Navigate to="checkin/message" state={this.state.message} />
+          <Navigate to="checkin/message" state={this.state} />
         ) : null}
         {this.state.showModal && <Navigate to="/checkin" state={this.state} />}
         <div className="page-container">
@@ -191,6 +205,9 @@ class Dashboard extends Component {
               "Please change the device operation mode to activate reading"
             ) : (
               ""
+            )}
+            {this.state.deviceStatus === "VDS_NOT_RUNNING" && (
+              <span className="error-msg">VDS is not running</span>
             )}
           </div>
         </div>
