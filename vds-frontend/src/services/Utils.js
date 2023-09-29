@@ -25,6 +25,10 @@ export function clearData() {
   return axios.delete(`${BASE_URL}/data`);
 }
 
+export function stopInfo() {
+  return axios.get(`${VDS_URL}/identity/stop`)
+}
+
 export function setReaderProperties(value) {
   return axios.post(`${VDS_URL}/reader/properties`, {
     setting: "USB_mode",

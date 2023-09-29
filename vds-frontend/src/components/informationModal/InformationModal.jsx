@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import { getIdentityInfo, saveIdData } from "../../services/Utils";
+import { Link, useLocation } from "react-router-dom";
+import { getIdentityInfo, saveIdData, stopInfo } from "../../services/Utils";
 import QRGIF1 from "../../assets/images/Verification_using_QR.gif";
 import QRGIF2 from "../../assets/images/Verification_using_NFC.gif";
 import physicalIMG from "../../assets/images/DL_Scan_Back.png";
 import Loader from "./Loader";
 import Header from "../../containers/header/Header";
 import { Navigate } from "react-router";
+import { Button } from "react-bootstrap";
 
 const InformationModal = () => {
   const [message, setMessage] = useState("");
@@ -18,6 +19,7 @@ const InformationModal = () => {
 
   useEffect(() => {
     let responseMessage;
+    data.indentityInfo = true;
     getIdentityInfo()
       .then((response) => {
         if (response.data.docType === "IDENTITY") {
@@ -59,14 +61,22 @@ const InformationModal = () => {
         setMessage(responseMessage);
         navigateToCheckinMessage();
       });
+      // window.addEventListener('popstate', handleBackButton);
+      // return () => {
+      //   console.log("unmount");
+      //   window.removeEventListener('popstate', handleBackButton);
+      // }
   }, []);
 
+  // const handleBackButton = () => {
+  //   stopInfo();
+  // };
   function navigateToCheckinMessage() {
     setCheckinCompleted(true);
   }
   return (
     <div className="information-modal">
-      <Header />
+      <Header indentityInfo={data.indentityInfo} />
       {data.isMdL ? (
         <span className="information-modal-text-span">
           Follow instructions to complete ID verification
@@ -99,8 +109,11 @@ const InformationModal = () => {
               <h3 className="information-modal-nfc-verification-text">NFC</h3>
             </div>
             <div className="message-wrap">
-              <p>
+              <p className="message-btn-wrap">
                 <Loader />
+                <Link to="/" onClick={data.indentityInfo ? stopInfo : null}>
+                <Button variant="danger" className="close-btn">Cancel Transaction</Button>
+                </Link>
               </p>
             </div>
           </>
@@ -114,8 +127,11 @@ const InformationModal = () => {
               ></img>
             </div>
             <div className="message-wrap">
-              <p>
-                <span>Please scan 2D barcode at the back of your DL</span>
+              <p className="message-btn-wrap">
+                <span className="text-span">Please scan 2D barcode at the back of your DL</span>
+                <Link to="/" onClick={data.indentityInfo ? stopInfo : null}>
+                <Button variant="danger" className="close-btn">Cancel Transaction</Button>
+                </Link>
               </p>
             </div>
           </>

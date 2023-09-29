@@ -24,6 +24,7 @@ class Dashboard extends Component {
     listening: false,
     checkinMessage: false,
     portrait: "",
+    indentityInfo: false
   };
 
   buttonEnabled = () => {
@@ -143,7 +144,7 @@ class Dashboard extends Component {
   render() {
     return (
       <>
-        <Header></Header>
+        <Header indentityInfo={this.state.indentityInfo} />
         {this.state.checkinMessage ? (
           <Navigate to="checkin/message" state={this.state} />
         ) : null}
