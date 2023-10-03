@@ -3,7 +3,7 @@ import { Navigate } from "react-router";
 import Header from "../header/Header";
 import { Button } from "react-bootstrap";
 import { VDS_URL } from "../../UrlConfig";
-import { getReaderinfo, saveIdData } from "../../services/Utils";
+import { getReaderinfo, saveIdData, stopInfo } from "../../services/Utils";
 import QRGIF1 from "../../assets/images/Verification_using_QR.gif";
 import QRGIF2 from "../../assets/images/Verification_using_NFC.gif";
 import physicalIMG from "../../assets/images/DL_Scan_Back.png";
@@ -24,7 +24,7 @@ class Dashboard extends Component {
     listening: false,
     checkinMessage: false,
     portrait: "",
-    indentityInfo: false
+    identityInfoAPIInvoked: false,
   };
 
   buttonEnabled = () => {
@@ -34,9 +34,25 @@ class Dashboard extends Component {
     );
   };
   componentDidMount = () => {
-    if(this.state.deviceStatus !== ""){
-    getReaderinfo()
+    if (this.state.deviceStatus !== "") {
+      let localIdInfo = localStorage.getItem("identityInfoAPIInvoked");
+      if (localIdInfo === "true") {
+        stopInfo()
+          .then(() => {this.readerInfo()})
+          .catch((error) => {
+            localStorage.setItem("identityInfoAPIInvoked", false);
+            console.error(error);
+          });
+      } else {
+        this.readerInfo()
+      }
+    }
+  };
+
+  readerInfo = async () => {
+    return getReaderinfo()
       .then((response) => {
+        localStorage.setItem("identityInfoAPIInvoked", false);
         if (response.data && response.status) {
           localStorage.setItem("deviceMode", response.data.usbMode);
           this.setState({
@@ -48,9 +64,9 @@ class Dashboard extends Component {
         }
       })
       .catch((error) => {
+        localStorage.setItem("identityInfoAPIInvoked", false);
         console.error(error);
       });
-    }
   };
 
   serverSentEvents = () => {
@@ -133,6 +149,7 @@ class Dashboard extends Component {
   }
 
   getIdentityInfo = (isMdl) => {
+    localStorage.setItem("identityInfoAPIInvoked", true);
     this.setState({ isMdL: isMdl });
     this.handleModal(true);
   };
@@ -144,7 +161,7 @@ class Dashboard extends Component {
   render() {
     return (
       <>
-        <Header indentityInfo={this.state.indentityInfo} />
+        <Header />
         {this.state.checkinMessage ? (
           <Navigate to="checkin/message" state={this.state} />
         ) : null}

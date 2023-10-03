@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import Container from "react-bootstrap/Container";
 import { Nav, Navbar } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { stopInfo } from "../../services/Utils";
 
 class Header extends Component {
   render() {
@@ -11,7 +10,7 @@ class Header extends Component {
         <Navbar bg="light" expand="lg" className="navbar-wrap" fixed="top">
           <Container fluid>
             <Navbar.Brand>
-              <Link to="/" onClick={this.props.indentityInfo ? stopInfo : null}>
+              <Link to="/">
                 <img
                   src={require("../../assets/images/credenceid-logo.png")}
                   alt="CredenceId-Logo"
@@ -19,7 +18,7 @@ class Header extends Component {
               </Link>
             </Navbar.Brand>
             <Nav className="me-auto navBar-linkwrap">
-              <Link to="/" onClick={this.props.indentityInfo ? stopInfo : null}>
+              <Link to="/">
                 <img
                   src={require("../../assets/images/DMV_Logo.png")}
                   alt="MID-LOGO"

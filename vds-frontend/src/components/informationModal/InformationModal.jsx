@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { getIdentityInfo, saveIdData, stopInfo } from "../../services/Utils";
+import { getIdentityInfo, saveIdData } from "../../services/Utils";
 import QRGIF1 from "../../assets/images/Verification_using_QR.gif";
 import QRGIF2 from "../../assets/images/Verification_using_NFC.gif";
 import physicalIMG from "../../assets/images/DL_Scan_Back.png";
@@ -19,7 +19,6 @@ const InformationModal = () => {
 
   useEffect(() => {
     let responseMessage;
-    data.indentityInfo = true;
     getIdentityInfo()
       .then((response) => {
         if (response.data.docType === "IDENTITY") {
@@ -61,22 +60,14 @@ const InformationModal = () => {
         setMessage(responseMessage);
         navigateToCheckinMessage();
       });
-      // window.addEventListener('popstate', handleBackButton);
-      // return () => {
-      //   console.log("unmount");
-      //   window.removeEventListener('popstate', handleBackButton);
-      // }
   }, []);
 
-  // const handleBackButton = () => {
-  //   stopInfo();
-  // };
   function navigateToCheckinMessage() {
     setCheckinCompleted(true);
   }
   return (
     <div className="information-modal">
-      <Header indentityInfo={data.indentityInfo} />
+      <Header />
       {data.isMdL ? (
         <span className="information-modal-text-span">
           Follow instructions to complete ID verification
@@ -111,7 +102,7 @@ const InformationModal = () => {
             <div className="message-wrap">
               <p className="message-btn-wrap">
                 <Loader />
-                <Link to="/" onClick={data.indentityInfo ? stopInfo : null}>
+                <Link to="/">
                 <Button variant="danger" className="close-btn">Cancel Transaction</Button>
                 </Link>
               </p>
@@ -129,7 +120,7 @@ const InformationModal = () => {
             <div className="message-wrap">
               <p className="message-btn-wrap">
                 <span className="text-span">Please scan 2D barcode at the back of your DL</span>
-                <Link to="/" onClick={data.indentityInfo ? stopInfo : null}>
+                <Link to="/">
                 <Button variant="danger" className="close-btn">Cancel Transaction</Button>
                 </Link>
               </p>
