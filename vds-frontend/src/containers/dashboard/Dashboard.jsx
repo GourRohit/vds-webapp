@@ -24,7 +24,6 @@ class Dashboard extends Component {
     listening: false,
     checkinMessage: false,
     portrait: "",
-    identityInfoAPIInvoked: false,
   };
 
   buttonEnabled = () => {
@@ -38,7 +37,10 @@ class Dashboard extends Component {
       let localIdInfo = localStorage.getItem("identityInfoAPIInvoked");
       if (localIdInfo === "true") {
         stopInfo()
-          .then(() => {this.readerInfo()})
+          .then(() => {
+            localStorage.setItem("identityInfoAPIInvoked", false);
+            this.readerInfo();
+          })
           .catch((error) => {
             localStorage.setItem("identityInfoAPIInvoked", false);
             console.error(error);
@@ -52,7 +54,6 @@ class Dashboard extends Component {
   readerInfo = async () => {
     return getReaderinfo()
       .then((response) => {
-        localStorage.setItem("identityInfoAPIInvoked", false);
         if (response.data && response.status) {
           localStorage.setItem("deviceMode", response.data.usbMode);
           this.setState({
@@ -64,7 +65,6 @@ class Dashboard extends Component {
         }
       })
       .catch((error) => {
-        localStorage.setItem("identityInfoAPIInvoked", false);
         console.error(error);
       });
   };
