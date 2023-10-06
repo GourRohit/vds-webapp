@@ -14,6 +14,7 @@ function CheckinMessage() {
       setTime(true);
     }, 7000);
     setTime(false);
+    localStorage.setItem("identityInfoAPIInvoked", false);
   }, []);
   return (
     <>

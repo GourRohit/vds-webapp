@@ -44,7 +44,10 @@ class Dashboard extends Component {
             localStorage.setItem("identityInfoAPIInvoked", false);
             console.error(error);
           });
-      } else if (localIdInfo === "false" && this.state.deviceStatus !== "") {
+      } 
+      // checking this condition for first time rendering, we get initial empty deviceStatus 
+      // before we get deviceStatus API response and getReaderInfo API was getting called twice
+      else if (this.state.deviceStatus !== "") {
         this.readerInfo()
       }
   };
@@ -146,7 +149,7 @@ class Dashboard extends Component {
     });
   }
 
-  getIdentityInfo = (isMdl) => {
+  handleButtonClick = (isMdl) => {
     localStorage.setItem("identityInfoAPIInvoked", true);
     this.setState({ isMdL: isMdl });
     this.handleModal(true);
@@ -170,7 +173,7 @@ class Dashboard extends Component {
             <div className="button-wrap">
               <Button
                 variant={this.buttonEnabled() ? "primary" : "secondary"}
-                onClick={() => this.getIdentityInfo(false)}
+                onClick={() => this.handleButtonClick(false)}
                 disabled={!this.buttonEnabled()}
                 className="db-button"
               >
@@ -179,7 +182,7 @@ class Dashboard extends Component {
               </Button>
               <Button
                 variant={this.buttonEnabled() ? "primary" : "secondary"}
-                onClick={() => this.getIdentityInfo(true)}
+                onClick={() => this.handleButtonClick(true)}
                 disabled={!this.buttonEnabled()}
                 className="db-button"
               >
