@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { getIdentityInfo, saveIdData } from "../../services/Utils";
 import QRGIF1 from "../../assets/images/Verification_using_QR.gif";
 import QRGIF2 from "../../assets/images/Verification_using_NFC.gif";
@@ -7,6 +7,7 @@ import physicalIMG from "../../assets/images/DL_Scan_Back.png";
 import Loader from "./Loader";
 import Header from "../../containers/header/Header";
 import { Navigate } from "react-router";
+import { Button } from "react-bootstrap";
 
 const InformationModal = () => {
   const [message, setMessage] = useState("");
@@ -99,8 +100,11 @@ const InformationModal = () => {
               <h3 className="information-modal-nfc-verification-text">NFC</h3>
             </div>
             <div className="message-wrap">
-              <p>
+              <p className="message-btn-wrap">
                 <Loader />
+                <Link to="/">
+                <Button variant="danger" className="close-btn">Cancel Transaction</Button>
+                </Link>
               </p>
             </div>
           </>
@@ -114,8 +118,11 @@ const InformationModal = () => {
               ></img>
             </div>
             <div className="message-wrap">
-              <p>
-                <span>Please scan 2D barcode at the back of your DL</span>
+              <p className="message-btn-wrap">
+                <span className="text-span">Please scan 2D barcode at the back of your DL</span>
+                <Link to="/">
+                <Button variant="danger" className="close-btn">Cancel Transaction</Button>
+                </Link>
               </p>
             </div>
           </>

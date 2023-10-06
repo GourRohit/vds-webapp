@@ -176,6 +176,18 @@ button.btn-secondary:disabled {
   font-size: 26px;
   color: black;
 }
+.text-span {
+  align-self: center;
+}
+.message-btn-wrap {
+  display: flex;
+  justify-content: center;
+  margin-left: 10%;
+}
+.close-btn {
+  width: 100%;
+  margin-left: 100%;
+}
 .device-status {
   margin-top: 165px;
   margin-bottom: 30px;

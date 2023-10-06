@@ -3,7 +3,7 @@ import { Navigate } from "react-router";
 import Header from "../header/Header";
 import { Button } from "react-bootstrap";
 import { VDS_URL } from "../../UrlConfig";
-import { getReaderinfo, saveIdData } from "../../services/Utils";
+import { getReaderinfo, saveIdData, stopInfo } from "../../services/Utils";
 import QRGIF1 from "../../assets/images/Verification_using_QR.gif";
 import QRGIF2 from "../../assets/images/Verification_using_NFC.gif";
 import physicalIMG from "../../assets/images/DL_Scan_Back.png";
@@ -33,8 +33,27 @@ class Dashboard extends Component {
     );
   };
   componentDidMount = () => {
-    if(this.state.deviceStatus !== ""){
-    getReaderinfo()
+      let localIdInfo = localStorage.getItem("identityInfoAPIInvoked");
+      if (localIdInfo === "true") {
+        stopInfo()
+          .then(() => {
+            localStorage.setItem("identityInfoAPIInvoked", false);
+            this.readerInfo();
+          })
+          .catch((error) => {
+            localStorage.setItem("identityInfoAPIInvoked", false);
+            console.error(error);
+          });
+      } 
+      // checking this condition for first time rendering, we get initial empty deviceStatus 
+      // before we get deviceStatus API response and getReaderInfo API was getting called twice
+      else if (this.state.deviceStatus !== "") {
+        this.readerInfo()
+      }
+  };
+
+  readerInfo = async () => {
+    return getReaderinfo()
       .then((response) => {
         if (response.data && response.status) {
           localStorage.setItem("deviceMode", response.data.usbMode);
@@ -49,7 +68,6 @@ class Dashboard extends Component {
       .catch((error) => {
         console.error(error);
       });
-    }
   };
 
   serverSentEvents = () => {
@@ -131,7 +149,8 @@ class Dashboard extends Component {
     });
   }
 
-  getIdentityInfo = (isMdl) => {
+  handleButtonClick = (isMdl) => {
+    localStorage.setItem("identityInfoAPIInvoked", true);
     this.setState({ isMdL: isMdl });
     this.handleModal(true);
   };
@@ -143,7 +162,7 @@ class Dashboard extends Component {
   render() {
     return (
       <>
-        <Header></Header>
+        <Header />
         {this.state.checkinMessage ? (
           <Navigate to="checkin/message" state={this.state} />
         ) : null}
@@ -154,7 +173,7 @@ class Dashboard extends Component {
             <div className="button-wrap">
               <Button
                 variant={this.buttonEnabled() ? "primary" : "secondary"}
-                onClick={() => this.getIdentityInfo(false)}
+                onClick={() => this.handleButtonClick(false)}
                 disabled={!this.buttonEnabled()}
                 className="db-button"
               >
@@ -163,7 +182,7 @@ class Dashboard extends Component {
               </Button>
               <Button
                 variant={this.buttonEnabled() ? "primary" : "secondary"}
-                onClick={() => this.getIdentityInfo(true)}
+                onClick={() => this.handleButtonClick(true)}
                 disabled={!this.buttonEnabled()}
                 className="db-button"
               >
