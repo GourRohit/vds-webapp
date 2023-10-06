@@ -33,7 +33,6 @@ class Dashboard extends Component {
     );
   };
   componentDidMount = () => {
-    if (this.state.deviceStatus !== "") {
       let localIdInfo = localStorage.getItem("identityInfoAPIInvoked");
       if (localIdInfo === "true") {
         stopInfo()
@@ -45,10 +44,9 @@ class Dashboard extends Component {
             localStorage.setItem("identityInfoAPIInvoked", false);
             console.error(error);
           });
-      } else {
+      } else if (localIdInfo === "false" && this.state.deviceStatus !== "") {
         this.readerInfo()
       }
-    }
   };
 
   readerInfo = async () => {
