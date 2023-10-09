@@ -34,7 +34,7 @@ const InformationModal = () => {
                   responseMessage = ` Welcome ${response.data.data.givenNames} ${response.data.data.familyName}, we
                   could find that you are already checked in for appointment at ${res.data.appointmentTime}`;
                   setMessage(responseMessage);
-                  setPortrait(res.data.portrait);
+                  setPortrait(response.data.data.portrait);
                 } else {
                   setMessage(message);
                 }

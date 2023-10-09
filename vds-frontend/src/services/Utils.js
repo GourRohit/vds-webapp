@@ -8,7 +8,6 @@ export function getDeviceStatus() {
 export function saveIdData(data) {
   const idData = {
     documentNumber: data.documentNumber,
-    portrait: data.portrait,
   };
   return axios.post(`${BASE_URL}/data`, idData);
 }
