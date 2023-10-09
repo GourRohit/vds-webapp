@@ -56,7 +56,7 @@ function createDatabase() {
 const createTables = () => {
   db.serialize(() => {
     db.run(
-      "CREATE TABLE CHECKIN_DATA (documentNumber TEXT, appointmentTime TEXT, portrait TEXT)"
+      "CREATE TABLE CHECKIN_DATA (documentNumber TEXT, appointmentTime TEXT)"
     );
     console.log("sucessfully create table");
   });
@@ -65,8 +65,8 @@ const createTables = () => {
 function insertData(data) {
   return new Promise(function (resolve, reject) {
     return db.run(
-      `INSERT INTO CHECKIN_DATA(documentNumber, appointmentTime, portrait) VALUES(?,?,?)`,
-      [data.documentNumber, data.appointmentTime, data.portrait],
+      `INSERT INTO CHECKIN_DATA(documentNumber, appointmentTime) VALUES(?,?)`,
+      [data.documentNumber, data.appointmentTime],
       function (error) {
         if (error) {
           return reject(error);
@@ -81,7 +81,7 @@ function insertData(data) {
 function checkForDuplicateData(docNumber) {
   return new Promise(function (resolve, reject) {
     var query =
-      "SELECT documentNumber, appointmentTime, portrait FROM CHECKIN_DATA  WHERE documentNumber = " +
+      "SELECT documentNumber, appointmentTime FROM CHECKIN_DATA  WHERE documentNumber = " +
       "'" +
       docNumber +
       "'";
@@ -108,11 +108,10 @@ app.post("/data", async (req, res) => {
   date.setMinutes(date.getMinutes() + 30);
   // date to epoch conversion
   const time = date.getTime();
-  let message, appointmentTime, portrait;
+  let message, appointmentTime;
   const data = {
     documentNumber: req.body.documentNumber,
     appointmentTime: time,
-    portrait: req.body.portrait,
   };
   let rows = await checkForDuplicateData(data.documentNumber);
   const convertEpochToTime = (time) => {
@@ -122,16 +121,13 @@ app.post("/data", async (req, res) => {
     await insertData(data);
     message = "success";
     appointmentTime = convertEpochToTime(data.appointmentTime);
-    portrait = data.portrait;
   } else {
     message = "duplicate";
     appointmentTime = convertEpochToTime(rows[0].appointmentTime);
-    portrait = rows[0].portrait;
   }
   res.json({
     message: message,
     appointmentTime: appointmentTime,
-    portrait: portrait,
   });
 });
 function getdataFromDb() {
