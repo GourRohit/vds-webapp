@@ -6,10 +6,7 @@ import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import Table from "react-bootstrap/Table";
 import { Link } from "react-router-dom";
-import {
-  getReaderinfo,
-  setReaderProperties,
-} from "../../services/Utils";
+import { getReaderinfo, setReaderProperties } from "../../services/Utils";
 
 class Settings extends Component {
   state = {
@@ -18,6 +15,7 @@ class Settings extends Component {
     isData: false,
     deviceMode: localStorage.getItem("deviceMode"),
     isLoading: false,
+    isReaderInfoLoading: false,
   };
 
   changeMode(deviceMode) {
@@ -120,9 +118,9 @@ class Settings extends Component {
                     />{" "}
                     {this.state.deviceStatus === "CONNECTED_AOA_MODE"
                       ? "CONNECTED"
-                      : (this.state.deviceStatus === "VDS_NOT_RUNNING"
+                      : this.state.deviceStatus === "VDS_NOT_RUNNING"
                       ? "VDS NOT RUNNING"
-                      : "Tap2iD NOT CONNECTED")}
+                      : "Tap2iD NOT CONNECTED"}
                   </Col>
                 </Row>
                 <Row>
@@ -207,7 +205,10 @@ class Settings extends Component {
                   <Col md={12} className="reader-info-btn">
                     <Button
                       className="info-btn"
-                      onClick={() =>
+                      onClick={() => {
+                        this.setState({
+                          isReaderInfoLoading: true,
+                        });
                         getReaderinfo()
                           .then((response) => {
                             if (response.data) {
@@ -216,6 +217,7 @@ class Settings extends Component {
                                 isData: true,
                                 deviceStatus: response.data.deviceState,
                                 deviceMode: response.data.usbMode,
+                                isReaderInfoLoading: false,
                               });
                             } else {
                               this.setState({
@@ -225,13 +227,24 @@ class Settings extends Component {
                             }
                           })
                           .catch((error) => {
-                            console.error(error);
                             this.setState({
+                              isReaderInfoLoading: false,
                               readerData: [],
                               isData: false,
                             });
-                          })
-                      }
+                            confirmAlert({
+                              title:
+                                "Some error occured, Please reload the window and try again",
+                              buttons: [
+                                {
+                                  label: "Reload",
+                                  onClick: () => window.location.reload(),
+                                },
+                              ],
+                            });
+                            console.error(error);
+                          });
+                      }}
                       variant={
                         this.state.deviceStatus === "CONNECTED_AOA_MODE"
                           ? "primary"
@@ -244,6 +257,11 @@ class Settings extends Component {
                   </Col>
                 </Row>
                 <Row className={this.state.isData ? "info-box" : ""}>
+                  <div className="settings-fade-loader">
+                    {this.state.isReaderInfoLoading ? (
+                      <FadeLoader color="#b3ffcc" />
+                    ) : null}
+                  </div>
                   {this.state.deviceStatus === "CONNECTED_AOA_MODE" &&
                   this.state.isData ? (
                     <Col md={12}>
@@ -267,7 +285,7 @@ class Settings extends Component {
               </Col>
             </Row>
             <Row className="spinner">
-            {this.state.isLoading ? <FadeLoader color="#1aff66" /> : null}
+              {this.state.isLoading ? <FadeLoader color="#1aff66" /> : null}
             </Row>
           </div>
         </Container>
