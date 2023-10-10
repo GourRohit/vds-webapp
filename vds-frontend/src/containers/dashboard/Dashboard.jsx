@@ -285,6 +285,12 @@ class Dashboard extends Component {
               {this.state.deviceStatus === "VDS_NOT_RUNNING" && (
                 <span className="error-msg">VDS is not running</span>
               )}
+              {this.state.deviceStatus === "CONNECTED_USB_DEBUG_ENABLED" && (
+                <span className="error-msg">Tap2iD is in ADB mode</span>
+              )}
+              {this.state.deviceStatus === "CONNECTED_USB_DEBUG_DISABLED" && (
+                <span className="error-msg">Tap2iD is not in AOA mode</span>
+              )}
             </div>
           </div>
         </div>
