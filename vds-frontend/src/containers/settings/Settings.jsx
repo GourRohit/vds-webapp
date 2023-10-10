@@ -8,7 +8,9 @@ import Table from "react-bootstrap/Table";
 import { Link } from "react-router-dom";
 import {
   getReaderinfo,
-  setReaderProperties,
+  setUsbMode,
+  stopInfo,
+  setReaderProfile
 } from "../../services/Utils";
 
 class Settings extends Component {
@@ -18,13 +20,28 @@ class Settings extends Component {
     isData: false,
     deviceMode: localStorage.getItem("deviceMode"),
     isLoading: false,
+    isReaderInfoLoading: false,
+  };
+
+  componentDidMount = () => {
+    let localIdInfo = localStorage.getItem("identityInfoAPIInvoked");
+    if (localIdInfo === "true") {
+      stopInfo()
+        .then(() => {
+          localStorage.setItem("identityInfoAPIInvoked", false);
+        })
+        .catch((error) => {
+          localStorage.setItem("identityInfoAPIInvoked", false);
+          console.error(error);
+        });
+    }
   };
 
   changeMode(deviceMode) {
     this.setState({
       isLoading: true,
     });
-    setReaderProperties(deviceMode)
+    setUsbMode(deviceMode)
       .then((response) => {
         this.setState({
           isLoading: false,
@@ -59,6 +76,42 @@ class Settings extends Component {
         console.log(error);
       });
   }
+  
+  changeProfile(readerProfile) {
+    this.setState({
+      isLoading: true,
+    });
+    setReaderProfile(readerProfile)
+      .then((response) => {
+        this.setState({
+          isLoading: false,
+        });
+        if (response.status) {
+          confirmAlert({
+            title: "Reader profile successfully changed",
+            buttons: [
+              {
+                label: "Ok",
+              },
+            ],
+          });
+        }
+      })
+      .catch((error) => {
+        this.setState({
+          isLoading: false,
+        });
+        confirmAlert({
+          title: "Failed to change reader profile",
+          buttons: [
+            {
+              label: "Ok",
+            },
+          ],
+        });
+        console.log(error);
+      });
+  }
 
   handleRadioBtn = (e) => {
     let deviceMode = e.target.value;
@@ -75,6 +128,22 @@ class Settings extends Component {
       ],
     });
   };
+
+  handleReaderProfileRadioBtn = (e) => {
+    let readerProfile = e.target.value;
+    confirmAlert({
+      title: `Do you want to switch to ${e.target.value}`,
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () => this.changeProfile(readerProfile),
+        },
+        {
+          label: "No",
+        },
+      ],
+    });
+  }
 
   render() {
     return (
@@ -120,9 +189,9 @@ class Settings extends Component {
                     />{" "}
                     {this.state.deviceStatus === "CONNECTED_AOA_MODE"
                       ? "CONNECTED"
-                      : (this.state.deviceStatus === "VDS_NOT_RUNNING"
+                      : this.state.deviceStatus === "VDS_NOT_RUNNING"
                       ? "VDS NOT RUNNING"
-                      : "Tap2iD NOT CONNECTED")}
+                      : "Tap2iD NOT CONNECTED"}
                   </Col>
                 </Row>
                 <Row>
@@ -201,13 +270,70 @@ class Settings extends Component {
                     </label>
                   </Col>
                 </Row>
+                <br />
+                <Row>
+                  <Col md={3}>
+                    <p>
+                      <strong>Reader Profile :</strong>
+                    </p>
+                  </Col>
+                  <Col md={9} className="text-align-left">
+                    <input
+                      type="radio"
+                      id="idcheck"
+                      name="profile"
+                      value="ID_CHECK"
+                      disabled={
+                        this.state.deviceStatus !== "CONNECTED_AOA_MODE"
+                      }
+                      onClick={(e) => this.handleReaderProfileRadioBtn(e)}
+                    />
+                    <label for="idcheck" className="radio-label">
+                      ID_CHECK
+                    </label>
+                    <br />
+
+                    <input
+                      type="radio"
+                      id="agecheck"
+                      name="profile"
+                      value="AGE_CHECK"
+                      disabled={
+                        this.state.deviceStatus !== "CONNECTED_AOA_MODE"
+                      }
+                      onClick={(e) => this.handleReaderProfileRadioBtn(e)}
+                    />
+                    <label for="agecheck" className="radio-label">
+                      AGE_CHECK
+                    </label>
+                    <br />
+
+                    <input
+                      type="radio"
+                      id="customcheck"
+                      name="profile"
+                      value="CUSTOM_CHECK"
+                      disabled={
+                        this.state.deviceStatus !== "CONNECTED_AOA_MODE"
+                      }
+                      onClick={(e) => this.handleReaderProfileRadioBtn(e)}
+                    />
+                    <label for="customcheck" className="radio-label">
+                      CUSTOM_CHECK
+                    </label>
+                    <br />
+                  </Col>
+                </Row>
               </Col>
               <Col md={6}>
                 <Row className="btn-row">
                   <Col md={12} className="reader-info-btn">
                     <Button
                       className="info-btn"
-                      onClick={() =>
+                      onClick={() => {
+                        this.setState({
+                          isReaderInfoLoading: true,
+                        });
                         getReaderinfo()
                           .then((response) => {
                             if (response.data) {
@@ -216,6 +342,7 @@ class Settings extends Component {
                                 isData: true,
                                 deviceStatus: response.data.deviceState,
                                 deviceMode: response.data.usbMode,
+                                isReaderInfoLoading: false,
                               });
                             } else {
                               this.setState({
@@ -225,13 +352,24 @@ class Settings extends Component {
                             }
                           })
                           .catch((error) => {
-                            console.error(error);
                             this.setState({
+                              isReaderInfoLoading: false,
                               readerData: [],
                               isData: false,
                             });
-                          })
-                      }
+                            confirmAlert({
+                              title:
+                                "Some error occured, Please reload the window and try again",
+                              buttons: [
+                                {
+                                  label: "Reload",
+                                  onClick: () => window.location.reload(),
+                                },
+                              ],
+                            });
+                            console.error(error);
+                          });
+                      }}
                       variant={
                         this.state.deviceStatus === "CONNECTED_AOA_MODE"
                           ? "primary"
@@ -244,6 +382,11 @@ class Settings extends Component {
                   </Col>
                 </Row>
                 <Row className={this.state.isData ? "info-box" : ""}>
+                  <div className="settings-fade-loader">
+                    {this.state.isReaderInfoLoading ? (
+                      <FadeLoader color="#b3ffcc" />
+                    ) : null}
+                  </div>
                   {this.state.deviceStatus === "CONNECTED_AOA_MODE" &&
                   this.state.isData ? (
                     <Col md={12}>
@@ -267,7 +410,7 @@ class Settings extends Component {
               </Col>
             </Row>
             <Row className="spinner">
-            {this.state.isLoading ? <FadeLoader color="#1aff66" /> : null}
+              {this.state.isLoading ? <FadeLoader color="#1aff66" /> : null}
             </Row>
           </div>
         </Container>

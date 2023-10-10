@@ -8,7 +8,6 @@ export function getDeviceStatus() {
 export function saveIdData(data) {
   const idData = {
     documentNumber: data.documentNumber,
-    portrait: data.portrait,
   };
   return axios.post(`${BASE_URL}/data`, idData);
 }
@@ -25,11 +24,24 @@ export function clearData() {
   return axios.delete(`${BASE_URL}/data`);
 }
 
-export function setReaderProperties(value) {
+export function stopInfo() {
+  return axios.get(`${VDS_URL}/identity/stop`)
+}
+
+export function setUsbMode(value) {
   return axios.post(`${VDS_URL}/reader/properties`, {
     setting: "USB_mode",
     value: {
       mode: value,
+    },
+  });
+}
+
+export function setReaderProfile(value) {
+  return axios.post(`${VDS_URL}/reader/properties`, {
+    setting: "Reader_Profile",
+    value: {
+      profile: value,
     },
   });
 }
