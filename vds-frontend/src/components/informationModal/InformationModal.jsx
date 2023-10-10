@@ -134,6 +134,11 @@ const InformationModal = () => {
               <p className="message-btn-wrap">
                 <Loader />
               </p>
+              <p className="message-btn-wrap">
+                <span className="message-span">
+                Once mDL is presented, please stay on this screen till Verification completes
+                </span>
+              </p>
             </div>
           </>
         ) : (
@@ -160,6 +165,11 @@ const InformationModal = () => {
               <p className="message-btn-wrap">
                 <span className="text-span">
                   Please scan 2D barcode at the back of your DL
+                </span>
+              </p>
+              <p className="message-btn-wrap">
+                <span className="message-span">
+                Once Physical ID is presented, please stay on this screen till Verification completes
                 </span>
               </p>
             </div>
