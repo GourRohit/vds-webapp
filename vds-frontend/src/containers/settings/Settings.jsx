@@ -6,7 +6,7 @@ import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import Table from "react-bootstrap/Table";
 import { Link } from "react-router-dom";
-import { getReaderinfo, setReaderProperties } from "../../services/Utils";
+import { getReaderinfo, setReaderProperties, stopInfo } from "../../services/Utils";
 
 class Settings extends Component {
   state = {
@@ -16,6 +16,20 @@ class Settings extends Component {
     deviceMode: localStorage.getItem("deviceMode"),
     isLoading: false,
     isReaderInfoLoading: false,
+  };
+
+  componentDidMount = () => {
+    let localIdInfo = localStorage.getItem("identityInfoAPIInvoked");
+    if (localIdInfo === "true") {
+      stopInfo()
+        .then(() => {
+          localStorage.setItem("identityInfoAPIInvoked", false);
+        })
+        .catch((error) => {
+          localStorage.setItem("identityInfoAPIInvoked", false);
+          console.error(error);
+        });
+    }
   };
 
   changeMode(deviceMode) {

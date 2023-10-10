@@ -18,6 +18,7 @@ const InformationModal = () => {
   let props = { message, portrait };
 
   useEffect(() => {
+    localStorage.setItem("identityInfoAPIInvoked", true);
     let responseMessage;
     getIdentityInfo()
       .then((response) => {
