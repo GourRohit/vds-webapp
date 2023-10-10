@@ -101,37 +101,57 @@ class Dashboard extends Component {
               recievedIdentityInfo: true,
             });
             if (obj.docType === "IDENTITY") {
-              saveIdData(obj.data)
-                .then((res) => {
-                  if (res.data && res.status) {
-                    if (res.data.message === "success") {
-                      this.setState({
-                        message: ` Welcome ${obj.data.givenNames} ${obj.data.familyName}, you are checked in for
-                    your ${res.data.appointmentTime} appointment`,
-                        portrait: obj.data.portrait,
-                      });
-                    } else if (res.data.message === "duplicate") {
-                      this.setState({
-                        message: ` Welcome ${obj.data.givenNames} ${obj.data.familyName}, we
-                      could find that you are already checked in for appointment at ${res.data.appointmentTime}`,
-                        portrait: res.data.portrait,
-                      });
-                    } else {
-                      this.setState({
-                        message: "",
-                      });
-                    }
-                  }
-                })
-                .then(() => {
-                  this.navigateToCheckinMessage();
-                })
-                .catch((err) => {
+              if (obj.data.documentNumber === "") {
+                if (obj.data.isAgeOver21 === true) {
                   this.setState({
-                    message: "Your check-in could not be completed",
+                    message:
+                      "Your age has been verified and it is above 21 years",
+                    portrait: obj.data.portrait,
                   });
-                  this.navigateToCheckinMessage();
-                });
+                } else if (obj.data.isAgeOver18 === true) {
+                  this.setState({
+                    message:
+                      "Your age has been verified and it is above 18 years",
+                    portrait: obj.data.portrait,
+                  });
+                } else {
+                  this.setState({
+                    message: "You have been checked in successfully",
+                  });
+                }
+              } else {
+                saveIdData(obj.data)
+                  .then((res) => {
+                    if (res.data && res.status) {
+                      if (res.data.message === "success") {
+                        this.setState({
+                          message: ` Welcome ${obj.data.givenNames} ${obj.data.familyName}, you are checked in for
+                    your ${res.data.appointmentTime} appointment`,
+                          portrait: obj.data.portrait,
+                        });
+                      } else if (res.data.message === "duplicate") {
+                        this.setState({
+                          message: ` Welcome ${obj.data.givenNames} ${obj.data.familyName}, we
+                      could find that you are already checked in for appointment at ${res.data.appointmentTime}`,
+                          portrait: obj.data.portrait,
+                        });
+                      } else {
+                        this.setState({
+                          message: "",
+                        });
+                      }
+                    }
+                  })
+                  .then(() => {
+                    this.navigateToCheckinMessage();
+                  })
+                  .catch((err) => {
+                    this.setState({
+                      message: "Your check-in could not be completed",
+                    });
+                    this.navigateToCheckinMessage();
+                  });
+              }
             } else if (obj.docType === "QR_CODE") {
               this.setState({
                 message: obj.data.qrCodeData,

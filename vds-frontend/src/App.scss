@@ -182,11 +182,20 @@ button.btn-secondary:disabled {
 .message-btn-wrap {
   display: flex;
   justify-content: center;
-  margin-left: 10%;
 }
 .close-btn {
-  width: 100%;
-  margin-left: 100%;
+  width: 75%;
+  height: 75px;
+}
+.close-btn-div {
+  display: flex;
+  text-align: end;
+  align-self: center;
+}
+.close-btn-div-physical {
+  display: flex;
+  text-align: start;
+  align-self: center;
 }
 .device-status {
   margin-top: 165px;
@@ -244,14 +253,20 @@ ul.breadcrumb li a:hover {
 .information-modal-image-wrap {
   display: flex;
   justify-content: center;
+  margin-left: 25%;
+}
+.information-modal-image-physical {
+  width: 30%;
+  margin: 50px;
 }
 .information-modal-image {
-  width: 23%;
+  width: 50%;
   margin: 50px;
 }
 .information-modal-name-wrap {
   display: flex;
   justify-content: space-evenly;
+  margin-left: 25%;
 }
 .information-modal-qr-verification-text {
   margin-left: 25px;
@@ -260,6 +275,7 @@ ul.breadcrumb li a:hover {
 .information-modal-nfc-verification-text {
   margin-right: 60px;
   font-size: 18px;
+  margin-left: 25%;
 }
 .checkin-message {
   display: flex;
@@ -313,3 +329,18 @@ ul.breadcrumb li a:hover {
   justify-content: center;
   margin-top: 30px;
 }
+.information-container{
+  display: flex;
+  justify-content: center;
+}
+.information-section {
+  width: 75%;
+}
+.information-btn-wrap {
+  width: 20%;
+  .close-btn-div {
+    padding-top: 75%;
+    width: 195px;
+  }
+}
+
