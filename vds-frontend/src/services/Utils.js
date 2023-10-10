@@ -28,11 +28,20 @@ export function stopInfo() {
   return axios.get(`${VDS_URL}/identity/stop`)
 }
 
-export function setReaderProperties(value) {
+export function setUsbMode(value) {
   return axios.post(`${VDS_URL}/reader/properties`, {
     setting: "USB_mode",
     value: {
       mode: value,
+    },
+  });
+}
+
+export function setReaderProfile(value) {
+  return axios.post(`${VDS_URL}/reader/properties`, {
+    setting: "Reader_Profile",
+    value: {
+      profile: value,
     },
   });
 }

@@ -6,7 +6,12 @@ import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import Table from "react-bootstrap/Table";
 import { Link } from "react-router-dom";
-import { getReaderinfo, setReaderProperties, stopInfo } from "../../services/Utils";
+import {
+  getReaderinfo,
+  setUsbMode,
+  stopInfo,
+  setReaderProfile
+} from "../../services/Utils";
 
 class Settings extends Component {
   state = {
@@ -36,7 +41,7 @@ class Settings extends Component {
     this.setState({
       isLoading: true,
     });
-    setReaderProperties(deviceMode)
+    setUsbMode(deviceMode)
       .then((response) => {
         this.setState({
           isLoading: false,
@@ -71,6 +76,42 @@ class Settings extends Component {
         console.log(error);
       });
   }
+  
+  changeProfile(readerProfile) {
+    this.setState({
+      isLoading: true,
+    });
+    setReaderProfile(readerProfile)
+      .then((response) => {
+        this.setState({
+          isLoading: false,
+        });
+        if (response.status) {
+          confirmAlert({
+            title: "Reader profile successfully changed",
+            buttons: [
+              {
+                label: "Ok",
+              },
+            ],
+          });
+        }
+      })
+      .catch((error) => {
+        this.setState({
+          isLoading: false,
+        });
+        confirmAlert({
+          title: "Failed to change reader profile",
+          buttons: [
+            {
+              label: "Ok",
+            },
+          ],
+        });
+        console.log(error);
+      });
+  }
 
   handleRadioBtn = (e) => {
     let deviceMode = e.target.value;
@@ -87,6 +128,22 @@ class Settings extends Component {
       ],
     });
   };
+
+  handleReaderProfileRadioBtn = (e) => {
+    let readerProfile = e.target.value;
+    confirmAlert({
+      title: `Do you want to switch to ${e.target.value}`,
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () => this.changeProfile(readerProfile),
+        },
+        {
+          label: "No",
+        },
+      ],
+    });
+  }
 
   render() {
     return (
@@ -211,6 +268,60 @@ class Settings extends Component {
                     <label for="eseek" className="radio-label">
                       VELOCIRAPTOR
                     </label>
+                  </Col>
+                </Row>
+                <br />
+                <Row>
+                  <Col md={3}>
+                    <p>
+                      <strong>Reader Profile :</strong>
+                    </p>
+                  </Col>
+                  <Col md={9} className="text-align-left">
+                    <input
+                      type="radio"
+                      id="idcheck"
+                      name="profile"
+                      value="ID_CHECK"
+                      disabled={
+                        this.state.deviceStatus !== "CONNECTED_AOA_MODE"
+                      }
+                      onClick={(e) => this.handleReaderProfileRadioBtn(e)}
+                    />
+                    <label for="idcheck" className="radio-label">
+                      ID_CHECK
+                    </label>
+                    <br />
+
+                    <input
+                      type="radio"
+                      id="agecheck"
+                      name="profile"
+                      value="AGE_CHECK"
+                      disabled={
+                        this.state.deviceStatus !== "CONNECTED_AOA_MODE"
+                      }
+                      onClick={(e) => this.handleReaderProfileRadioBtn(e)}
+                    />
+                    <label for="agecheck" className="radio-label">
+                      AGE_CHECK
+                    </label>
+                    <br />
+
+                    <input
+                      type="radio"
+                      id="customcheck"
+                      name="profile"
+                      value="CUSTOM_CHECK"
+                      disabled={
+                        this.state.deviceStatus !== "CONNECTED_AOA_MODE"
+                      }
+                      onClick={(e) => this.handleReaderProfileRadioBtn(e)}
+                    />
+                    <label for="customcheck" className="radio-label">
+                      CUSTOM_CHECK
+                    </label>
+                    <br />
                   </Col>
                 </Row>
               </Col>
