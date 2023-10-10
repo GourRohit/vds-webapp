@@ -142,26 +142,24 @@ class Dashboard extends Component {
                       }
                     }
                   })
-                  .then(() => {
-                    this.navigateToCheckinMessage();
-                  })
                   .catch((err) => {
                     this.setState({
                       message: "Your check-in could not be completed",
                     });
-                    this.navigateToCheckinMessage();
                   });
               }
             } else if (obj.docType === "QR_CODE") {
               this.setState({
                 message: obj.data.qrCodeData,
               });
-              this.navigateToCheckinMessage();
             }
           }
         },
         false
-      );
+      )
+      .then(() => {
+        this.navigateToCheckinMessage();
+      });
       sse.onerror = function (event) {
         this.setState({
           message: "Could not establish connection with VDS",

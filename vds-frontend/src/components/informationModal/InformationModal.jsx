@@ -53,21 +53,19 @@ const InformationModal = () => {
                   }
                 }
               })
-              .then(() => {
-                navigateToCheckinMessage();
-              })
               .catch((error) => {
                 responseMessage = "Your check-in could not be completed";
                 setMessage(responseMessage);
-                navigateToCheckinMessage();
               });
           }
         } else if (response.data.docType === "QR_CODE") {
           setMessage(response.data.data.qrCodeData);
-          navigateToCheckinMessage();
         } else {
           setMessage("");
         }
+      })
+      .then(() => {
+        navigateToCheckinMessage();
       })
       .catch((error) => {
         responseMessage = "Your check-in could not be completed";
