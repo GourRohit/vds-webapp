@@ -188,7 +188,6 @@ class Dashboard extends Component {
   }
 
   handleButtonClick = (isMdl) => {
-    localStorage.setItem("identityInfoAPIInvoked", true);
     this.setState({ isMdL: isMdl });
     this.handleModal(true);
   };
