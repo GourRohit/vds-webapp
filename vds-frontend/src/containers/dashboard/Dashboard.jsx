@@ -104,21 +104,20 @@ class Dashboard extends Component {
               if (obj.data.documentNumber === "") {
                 if (obj.data.isAgeOver21 === true) {
                   this.setState({
-                    message:
-                      "Your age has been verified and it is above 21 years",
-                    portrait: obj.data.portrait,
+                    message: "Your age has been verified and it is above 21 years",
+                    portrait: obj.data.portrait
                   });
                 } else if (obj.data.isAgeOver18 === true) {
                   this.setState({
-                    message:
-                      "Your age has been verified and it is above 18 years",
-                    portrait: obj.data.portrait,
+                    message: "Your age has been verified and it is above 18 years",
+                    portrait: obj.data.portrait
                   });
                 } else {
                   this.setState({
                     message: "You have been checked in successfully",
                   });
                 }
+                this.navigateToCheckinMessage();
               } else {
                 saveIdData(obj.data)
                   .then((res) => {
@@ -142,24 +141,26 @@ class Dashboard extends Component {
                       }
                     }
                   })
+                  .then(() => {
+                    this.navigateToCheckinMessage();
+                  })
                   .catch((err) => {
                     this.setState({
                       message: "Your check-in could not be completed",
                     });
+                    this.navigateToCheckinMessage();
                   });
               }
             } else if (obj.docType === "QR_CODE") {
               this.setState({
                 message: obj.data.qrCodeData,
               });
+              this.navigateToCheckinMessage();
             }
           }
         },
         false
-      )
-      .then(() => {
-        this.navigateToCheckinMessage();
-      });
+      );
       sse.onerror = function (event) {
         this.setState({
           message: "Could not establish connection with VDS",
