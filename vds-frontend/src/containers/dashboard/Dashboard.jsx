@@ -161,6 +161,14 @@ class Dashboard extends Component {
         },
         false
       );
+
+      sse.addEventListener("ERROR_DATA", (event) => {
+        this.setState({
+          message: "Your check-in could not be completed",
+        });
+        this.navigateToCheckinMessage();
+      });
+
       sse.onerror = function (event) {
         this.setState({
           message: "Could not establish connection with VDS",
