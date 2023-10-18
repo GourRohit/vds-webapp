@@ -9,6 +9,7 @@ import { getReaderinfo, saveIdData, stopInfo } from "../../services/Utils";
 import QRGIF1 from "../../assets/images/Verification_using_QR.gif";
 import QRGIF2 from "../../assets/images/Verification_using_NFC.gif";
 import physicalIMG from "../../assets/images/DL_Scan_Back.png";
+let sse;
 
 class Dashboard extends Component {
   state = {
@@ -96,15 +97,15 @@ class Dashboard extends Component {
   }
 
   closeSSEConnection = () => {
-    if (this.sse) {
-      this.sse.close();
+    if (sse) {
+      sse.close();
       this.setState({ listening: false });
     }
   };
 
   serverSentEvents = () => {
     if (!this.state.listening) {
-      const sse = new EventSource(`${VDS_URL}/sse/read`);
+      sse = new EventSource(`${VDS_URL}/sse/read`);
       sse.addEventListener(
         "SCANNED_DATA",
         (event) => {
