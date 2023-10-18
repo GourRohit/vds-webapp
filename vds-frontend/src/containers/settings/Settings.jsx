@@ -35,6 +35,14 @@ class Settings extends Component {
           console.error(error);
         });
     }
+    this.setState({
+      isLoading: true,
+    });
+    setInterval(() => {
+      this.setState({
+        isLoading: false,
+      });
+    }, 1000);
   };
 
   changeMode(deviceMode) {
@@ -277,7 +285,7 @@ class Settings extends Component {
                       <strong>Reader Profile :</strong>
                     </p>
                   </Col>
-                  <Col md={9} className="text-align-left">
+                  <Col md={8} className="text-align-left">
                     <input
                       type="radio"
                       id="idcheck"
@@ -322,6 +330,11 @@ class Settings extends Component {
                       CUSTOM_CHECK
                     </label>
                     <br />
+                  </Col>
+                  <Col md={1} className="spinner">
+                    {this.state.isLoading ? (
+                      <FadeLoader color="#1aff66" />
+                    ) : null}
                   </Col>
                 </Row>
               </Col>
@@ -408,9 +421,6 @@ class Settings extends Component {
                   ) : null}
                 </Row>
               </Col>
-            </Row>
-            <Row className="spinner">
-              {this.state.isLoading ? <FadeLoader color="#1aff66" /> : null}
             </Row>
           </div>
         </Container>
