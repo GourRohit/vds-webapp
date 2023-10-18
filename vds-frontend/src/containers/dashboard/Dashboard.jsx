@@ -89,6 +89,19 @@ class Dashboard extends Component {
       });
   };
 
+  componentWillUnmount() {
+    if(this.state.deviceMode === "HOLDER_DRIVEN") {
+      this.closeSSEConnection();
+    }
+  }
+
+  closeSSEConnection = () => {
+    if (this.sse) {
+      this.sse.close();
+      this.setState({ listening: false });
+    }
+  };
+
   serverSentEvents = () => {
     if (!this.state.listening) {
       const sse = new EventSource(`${VDS_URL}/sse/read`);
