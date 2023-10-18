@@ -68,7 +68,6 @@ class Dashboard extends Component {
             isLoading: false,
           });
           if (response.data.usbMode === "HOLDER_DRIVEN") {
-            window.addEventListener("beforeunload", this.closeSSEConnection);
             this.serverSentEvents();
           }
         }
@@ -91,7 +90,9 @@ class Dashboard extends Component {
   };
 
   componentWillUnmount() {
-    window.removeEventListener("beforeunload", this.closeSSEConnection);
+    if(this.state.deviceMode === "HOLDER_DRIVEN") {
+      this.closeSSEConnection();
+    }
   }
 
   closeSSEConnection = () => {
