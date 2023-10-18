@@ -92,7 +92,6 @@ class Dashboard extends Component {
 
   componentWillUnmount() {
     window.removeEventListener("beforeunload", this.closeSSEConnection);
-    this.closeSSEConnection();
   }
 
   closeSSEConnection = () => {
