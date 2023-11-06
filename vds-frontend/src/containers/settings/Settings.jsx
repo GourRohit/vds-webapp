@@ -180,6 +180,12 @@ class Settings extends Component {
           isLoading: false,
         });
         if (response.status) {
+          this.setState({
+            wifiFormData: {
+              wifiSSID: "",
+              wifiPassword: "",
+            }
+          })
           confirmAlert({
             title: "Wifi SSID successfully changed",
             buttons: [
