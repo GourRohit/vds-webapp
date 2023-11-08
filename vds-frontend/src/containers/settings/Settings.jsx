@@ -46,7 +46,7 @@ class Settings extends Component {
     this.setState({
       isLoading: true,
     });
-    setInterval(() => {
+    setTimeout(() => {
       this.setState({
         isLoading: false,
       });
@@ -140,9 +140,6 @@ class Settings extends Component {
     });
     setReaderProfile(readerProfile)
       .then((response) => {
-        this.setState({
-          isLoading: false,
-        });
         if (response.status) {
           confirmAlert({
             title: "Reader profile successfully changed",
@@ -153,6 +150,9 @@ class Settings extends Component {
             ],
           });
         }
+        this.setState({
+          isLoading: false,
+        });
       })
       .catch((error) => {
         this.setState({
@@ -214,6 +214,7 @@ class Settings extends Component {
 
   handleRadioBtn = (e) => {
     let deviceMode = e.target.value;
+    this.setState({ isLoading: true })
     confirmAlert({
       title: `Do you want to switch to ${e.target.value}`,
       buttons: [
@@ -230,6 +231,7 @@ class Settings extends Component {
 
   handleReaderProfileRadioBtn = (e) => {
     let readerProfile = e.target.value;
+    this.setState({ isLoading: true })
     confirmAlert({
       title: `Do you want to switch to ${e.target.value}`,
       buttons: [
