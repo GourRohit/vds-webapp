@@ -91,7 +91,7 @@ class Dashboard extends Component {
   };
 
   componentWillUnmount() {
-    if(this.state.deviceMode === "HOLDER_DRIVEN") {
+    if (this.state.deviceMode === "HOLDER_DRIVEN") {
       this.closeSSEConnection();
     }
   }
@@ -229,7 +229,7 @@ class Dashboard extends Component {
         >
           <Header />
           {this.state.checkinMessage ? (
-            <Navigate to="checkin/message" state={this.state} />
+            <Navigate to="/checkin/message" state={this.state} />
           ) : null}
           {this.state.showModal && (
             <Navigate to="/checkin" state={this.state} />
@@ -297,7 +297,7 @@ class Dashboard extends Component {
                 this.state.message === "" ? (
                 "Tap or scan your mobile DL or physical DL to check in"
               ) : (this.state.deviceMode === "STANDALONE" ||
-                  this.state.deviceMode === "VELOCIRAPTOR") &&
+                this.state.deviceMode === "VELOCIRAPTOR") &&
                 this.state.deviceStatus === "CONNECTED_AOA_MODE" ? (
                 "Please change the device operation mode to activate reading"
               ) : (
