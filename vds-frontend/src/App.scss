@@ -323,6 +323,16 @@ ul.breadcrumb li a:hover {
 .portrait-img {
   width: 20%;
 }
+.loader-overlay{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .fade-loader {
   display: flex;
   justify-content: center;
@@ -332,7 +342,10 @@ ul.breadcrumb li a:hover {
 .settings-fade-loader {
   display: flex;
   justify-content: center;
+  align-items: center;
   margin-top: 30px;
+  width: 660px;
+  height: 315px;
 }
 .information-container{
   display: flex;
