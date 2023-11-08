@@ -91,7 +91,7 @@ class Dashboard extends Component {
   };
 
   componentWillUnmount() {
-    if(this.state.deviceMode === "HOLDER_DRIVEN") {
+    if (this.state.deviceMode === "HOLDER_DRIVEN") {
       this.closeSSEConnection();
     }
   }
@@ -222,6 +222,13 @@ class Dashboard extends Component {
     return (
       <>
         <div
+          className="loader-overlay"
+          style={{
+            zIndex: this.state.isLoading ? 10 : -10,
+          }}>
+          {this.state.isLoading ? <FadeLoader color="#1aff66" /> : null}
+        </div>
+        <div
           style={{
             opacity: this.state.isLoading ? 0.25 : 1,
             pointerEvents: this.state.isLoading ? "none" : "auto",
@@ -284,9 +291,6 @@ class Dashboard extends Component {
                 </div>
               </>
             )}
-            <div className="fade-loader">
-              {this.state.isLoading ? <FadeLoader color="#1aff66" /> : null}
-            </div>
             <div className="user-message-wrap">
               {this.state.deviceStatus === "NOT_CONNECTED" ? (
                 <span className="error-msg">
@@ -297,7 +301,7 @@ class Dashboard extends Component {
                 this.state.message === "" ? (
                 "Tap or scan your mobile DL or physical DL to check in"
               ) : (this.state.deviceMode === "STANDALONE" ||
-                  this.state.deviceMode === "VELOCIRAPTOR") &&
+                this.state.deviceMode === "VELOCIRAPTOR") &&
                 this.state.deviceStatus === "CONNECTED_AOA_MODE" ? (
                 "Please change the device operation mode to activate reading"
               ) : (
