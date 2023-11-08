@@ -344,7 +344,7 @@ ul.breadcrumb li a:hover {
   justify-content: center;
   align-items: center;
   margin-top: 30px;
-  width: 660px;
+  width: 520px;
   height: 315px;
 }
 .information-container{
@@ -373,11 +373,22 @@ ul.breadcrumb li a:hover {
 }
 .reader-info-container{
   width: 100%;
-  height: 500px;
+  height: 424px;
   background: #eaeaea;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.verifier-info-wrap{
+  border: 1px solid #c4c4c4;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  height: 522px;
+}
+
+.verifier-info-wrap h5{
+  margin-bottom: 1.5rem;
 }
 
 // ---------- General Settings styles ---------

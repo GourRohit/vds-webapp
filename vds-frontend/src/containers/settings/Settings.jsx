@@ -46,7 +46,7 @@ class Settings extends Component {
     this.setState({
       isLoading: true,
     });
-    setInterval(() => {
+    setTimeout(() => {
       this.setState({
         isLoading: false,
       });
@@ -140,9 +140,6 @@ class Settings extends Component {
     });
     setReaderProfile(readerProfile)
       .then((response) => {
-        this.setState({
-          isLoading: false,
-        });
         if (response.status) {
           confirmAlert({
             title: "Reader profile successfully changed",
@@ -153,6 +150,9 @@ class Settings extends Component {
             ],
           });
         }
+        this.setState({
+          isLoading: false,
+        });
       })
       .catch((error) => {
         this.setState({
@@ -214,6 +214,7 @@ class Settings extends Component {
 
   handleRadioBtn = (e) => {
     let deviceMode = e.target.value;
+    this.setState({ isLoading: true })
     confirmAlert({
       title: `Do you want to switch to ${e.target.value}`,
       buttons: [
@@ -230,6 +231,7 @@ class Settings extends Component {
 
   handleReaderProfileRadioBtn = (e) => {
     let readerProfile = e.target.value;
+    this.setState({ isLoading: true })
     confirmAlert({
       title: `Do you want to switch to ${e.target.value}`,
       buttons: [
@@ -350,41 +352,63 @@ class Settings extends Component {
               </Row>
 
               <Col md={6}>
-                <h5>Tap2iD Verifier Info</h5>
-                <Row className={this.state.isData ? "info-box" : ""}>
-                  {this.state.deviceStatus === "CONNECTED_AOA_MODE" &&
-                    this.state.isData ? (
-                    <Col md={12}>
-                      {this.state.isReaderInfoLoading ? (
-                        <div className="settings-fade-loader">
-                          <FadeLoader color="#b3ffcc" />
-                        </div>
-                      ) : <Table hover size="sm">
-                        <tbody>
-                          {Object.keys(this.state.readerData).map((item, i) => {
-                            const words = item.replace(/([a-z])([A-Z])/g, '$1 $2').split(' ');
-                            const result = words.map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-                            return (
-                              <tr>
-                                <td>{result + ":"}</td>
-                                <td>
-                                  {this.state.readerData[item] !== null
-                                    ? this.state.readerData[item].toString()
-                                    : "Unvailable"}
-                                </td>
-                              </tr>
-                            )
-                          })
-                          }
-                        </tbody>
-                      </Table>}
-                    </Col>
-                  ) : (
-                    <Col md={12}>
-                      <div className="reader-info-container">
+                <div className="verifier-info-wrap">
+                  <h5>Tap2iD Verifier Info</h5>
+                  <Row className={this.state.isData ? "info-box" : ""}>
+                    {this.state.deviceStatus === "CONNECTED_AOA_MODE" &&
+                      this.state.isData ? (
+                      <Col md={12}>
                         {this.state.isReaderInfoLoading ? (
-                          <FadeLoader color="#b3ffcc" />
-                        ) : <Button
+                          <div className="settings-fade-loader">
+                            <FadeLoader color="#b3ffcc" />
+                          </div>
+                        ) : <Table hover size="sm">
+                          <tbody>
+                            {Object.keys(this.state.readerData).map((item, i) => {
+                              const words = item.replace(/([a-z])([A-Z])/g, '$1 $2').split(' ');
+                              const result = words.map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+                              return (
+                                <tr>
+                                  <td>{result + ":"}</td>
+                                  <td>
+                                    {this.state.readerData[item] !== null
+                                      ? this.state.readerData[item].toString()
+                                      : "Unvailable"}
+                                  </td>
+                                </tr>
+                              )
+                            })
+                            }
+                          </tbody>
+                        </Table>}
+                      </Col>
+                    ) : (
+                      <Col md={12}>
+                        <div className="reader-info-container">
+                          {this.state.isReaderInfoLoading ? (
+                            <FadeLoader color="#b3ffcc" />
+                          ) : <Button
+                            className="info-btn"
+                            onClick={() => this.getReaderData()}
+                            variant={
+                              this.state.deviceStatus === "CONNECTED_AOA_MODE"
+                                ? "primary"
+                                : "secondary"
+                            }
+                            disabled={this.state.deviceStatus === "NOT_CONNECTED"}
+                          >
+                            Fetch Reader Info
+                          </Button>
+                          }
+                        </div>
+                      </Col>
+                    )}
+                  </Row>
+
+                  <div>
+                    {(this.state.deviceStatus === "CONNECTED_AOA_MODE" &&
+                      this.state.isData) && (
+                        <Button
                           className="info-btn"
                           onClick={() => this.getReaderData()}
                           variant={
@@ -396,28 +420,8 @@ class Settings extends Component {
                         >
                           Fetch Reader Info
                         </Button>
-                        }
-                      </div>
-                    </Col>
-                  )}
-                </Row>
-
-                <div>
-                  {(this.state.deviceStatus === "CONNECTED_AOA_MODE" &&
-                    this.state.isData) && (
-                      <Button
-                        className="info-btn"
-                        onClick={() => this.getReaderData()}
-                        variant={
-                          this.state.deviceStatus === "CONNECTED_AOA_MODE"
-                            ? "primary"
-                            : "secondary"
-                        }
-                        disabled={this.state.deviceStatus === "NOT_CONNECTED"}
-                      >
-                        Fetch Reader Info
-                      </Button>
-                    )}
+                      )}
+                  </div>
                 </div>
               </Col>
 
