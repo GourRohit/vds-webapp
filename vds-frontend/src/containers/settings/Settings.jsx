@@ -291,6 +291,14 @@ class Settings extends Component {
   render() {
     return (
       <>
+        <div
+          className="loader-overlay"
+          style={{
+            zIndex: this.state.isLoading ? 10 : -10,
+          }}>
+          {this.state.isLoading ? <FadeLoader color="#1aff66" /> : null}
+        </div>
+
         <Header />
         <Container>
           <div
@@ -344,15 +352,14 @@ class Settings extends Component {
               <Col md={6}>
                 <h5>Tap2iD Verifier Info</h5>
                 <Row className={this.state.isData ? "info-box" : ""}>
-                  <div className="settings-fade-loader">
-                    {this.state.isReaderInfoLoading ? (
-                      <FadeLoader color="#b3ffcc" />
-                    ) : null}
-                  </div>
                   {this.state.deviceStatus === "CONNECTED_AOA_MODE" &&
                     this.state.isData ? (
                     <Col md={12}>
-                      <Table hover size="sm">
+                      {this.state.isReaderInfoLoading ? (
+                        <div className="settings-fade-loader">
+                          <FadeLoader color="#b3ffcc" />
+                        </div>
+                      ) : <Table hover size="sm">
                         <tbody>
                           {Object.keys(this.state.readerData).map((item, i) => {
                             const words = item.replace(/([a-z])([A-Z])/g, '$1 $2').split(' ');
@@ -370,12 +377,14 @@ class Settings extends Component {
                           })
                           }
                         </tbody>
-                      </Table>
+                      </Table>}
                     </Col>
                   ) : (
                     <Col md={12}>
                       <div className="reader-info-container">
-                        <Button
+                        {this.state.isReaderInfoLoading ? (
+                          <FadeLoader color="#b3ffcc" />
+                        ) : <Button
                           className="info-btn"
                           onClick={() => this.getReaderData()}
                           variant={
@@ -387,6 +396,7 @@ class Settings extends Component {
                         >
                           Fetch Reader Info
                         </Button>
+                        }
                       </div>
                     </Col>
                   )}
