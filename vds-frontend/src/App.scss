@@ -340,8 +340,16 @@ ul.breadcrumb li a:hover {
   justify-content: center;
   align-items: center;
   margin-top: 30px;
-  width: 520px;
+  width: 100%;
   height: 315px;
+}
+.col-wrap{
+  display: flex;
+  flex-direction: column-reverse;
+
+  @media (min-width: 992px){
+    flex-direction: row;
+  }
 }
 .information-container{
   display: flex;
@@ -381,7 +389,8 @@ ul.breadcrumb li a:hover {
   border-radius: 0.5rem;
   padding: 1.5rem;
   height: 522px;
-  }
+  margin-bottom: 2rem;
+}
 
 .verifier-info-wrap h5{
   margin-bottom: 1.5rem;
@@ -400,11 +409,21 @@ ul.breadcrumb li a:hover {
 }
 .radio-options-wrap{
   display: flex;
-  gap: 2rem;
+  gap: 1rem;
   align-items: center;
   justify-content: flex-start;
-}
+  @media (min-width: 992px) {
+    gap: 0rem;
+    align-items: start;
+    flex-direction: column;
+  }
 
+  @media (min-width: 1200px) {
+    gap: 1.5rem;
+    flex-direction: row;
+    align-items: center;
+  }
+}
 // ---------- Wifi settings styles ------------
 .wifi-settings-wrap h5{
   margin-bottom: 1.5rem;

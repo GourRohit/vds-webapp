@@ -351,43 +351,65 @@ class Settings extends Component {
                 </Col>
               </Row>
 
-              <Col md={6}>
-                <div className="verifier-info-wrap">
-                  <h5>Tap2iD Verifier Info</h5>
-                  <Row className={this.state.isData ? "info-box" : ""}>
-                    {this.state.deviceStatus === "CONNECTED_AOA_MODE" &&
-                      this.state.isData ? (
-                      <Col md={12}>
-                        {this.state.isReaderInfoLoading ? (
-                          <div className="settings-fade-loader">
-                            <FadeLoader color="#b3ffcc" />
-                          </div>
-                        ) : <Table hover size="sm">
-                          <tbody>
-                            {Object.keys(this.state.readerData).map((item, i) => {
-                              const words = item.replace(/([a-z])([A-Z])/g, '$1 $2').split(' ');
-                              const result = words.map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-                              return (
-                                <tr>
-                                  <td>{result + ":"}</td>
-                                  <td>
-                                    {this.state.readerData[item] !== null
-                                      ? this.state.readerData[item].toString()
-                                      : "Unvailable"}
-                                  </td>
-                                </tr>
-                              )
-                            })
-                            }
-                          </tbody>
-                        </Table>}
-                      </Col>
-                    ) : (
-                      <Col md={12}>
-                        <div className="reader-info-container">
+              <div className="col-wrap">
+                <Col lg={6}>
+                  <div className="verifier-info-wrap">
+                    <h5>Tap2iD Verifier Info</h5>
+                    <Row className={this.state.isData ? "info-box" : ""}>
+                      {this.state.deviceStatus === "CONNECTED_AOA_MODE" &&
+                        this.state.isData ? (
+                        <Col md={12}>
                           {this.state.isReaderInfoLoading ? (
-                            <FadeLoader color="#b3ffcc" />
-                          ) : <Button
+                            <div className="settings-fade-loader">
+                              <FadeLoader color="#b3ffcc" />
+                            </div>
+                          ) : <Table hover size="sm">
+                            <tbody>
+                              {Object.keys(this.state.readerData).map((item, i) => {
+                                const words = item.replace(/([a-z])([A-Z])/g, '$1 $2').split(' ');
+                                const result = words.map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+                                return (
+                                  <tr>
+                                    <td>{result + ":"}</td>
+                                    <td>
+                                      {this.state.readerData[item] !== null
+                                        ? this.state.readerData[item].toString()
+                                        : "Unvailable"}
+                                    </td>
+                                  </tr>
+                                )
+                              })
+                              }
+                            </tbody>
+                          </Table>}
+                        </Col>
+                      ) : (
+                        <Col md={12}>
+                          <div className="reader-info-container">
+                            {this.state.isReaderInfoLoading ? (
+                              <FadeLoader color="#b3ffcc" />
+                            ) : <Button
+                              className="info-btn"
+                              onClick={() => this.getReaderData()}
+                              variant={
+                                this.state.deviceStatus === "CONNECTED_AOA_MODE"
+                                  ? "primary"
+                                  : "secondary"
+                              }
+                              disabled={this.state.deviceStatus === "NOT_CONNECTED"}
+                            >
+                              Fetch Reader Info
+                            </Button>
+                            }
+                          </div>
+                        </Col>
+                      )}
+                    </Row>
+
+                    <div>
+                      {(this.state.deviceStatus === "CONNECTED_AOA_MODE" &&
+                        this.state.isData) && (
+                          <Button
                             className="info-btn"
                             onClick={() => this.getReaderData()}
                             variant={
@@ -399,199 +421,179 @@ class Settings extends Component {
                           >
                             Fetch Reader Info
                           </Button>
-                          }
+                        )}
+                    </div>
+                  </div>
+                </Col>
+
+                <Col lg={6}>
+                  <div className="general-settings-wrap">
+                    <h5>General Settings</h5>
+
+                    <div className="device-mode-wrap">
+                      <p><strong>Device Mode :</strong></p>
+                      <div className="radio-options-wrap">
+                        <div className="radio-option-wrap">
+                          <input
+                            type="radio"
+                            id="iddriven"
+                            name="mode"
+                            value="HOLDER_DRIVEN"
+                            disabled={
+                              this.state.deviceStatus !== "CONNECTED_AOA_MODE"
+                            }
+                            checked={
+                              this.state.deviceMode === "HOLDER_DRIVEN" && "checked"
+                            }
+                            onClick={(e) => this.handleRadioBtn(e)}
+                          />
+                          <label htmlFor="iddriven" className="radio-label">
+                            HOLDER_DRIVEN
+                          </label>
                         </div>
-                      </Col>
-                    )}
-                  </Row>
 
-                  <div>
-                    {(this.state.deviceStatus === "CONNECTED_AOA_MODE" &&
-                      this.state.isData) && (
-                        <Button
-                          className="info-btn"
-                          onClick={() => this.getReaderData()}
-                          variant={
-                            this.state.deviceStatus === "CONNECTED_AOA_MODE"
-                              ? "primary"
-                              : "secondary"
-                          }
-                          disabled={this.state.deviceStatus === "NOT_CONNECTED"}
-                        >
-                          Fetch Reader Info
-                        </Button>
-                      )}
-                  </div>
-                </div>
-              </Col>
+                        <div className="radio-option-wrap">
+                          <input
+                            type="radio"
+                            id="usbdriven"
+                            name="mode"
+                            value="HOST_DRIVEN"
+                            disabled={
+                              this.state.deviceStatus !== "CONNECTED_AOA_MODE"
+                            }
+                            checked={
+                              this.state.deviceMode === "HOST_DRIVEN" && "checked"
+                            }
+                            onClick={(e) => this.handleRadioBtn(e)}
+                          />
+                          <label htmlFor="usbdriven" className="radio-label">
+                            HOST_DRIVEN
+                          </label>
+                        </div>
 
-              <Col md={6}>
-                <div className="general-settings-wrap">
-                  <h5>General Settings</h5>
-
-                  <div className="device-mode-wrap">
-                    <p><strong>Device Mode :</strong></p>
-                    <div className="radio-options-wrap">
-                      <div className="radio-option-wrap">
-                        <input
-                          type="radio"
-                          id="iddriven"
-                          name="mode"
-                          value="HOLDER_DRIVEN"
-                          disabled={
-                            this.state.deviceStatus !== "CONNECTED_AOA_MODE"
-                          }
-                          checked={
-                            this.state.deviceMode === "HOLDER_DRIVEN" && "checked"
-                          }
-                          onClick={(e) => this.handleRadioBtn(e)}
-                        />
-                        <label htmlFor="iddriven" className="radio-label">
-                          HOLDER_DRIVEN
-                        </label>
+                        <div className="radio-option-wrap">
+                          <input
+                            type="radio"
+                            id="stand"
+                            name="mode"
+                            value="STANDALONE"
+                            disabled={
+                              this.state.deviceStatus !== "CONNECTED_AOA_MODE"
+                            }
+                            checked={
+                              this.state.deviceMode === "STANDALONE" && "checked"
+                            }
+                            onClick={(e) => this.handleRadioBtn(e)}
+                          />
+                          <label htmlFor="stand" className="radio-label">
+                            STANDALONE
+                          </label>
+                        </div>
                       </div>
+                    </div>
 
-                      <div className="radio-option-wrap">
-                        <input
-                          type="radio"
-                          id="usbdriven"
-                          name="mode"
-                          value="HOST_DRIVEN"
-                          disabled={
-                            this.state.deviceStatus !== "CONNECTED_AOA_MODE"
-                          }
-                          checked={
-                            this.state.deviceMode === "HOST_DRIVEN" && "checked"
-                          }
-                          onClick={(e) => this.handleRadioBtn(e)}
-                        />
-                        <label htmlFor="usbdriven" className="radio-label">
-                          HOST_DRIVEN
-                        </label>
-                      </div>
+                    <div className="reader-profile-wrap">
+                      <p><strong>Reader Profile:</strong></p>
+                      <div className="radio-options-wrap">
+                        <div className="radio-option-wrap">
+                          <input
+                            type="radio"
+                            id="idcheck"
+                            name="profile"
+                            value="ID_CHECK"
+                            disabled={
+                              this.state.deviceStatus !== "CONNECTED_AOA_MODE"
+                            }
+                            onClick={(e) => this.handleReaderProfileRadioBtn(e)}
+                          />
+                          <label htmlFor="idcheck" className="radio-label">
+                            ID_CHECK
+                          </label>
+                        </div>
 
-                      <div className="radio-option-wrap">
-                        <input
-                          type="radio"
-                          id="stand"
-                          name="mode"
-                          value="STANDALONE"
-                          disabled={
-                            this.state.deviceStatus !== "CONNECTED_AOA_MODE"
-                          }
-                          checked={
-                            this.state.deviceMode === "STANDALONE" && "checked"
-                          }
-                          onClick={(e) => this.handleRadioBtn(e)}
-                        />
-                        <label htmlFor="stand" className="radio-label">
-                          STANDALONE
-                        </label>
+                        <div className="radio-option-wrap">
+                          <input
+                            type="radio"
+                            id="agecheck"
+                            name="profile"
+                            value="AGE_CHECK"
+                            disabled={
+                              this.state.deviceStatus !== "CONNECTED_AOA_MODE"
+                            }
+                            onClick={(e) => this.handleReaderProfileRadioBtn(e)}
+                          />
+                          <label htmlFor="agecheck" className="radio-label">
+                            AGE_CHECK
+                          </label>
+                        </div>
+
+                        <div className="radio-option-wrap">
+                          <input
+                            type="radio"
+                            id="customcheck"
+                            name="profile"
+                            value="CUSTOM_CHECK"
+                            disabled={
+                              this.state.deviceStatus !== "CONNECTED_AOA_MODE"
+                            }
+                            onClick={(e) => this.handleReaderProfileRadioBtn(e)}
+                          />
+                          <label htmlFor="customcheck" className="radio-label">
+                            CUSTOM_CHECK
+                          </label>
+                        </div>
                       </div>
                     </div>
                   </div>
 
-                  <div className="reader-profile-wrap">
-                    <p><strong>Reader Profile:</strong></p>
-                    <div className="radio-options-wrap">
-                      <div className="radio-option-wrap">
-                        <input
-                          type="radio"
-                          id="idcheck"
-                          name="profile"
-                          value="ID_CHECK"
-                          disabled={
-                            this.state.deviceStatus !== "CONNECTED_AOA_MODE"
-                          }
-                          onClick={(e) => this.handleReaderProfileRadioBtn(e)}
-                        />
-                        <label htmlFor="idcheck" className="radio-label">
-                          ID_CHECK
-                        </label>
-                      </div>
+                  <div className="wifi-settings-wrap">
+                    <h5>Wifi Settings</h5>
+                    <form action="" onSubmit={(e) => this.handleSubmit(e)}>
+                      <Row className="input-wrap">
+                        <Col md={3}><label htmlFor="wifi-ssid">Wi-Fi SSID: </label></Col>
+                        <Col md={9}>
+                          <input
+                            type="text"
+                            name="wifiSSID"
+                            id="wifi-ssid"
+                            className="wifi-input"
+                            value={this.state.wifiFormData.wifiSSID}
+                            onChange={(e) => this.handleWifiChange(e)}
+                          /> <br />
+                          {this.state.wifiFormError.SSIDError && <div className="wifi-error-message">{this.state.wifiFormError.SSIDError}</div>}
+                        </Col>
+                      </Row>
 
-                      <div className="radio-option-wrap">
-                        <input
-                          type="radio"
-                          id="agecheck"
-                          name="profile"
-                          value="AGE_CHECK"
-                          disabled={
-                            this.state.deviceStatus !== "CONNECTED_AOA_MODE"
-                          }
-                          onClick={(e) => this.handleReaderProfileRadioBtn(e)}
-                        />
-                        <label htmlFor="agecheck" className="radio-label">
-                          AGE_CHECK
-                        </label>
-                      </div>
+                      <Row className="input-wrap">
+                        <Col md={3}><label htmlFor="wifi-ssid">Wi-Fi Password: </label></Col>
+                        <Col md={9}>
+                          <input
+                            type={this.state.showPassword ? 'text' : 'password'}
+                            name="wifiPassword"
+                            id="wifi-password"
+                            className="wifi-input"
+                            value={this.state.wifiFormData.wifiPassword}
+                            onChange={(e) => this.handleWifiChange(e)}
+                          />
+                          <span
+                            className="password-toggle"
+                            onClick={this.togglePasswordVisibility}
+                          >
+                            {this.state.showPassword ? <FaEye /> : <FaEyeSlash />}
+                          </span>
+                          <br />
+                          {this.state.wifiFormError.passwordError && <div className="wifi-error-message">{this.state.wifiFormError.passwordError}</div>}
+                        </Col>
+                      </Row>
 
-                      <div className="radio-option-wrap">
-                        <input
-                          type="radio"
-                          id="customcheck"
-                          name="profile"
-                          value="CUSTOM_CHECK"
-                          disabled={
-                            this.state.deviceStatus !== "CONNECTED_AOA_MODE"
-                          }
-                          onClick={(e) => this.handleReaderProfileRadioBtn(e)}
-                        />
-                        <label htmlFor="customcheck" className="radio-label">
-                          CUSTOM_CHECK
-                        </label>
-                      </div>
-                    </div>
+                      <Button
+                        type="submit"
+                        className="save-btn"
+                      >Save</Button>
+                    </form>
                   </div>
-                </div>
-
-                <div className="wifi-settings-wrap">
-                  <h5>Wifi Settings</h5>
-                  <form action="" onSubmit={(e) => this.handleSubmit(e)}>
-                    <Row className="input-wrap">
-                      <Col md={3}><label htmlFor="wifi-ssid">Wi-Fi SSID: </label></Col>
-                      <Col md={9}>
-                        <input
-                          type="text"
-                          name="wifiSSID"
-                          id="wifi-ssid"
-                          className="wifi-input"
-                          value={this.state.wifiFormData.wifiSSID}
-                          onChange={(e) => this.handleWifiChange(e)}
-                        /> <br />
-                        {this.state.wifiFormError.SSIDError && <div className="wifi-error-message">{this.state.wifiFormError.SSIDError}</div>}
-                      </Col>
-                    </Row>
-
-                    <Row className="input-wrap">
-                      <Col md={3}><label htmlFor="wifi-ssid">Wi-Fi Password: </label></Col>
-                      <Col md={9}>
-                        <input
-                          type={this.state.showPassword ? 'text' : 'password'}
-                          name="wifiPassword"
-                          id="wifi-password"
-                          className="wifi-input"
-                          value={this.state.wifiFormData.wifiPassword}
-                          onChange={(e) => this.handleWifiChange(e)}
-                        />
-                        <span
-                          className="password-toggle"
-                          onClick={this.togglePasswordVisibility}
-                        >
-                          {this.state.showPassword ? <FaEye /> : <FaEyeSlash />}
-                        </span>
-                        <br />
-                        {this.state.wifiFormError.passwordError && <div className="wifi-error-message">{this.state.wifiFormError.passwordError}</div>}
-                      </Col>
-                    </Row>
-
-                    <Button
-                      type="submit"
-                      className="save-btn"
-                    >Save</Button>
-                  </form>
-                </div>
-              </Col>
+                </Col>
+              </div>
             </Row>
           </div>
         </Container>
