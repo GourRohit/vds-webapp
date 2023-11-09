@@ -214,7 +214,6 @@ class Settings extends Component {
 
   handleRadioBtn = (e) => {
     let deviceMode = e.target.value;
-    this.setState({ isLoading: true })
     confirmAlert({
       title: `Do you want to switch to ${e.target.value}`,
       buttons: [
@@ -231,7 +230,6 @@ class Settings extends Component {
 
   handleReaderProfileRadioBtn = (e) => {
     let readerProfile = e.target.value;
-    this.setState({ isLoading: true })
     confirmAlert({
       title: `Do you want to switch to ${e.target.value}`,
       buttons: [
