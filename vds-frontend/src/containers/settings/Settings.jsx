@@ -452,7 +452,7 @@ class Settings extends Component {
                             onChange={(e) => this.handleRadioBtn(e)}
                           />
                           <label htmlFor="iddriven" className="radio-label">
-                            Holder Driven
+                            HOLDER_DRIVEN
                           </label>
                         </div>
 
@@ -471,7 +471,7 @@ class Settings extends Component {
                             onChange={(e) => this.handleRadioBtn(e)}
                           />
                           <label htmlFor="usbdriven" className="radio-label">
-                            Host Driven
+                            HOST_DRIVEN
                           </label>
                         </div>
 
@@ -490,7 +490,7 @@ class Settings extends Component {
                             onChange={(e) => this.handleRadioBtn(e)}
                           />
                           <label htmlFor="stand" className="radio-label">
-                            Standalone
+                            STANDALONE
                           </label>
                         </div>
                       </div>
@@ -514,7 +514,7 @@ class Settings extends Component {
                             onChange={(e) => this.handleReaderProfileRadioBtn(e)}
                           />
                           <label htmlFor="idcheck" className="radio-label">
-                            ID Check
+                            ID_CHECK
                           </label>
                         </div>
 
@@ -533,7 +533,7 @@ class Settings extends Component {
                             onChange={(e) => this.handleReaderProfileRadioBtn(e)}
                           />
                           <label htmlFor="agecheck" className="radio-label">
-                            Age Check
+                            AGE_CHECK
                           </label>
                         </div>
 
@@ -552,7 +552,7 @@ class Settings extends Component {
                             onChange={(e) => this.handleReaderProfileRadioBtn(e)}
                           />
                           <label htmlFor="customcheck" className="radio-label">
-                            Custom Check
+                            CUSTOM_CHECK
                           </label>
                         </div>
                       </div>
