@@ -21,6 +21,7 @@ class Settings extends Component {
     readerData: [],
     isData: false,
     deviceMode: localStorage.getItem("deviceMode"),
+    readerProfile: localStorage.getItem("readerProfile"),
     isLoading: false,
     isReaderInfoLoading: false,
     wifiFormData: {
@@ -65,6 +66,7 @@ class Settings extends Component {
             isData: true,
             deviceStatus: response.data.deviceState,
             deviceMode: response.data.usbMode,
+            readerProfile: response.data.readerProfile,
             isReaderInfoLoading: false,
           });
         } else {
@@ -134,13 +136,17 @@ class Settings extends Component {
       });
   }
 
-  changeProfile(readerProfile) {
+  changeProfile(profile) {
     this.setState({
       isLoading: true,
     });
-    setReaderProfile(readerProfile)
+    setReaderProfile(profile)
       .then((response) => {
         if (response.status) {
+          this.setState({
+            readerProfile: profile
+          })
+          localStorage.setItem("readerProfile", profile);
           confirmAlert({
             title: "Reader profile successfully changed",
             buttons: [
@@ -367,7 +373,7 @@ class Settings extends Component {
                                 const words = item.replace(/([a-z])([A-Z])/g, '$1 $2').split(' ');
                                 const result = words.map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
                                 return (
-                                  <tr>
+                                  <tr key={item}>
                                     <td>{result + ":"}</td>
                                     <td>
                                       {this.state.readerData[item] !== null
@@ -443,7 +449,7 @@ class Settings extends Component {
                             checked={
                               this.state.deviceMode === "HOLDER_DRIVEN" && "checked"
                             }
-                            onClick={(e) => this.handleRadioBtn(e)}
+                            onChange={(e) => this.handleRadioBtn(e)}
                           />
                           <label htmlFor="iddriven" className="radio-label">
                             HOLDER_DRIVEN
@@ -462,7 +468,7 @@ class Settings extends Component {
                             checked={
                               this.state.deviceMode === "HOST_DRIVEN" && "checked"
                             }
-                            onClick={(e) => this.handleRadioBtn(e)}
+                            onChange={(e) => this.handleRadioBtn(e)}
                           />
                           <label htmlFor="usbdriven" className="radio-label">
                             HOST_DRIVEN
@@ -481,7 +487,7 @@ class Settings extends Component {
                             checked={
                               this.state.deviceMode === "STANDALONE" && "checked"
                             }
-                            onClick={(e) => this.handleRadioBtn(e)}
+                            onChange={(e) => this.handleRadioBtn(e)}
                           />
                           <label htmlFor="stand" className="radio-label">
                             STANDALONE
@@ -502,7 +508,10 @@ class Settings extends Component {
                             disabled={
                               this.state.deviceStatus !== "CONNECTED_AOA_MODE"
                             }
-                            onClick={(e) => this.handleReaderProfileRadioBtn(e)}
+                            checked={
+                              (this.state.readerProfile === "ID_CHECK" || this.state.readerProfile === "ID Check") && "checked"
+                            }
+                            onChange={(e) => this.handleReaderProfileRadioBtn(e)}
                           />
                           <label htmlFor="idcheck" className="radio-label">
                             ID_CHECK
@@ -515,10 +524,13 @@ class Settings extends Component {
                             id="agecheck"
                             name="profile"
                             value="AGE_CHECK"
+                            checked={
+                              (this.state.readerProfile === "AGE_CHECK" || this.state.readerProfile === "Age Check") && "checked"
+                            }
                             disabled={
                               this.state.deviceStatus !== "CONNECTED_AOA_MODE"
                             }
-                            onClick={(e) => this.handleReaderProfileRadioBtn(e)}
+                            onChange={(e) => this.handleReaderProfileRadioBtn(e)}
                           />
                           <label htmlFor="agecheck" className="radio-label">
                             AGE_CHECK
@@ -531,10 +543,13 @@ class Settings extends Component {
                             id="customcheck"
                             name="profile"
                             value="CUSTOM_CHECK"
+                            checked={
+                              (this.state.readerProfile === "CUSTOM_CHECK" || this.state.readerProfile === "Custom Check") && "checked"
+                            }
                             disabled={
                               this.state.deviceStatus !== "CONNECTED_AOA_MODE"
                             }
-                            onClick={(e) => this.handleReaderProfileRadioBtn(e)}
+                            onChange={(e) => this.handleReaderProfileRadioBtn(e)}
                           />
                           <label htmlFor="customcheck" className="radio-label">
                             CUSTOM_CHECK
