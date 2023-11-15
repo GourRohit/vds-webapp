@@ -237,7 +237,7 @@ class Dashboard extends Component {
         >
           <Header />
           {this.state.checkinMessage ? (
-            <Navigate to="checkin/message" state={this.state} />
+            <Navigate to="/checkin/message" state={this.state} />
           ) : null}
           {this.state.showModal && (
             <Navigate to="/checkin" state={this.state} />

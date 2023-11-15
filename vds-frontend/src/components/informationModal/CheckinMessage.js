@@ -18,7 +18,7 @@ function CheckinMessage() {
   }, []);
   return (
     <>
-      {time ? navigate("/") : navigate("checkin/message")}
+      {time && navigate("/")}
       <Header />
       {portrait !== "data:image/webp;base64," && (
         <div className="portrait">
