@@ -64,7 +64,7 @@ class Dashboard extends Component {
       .then((response) => {
         if (response.data && response.status) {
           localStorage.setItem("deviceMode", response.data.usbMode);
-          localStorage.setItem("readerProfile", response.data.readerProfile)
+          localStorage.setItem("readerProfile", response.data.readerProfile.toLowerCase())
           this.setState({
             deviceMode: response.data.usbMode,
             isLoading: false,

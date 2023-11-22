@@ -66,7 +66,7 @@ class Settings extends Component {
             isData: true,
             deviceStatus: response.data.deviceState,
             deviceMode: response.data.usbMode,
-            readerProfile: response.data.readerProfile,
+            readerProfile: response.data.readerProfile.toLowerCase(),
             isReaderInfoLoading: false,
           });
         } else {
@@ -504,12 +504,12 @@ class Settings extends Component {
                             type="radio"
                             id="idcheck"
                             name="profile"
-                            value="ID_CHECK"
+                            value="id check profile"
                             disabled={
                               this.state.deviceStatus !== "CONNECTED_AOA_MODE"
                             }
                             checked={
-                              (this.state.readerProfile === "ID_CHECK" || this.state.readerProfile === "ID Check") && "checked"
+                              (this.state.readerProfile === "id check profile") && "checked"
                             }
                             onChange={(e) => this.handleReaderProfileRadioBtn(e)}
                           />
@@ -523,9 +523,9 @@ class Settings extends Component {
                             type="radio"
                             id="agecheck"
                             name="profile"
-                            value="AGE_CHECK"
+                            value="age check profile"
                             checked={
-                              (this.state.readerProfile === "AGE_CHECK" || this.state.readerProfile === "Age Check") && "checked"
+                              (this.state.readerProfile === "age check profile") && "checked"
                             }
                             disabled={
                               this.state.deviceStatus !== "CONNECTED_AOA_MODE"
@@ -542,9 +542,9 @@ class Settings extends Component {
                             type="radio"
                             id="customcheck"
                             name="profile"
-                            value="CUSTOM_CHECK"
+                            value="custom profile"
                             checked={
-                              (this.state.readerProfile === "CUSTOM_CHECK" || this.state.readerProfile === "Custom Check") && "checked"
+                              (this.state.readerProfile === "custom profile") && "checked"
                             }
                             disabled={
                               this.state.deviceStatus !== "CONNECTED_AOA_MODE"
