@@ -140,7 +140,13 @@ class Settings extends Component {
     this.setState({
       isLoading: true,
     });
-    setReaderProfile(profile)
+    // Reader profiles mapping
+    let readerProfile = {
+      "id check profile": "ID_CHECK",
+      "age check profile": "AGE_CHECK",
+      "custom profile": "CUSTOM_CHECK"
+    };
+    setReaderProfile(readerProfile[profile])
       .then((response) => {
         if (response.status) {
           this.setState({
