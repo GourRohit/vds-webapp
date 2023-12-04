@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Col, Container, Row, Button } from "react-bootstrap";
+import { Col, Container, Row, Button, Form } from "react-bootstrap";
 import { FadeLoader } from "react-spinners";
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import Header from "../header/Header";
@@ -602,6 +602,17 @@ class Settings extends Component {
                           </span>
                           <br />
                           {this.state.wifiFormError.passwordError && <div className="wifi-error-message">{this.state.wifiFormError.passwordError}</div>}
+                        </Col>
+                      </Row>
+
+                      <Row>
+                        <Col md="3"><label htmlFor="wifi-type">Wi-Fi Type: </label></Col>
+                        <Col md="9">
+                          <Form.Select id="wifi-type">
+                            <option value="">None</option>
+                            <option value="">WEP</option>
+                            <option value="">WAP</option>
+                          </Form.Select>
                         </Col>
                       </Row>
 
