@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Col, Container, Row, Button } from "react-bootstrap";
+import { Col, Container, Row, Button, Form } from "react-bootstrap";
 import { FadeLoader } from "react-spinners";
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import Header from "../header/Header";
@@ -27,6 +27,7 @@ class Settings extends Component {
     wifiFormData: {
       wifiSSID: "",
       wifiPassword: "",
+      wifiType: "None",
     },
     wifiFormError: {},
     showPassword: false,
@@ -278,8 +279,8 @@ class Settings extends Component {
       validationErrors.SSIDError = "Wifi SSID is required!"
     }
 
-    if (wifiFormData.wifiPassword.trim() === "") {
-      validationErrors.passwordError = "Wifi Password is required!"
+    if (wifiFormData.wifiType === "") {
+      validationErrors.wifiTypeError = "Wifi Type is required!"
     }
 
     this.setState({ wifiFormError: validationErrors })
@@ -287,7 +288,7 @@ class Settings extends Component {
     if (Object.keys(validationErrors).length === 0) {
       const wifiSetting = {}
       wifiSetting.SSID = this.state.wifiFormData.wifiSSID
-      wifiSetting.password = this.state.wifiFormData.wifiPassword
+      wifiSetting.type = this.state.wifiFormData.wifiType
 
       this.changeWifi(wifiSetting)
     }
@@ -602,6 +603,21 @@ class Settings extends Component {
                           </span>
                           <br />
                           {this.state.wifiFormError.passwordError && <div className="wifi-error-message">{this.state.wifiFormError.passwordError}</div>}
+                        </Col>
+                      </Row>
+
+                      <Row>
+                        <Col md="3"><label htmlFor="wifi-type">Wi-Fi Type: </label></Col>
+                        <Col md="9">
+                          <Form.Select
+                            id="wifi-type"
+                            name="wifiType"
+                            value={this.state.wifiFormData.wifiType}
+                            onChange={(e) => this.handleWifiChange(e)}>
+                            <option value="None">None</option>
+                            <option value="WEP">WEP</option>
+                            <option value="WPA">WPA</option>
+                          </Form.Select>
                         </Col>
                       </Row>
 

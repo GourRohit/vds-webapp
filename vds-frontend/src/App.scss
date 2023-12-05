@@ -377,7 +377,7 @@ ul.breadcrumb li a:hover {
 }
 .reader-info-container{
   width: 100%;
-  height: 424px;
+  height: 440px;
   background: #eaeaea;
   display: flex;
   justify-content: center;
@@ -388,8 +388,8 @@ ul.breadcrumb li a:hover {
   border: 1px solid #c4c4c4;
   border-radius: 0.5rem;
   padding: 1.5rem;
-  height: 522px;
-  margin-bottom: 2rem;
+  height: 538px;
+  margin-bottom: 0rem;
 }
 
 .verifier-info-wrap h5{
@@ -402,10 +402,13 @@ ul.breadcrumb li a:hover {
   border: 1px solid #c4c4c4;
   border-radius: 0.5rem;
   padding: 1.5rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
+}
+.general-settings-wrap p{
+  margin-bottom: 0.5rem;
 }
 .device-mode-wrap{
-  margin: 1rem 0;
+  margin: 1rem 0 0.5rem;
 }
 .radio-options-wrap{
   display: flex;
@@ -443,10 +446,19 @@ ul.breadcrumb li a:hover {
 }
 .save-btn{
   text-align: right;
+  margin-top: 1rem;
 }
 .password-toggle{
   position: absolute;
   top: 0.25rem;
   right: 1.5rem;
   cursor: pointer;
+}
+#wifi-type{
+  width: 100%;
+  border: 1px solid #726e6e;
+}
+#wifi-type:focus{
+  box-shadow: none;
+  outline: 1px solid black;
 }
