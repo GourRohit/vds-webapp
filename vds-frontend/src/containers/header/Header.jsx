@@ -12,7 +12,7 @@ class Header extends Component {
             <Navbar.Brand>
               <Link to="/">
                 <img
-                  src={require("../../assets/images/credenceid-logo.png")}
+                  src={require("../../assets/images/arizona_logo.webp")}
                   alt="CredenceId-Logo"
                 />
               </Link>
