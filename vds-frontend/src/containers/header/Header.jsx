@@ -19,7 +19,7 @@ class Header extends Component {
             </Navbar.Brand>
             <Link to="/" className="nav-link">
               <img
-                src={require("../../assets/images/DMV_Logo.png")}
+                src={require("../../assets/images/arizona_logo.webp")}
                 alt="MID-LOGO"
                 className="mid-logo"
               />
