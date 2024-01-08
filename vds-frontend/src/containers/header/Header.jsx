@@ -12,7 +12,7 @@ class Header extends Component {
             <Navbar.Brand>
               <Link to="/">
                 <img
-                  src={require("../../assets/images/ADOT_Logo_blue.webp")}
+                  src={require("../../assets/images/adot_logo.png")}
                   alt="adot-Logo"
                 />
               </Link>
