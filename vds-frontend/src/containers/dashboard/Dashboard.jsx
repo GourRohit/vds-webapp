@@ -78,16 +78,16 @@ class Dashboard extends Component {
         this.setState({
           isLoading: false,
         });
-        confirmAlert({
-          title: "Some error occured, Please reload the window and try again",
-          buttons: [
-            {
-              label: "Reload",
-              onClick: () => window.location.reload(),
-            },
-          ],
-        });
-        console.error(error);
+        // confirmAlert({
+        //   title: "Some error occured, Please reload the window and try again",
+        //   buttons: [
+        //     {
+        //       label: "Reload",
+        //       onClick: () => window.location.reload(),
+        //     },
+        //   ],
+        // });
+        // console.error(error);
       });
   };
 
