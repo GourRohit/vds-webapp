@@ -288,6 +288,7 @@ class Settings extends Component {
     if (Object.keys(validationErrors).length === 0) {
       const wifiSetting = {}
       wifiSetting.SSID = this.state.wifiFormData.wifiSSID
+      wifiSetting.password = this.state.wifiFormData.wifiPassword
       wifiSetting.type = this.state.wifiFormData.wifiType
 
       this.changeWifi(wifiSetting)

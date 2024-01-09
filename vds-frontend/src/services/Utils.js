@@ -51,7 +51,8 @@ export function setWifiSSID(value) {
     setting: "Wifi",
     value: {
       SSID: value.SSID,
-      Password: value.password
+      Password: value.password,
+      Type: value.type
     }
   })
 }
