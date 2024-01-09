@@ -14,16 +14,17 @@ class Header extends Component {
                 <img
                   src={require("../../assets/images/adot_logo.png")}
                   alt="adot-Logo"
+                  width={150}
                 />
               </Link>
             </Navbar.Brand>
-            <Link to="/" className="nav-link">
+            {/* <Link to="/" className="nav-link">
               <img
                 src={require("../../assets/images/arizona_logo.webp")}
                 alt="MID-LOGO"
                 className="mid-logo"
               />
-            </Link>
+            </Link> */}
             <Link className="setting-link" to="/dashboard/settings">
               <label className="setting-label">Settings</label>
               <img
