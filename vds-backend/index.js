@@ -120,7 +120,7 @@ app.post("/data", async (req, res) => {
     appointmentTime = data.appointmentTime;
   } else {
     message = "duplicate";
-    appointmentTime = Number.parseInt(rows[0].appointmentTime);
+    appointmentTime = rows[0].appointmentTime;
   }
   res.json({
     message: message,
