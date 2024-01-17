@@ -64,6 +64,7 @@ class Dashboard extends Component {
       .then((response) => {
         if (response.data && response.status) {
           localStorage.setItem("deviceMode", response.data.usbMode);
+          localStorage.setItem("readerProfile", response.data.readerProfile.toLowerCase())
           this.setState({
             deviceMode: response.data.usbMode,
             isLoading: false,
@@ -77,21 +78,21 @@ class Dashboard extends Component {
         this.setState({
           isLoading: false,
         });
-        confirmAlert({
-          title: "Some error occured, Please reload the window and try again",
-          buttons: [
-            {
-              label: "Reload",
-              onClick: () => window.location.reload(),
-            },
-          ],
-        });
-        console.error(error);
+        // confirmAlert({
+        //   title: "Some error occured, Please reload the window and try again",
+        //   buttons: [
+        //     {
+        //       label: "Reload",
+        //       onClick: () => window.location.reload(),
+        //     },
+        //   ],
+        // });
+        // console.error(error);
       });
   };
 
   componentWillUnmount() {
-    if(this.state.deviceMode === "HOLDER_DRIVEN") {
+    if (this.state.deviceMode === "HOLDER_DRIVEN") {
       this.closeSSEConnection();
     }
   }
@@ -222,6 +223,13 @@ class Dashboard extends Component {
     return (
       <>
         <div
+          className="loader-overlay"
+          style={{
+            zIndex: this.state.isLoading ? 10 : -10,
+          }}>
+          {this.state.isLoading ? <FadeLoader color="#1aff66" /> : null}
+        </div>
+        <div
           style={{
             opacity: this.state.isLoading ? 0.25 : 1,
             pointerEvents: this.state.isLoading ? "none" : "auto",
@@ -229,13 +237,13 @@ class Dashboard extends Component {
         >
           <Header />
           {this.state.checkinMessage ? (
-            <Navigate to="checkin/message" state={this.state} />
+            <Navigate to="/checkin/message" state={this.state} />
           ) : null}
           {this.state.showModal && (
             <Navigate to="/checkin" state={this.state} />
           )}
           <div className="page-container">
-            <p>Welcome to Mocktana Department of Motor Vehicles </p>
+            <p>Welcome to Arizona Department of Transportation </p>
             {this.state.deviceMode !== "HOLDER_DRIVEN" && (
               <div className="button-wrap">
                 <Button
@@ -284,9 +292,6 @@ class Dashboard extends Component {
                 </div>
               </>
             )}
-            <div className="fade-loader">
-              {this.state.isLoading ? <FadeLoader color="#1aff66" /> : null}
-            </div>
             <div className="user-message-wrap">
               {this.state.deviceStatus === "NOT_CONNECTED" ? (
                 <span className="error-msg">
@@ -297,7 +302,7 @@ class Dashboard extends Component {
                 this.state.message === "" ? (
                 "Tap or scan your mobile DL or physical DL to check in"
               ) : (this.state.deviceMode === "STANDALONE" ||
-                  this.state.deviceMode === "VELOCIRAPTOR") &&
+                this.state.deviceMode === "VELOCIRAPTOR") &&
                 this.state.deviceStatus === "CONNECTED_AOA_MODE" ? (
                 "Please change the device operation mode to activate reading"
               ) : (

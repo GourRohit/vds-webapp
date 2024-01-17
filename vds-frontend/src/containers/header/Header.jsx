@@ -8,33 +8,32 @@ class Header extends Component {
     return (
       <>
         <Navbar bg="light" expand="lg" className="navbar-wrap" fixed="top">
-          <Container fluid>
+          <div className="nav-container">
             <Navbar.Brand>
               <Link to="/">
                 <img
-                  src={require("../../assets/images/credenceid-logo.png")}
-                  alt="CredenceId-Logo"
+                  src={require("../../assets/images/adot_logo.png")}
+                  alt="adot-Logo"
+                  width={150}
                 />
               </Link>
             </Navbar.Brand>
-            <Nav className="me-auto navBar-linkwrap">
-              <Link to="/">
-                <img
-                  src={require("../../assets/images/DMV_Logo.png")}
-                  alt="MID-LOGO"
-                  className="mid-logo"
-                />
-              </Link>
-              <Link className="setting-link" to="/dashboard/settings">
-                <label className="setting-label">Settings</label>
-                <img
-                  src={require("../../assets/images/setting.png")}
-                  alt="setting-LOGO"
-                  className="setting-icon"
-                />
-              </Link>
-            </Nav>
-          </Container>
+            {/* <Link to="/" className="nav-link">
+              <img
+                src={require("../../assets/images/arizona_logo.webp")}
+                alt="MID-LOGO"
+                className="mid-logo"
+              />
+            </Link> */}
+            <Link className="setting-link" to="/dashboard/settings">
+              <label className="setting-label">Settings</label>
+              <img
+                src={require("../../assets/images/setting.png")}
+                alt="setting-LOGO"
+                className="setting-icon"
+              />
+            </Link>
+          </div>
         </Navbar>
       </>
     );

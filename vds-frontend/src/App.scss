@@ -4,41 +4,38 @@
   background: #fff !important;
   box-shadow: 0 3px 20px rgba(100, 128, 154, 0.25);
   height: 4.6875rem;
-  width: 100%;
-  .navBar-linkwrap {
-    margin-left: 500px;
-    width: 65%;
-    justify-content: space-around;
-    .mid-logo {
-      width: 15%;
-    }
-    .mid-label {
-      margin-top: 19px;
-      display: inline-block;
-      color: #000;
-      font-size: 1.5rem;
-      text-align: center;
-    }
-    .setting-label {
-      cursor: pointer;
-      color: #000;
-      font-size: medium;
-      margin-top: 18px;
-      margin-right: 5px;
-    }
-    .setting-icon {
-      width: 38px;
-      height: 38px;
-      margin-top: 12px;
-    }
-    .nav-link {
-      display: flex;
-    }
-    .setting-link {
-      display: flex;
-      cursor: pointer;
-      text-decoration: none;
-    }
+  width: 100vw;
+  .nav-container{
+    padding: 0 50px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .mid-logo{
+    width: 100%;
+  }
+  .setting-link {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .setting-label {
+    cursor: pointer;
+    color: #000;
+    font-size: medium;
+    // margin-top: 8px;
+    margin-right: 5px;
+  }
+  .setting-icon {
+    width: 38px;
+    height: 38px;
+    //margin-top: 12px;
+  }
+  .nav-link {
+    width: 100px;
+    text-align: center;
   }
 }
 .page-container {
@@ -71,8 +68,8 @@
   }
   .setting-label {
     font-size: 16px;
-    margin-top: 12px;
-    margin-bottom: 0;
+    // margin-top: 12px;
+    // margin-bottom: 0;
   }
   .row-margin {
     margin-top: 15px;
@@ -105,6 +102,7 @@
 }
 .info-box {
   margin-top: 40px;
+  margin-bottom: 1rem;
   background-color: #fbfbf8;
   text-align: left;
 }
@@ -241,7 +239,7 @@ ul.breadcrumb li a:hover {
   text-decoration: underline;
 }
 .settings-breadcrumb {
-  margin-bottom: 50px;
+  margin-bottom: 32px;
 }
 .breadcrumb-text {
   color: #000;
@@ -322,6 +320,16 @@ ul.breadcrumb li a:hover {
 .portrait-img {
   width: 20%;
 }
+.loader-overlay{
+  width: 100%;
+  height: 100%;
+  position: sticky;
+  top: 50%;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .fade-loader {
   display: flex;
   justify-content: center;
@@ -331,7 +339,18 @@ ul.breadcrumb li a:hover {
 .settings-fade-loader {
   display: flex;
   justify-content: center;
+  align-items: center;
   margin-top: 30px;
+  width: 100%;
+  height: 315px;
+}
+.col-wrap{
+  display: flex;
+  flex-direction: column-reverse;
+
+  @media (min-width: 992px){
+    flex-direction: row;
+  }
 }
 .information-container{
   display: flex;
@@ -347,4 +366,100 @@ ul.breadcrumb li a:hover {
     width: 195px;
   }
 }
+.status-container{
+  display: flex;
+  justify-content: center;
+  margin: 0px 0px 32px;
+}
+.status-wrap{
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+.reader-info-container{
+  width: 100%;
+  height: 440px;
+  background: #eaeaea;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
+.verifier-info-wrap{
+  border: 1px solid #c4c4c4;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  height: 538px;
+  margin-bottom: 0rem;
+}
+
+.verifier-info-wrap h5{
+  margin-bottom: 1.5rem;
+}
+
+// ---------- General Settings styles ---------
+.general-settings-wrap,
+.wifi-settings-wrap{
+  border: 1px solid #c4c4c4;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+}
+.general-settings-wrap p{
+  margin-bottom: 0.5rem;
+}
+.device-mode-wrap{
+  margin: 1rem 0 0.5rem;
+}
+.radio-options-wrap{
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: flex-start;
+  @media (min-width: 992px) {
+    gap: 0rem;
+    align-items: start;
+    flex-direction: column;
+  }
+
+  @media (min-width: 1200px) {
+    gap: 1.5rem;
+    flex-direction: row;
+    align-items: center;
+  }
+}
+// ---------- Wifi settings styles ------------
+.wifi-settings-wrap h5{
+  margin-bottom: 1.5rem;
+}
+.input-wrap{
+  margin: 1rem 0;
+}
+.wifi-input{
+  width: 100%;
+  border-radius: 4px;
+  padding: 0.35rem 0.5rem;
+  border: 1px solid #726e6e;
+}
+.wifi-error-message{
+  font-size: 0.9rem;
+  color: red;
+}
+.save-btn{
+  text-align: right;
+  margin-top: 1rem;
+}
+.password-toggle{
+  position: absolute;
+  top: 0.25rem;
+  right: 1.5rem;
+  cursor: pointer;
+}
+#wifi-type{
+  width: 100%;
+  border: 1px solid #726e6e;
+}
+#wifi-type:focus{
+  box-shadow: none;
+  outline: 1px solid black;
+}

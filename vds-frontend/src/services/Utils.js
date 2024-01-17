@@ -45,3 +45,14 @@ export function setReaderProfile(value) {
     },
   });
 }
+
+export function setWifiSSID(value) {
+  return axios.post(`${VDS_URL}/reader/properties`, {
+    setting: "Wifi",
+    value: {
+      SSID: value.SSID,
+      Password: value.password,
+      Type: value.type
+    }
+  })
+}
