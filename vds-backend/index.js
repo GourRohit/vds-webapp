@@ -102,28 +102,21 @@ function checkForDuplicateData(docNumber) {
 app.post("/data", async (req, res) => {
   // Returns the current epoch time in milliseconds
   const currentEpochTime = Date.now();
-  // Create a new Date object with the epoch time
-  const date = new Date(currentEpochTime);
-  // Add 30 minutes to the Date object
-  date.setMinutes(date.getMinutes() + 30);
-  // date to epoch conversion
-  const time = date.getTime();
+  // Adding 30 min in current time for getting appointment time window of 30 min
+  const time = currentEpochTime + 30*60*1000;
   let message, appointmentTime;
   const data = {
     documentNumber: req.body.documentNumber,
     appointmentTime: time,
   };
   let rows = await checkForDuplicateData(data.documentNumber);
-  const convertEpochToTime = (time) => {
-    return moment(parseInt(time)).format("h:mm A");
-  };
   if (!rows.length > 0) {
     await insertData(data);
     message = "success";
-    appointmentTime = convertEpochToTime(data.appointmentTime);
+    appointmentTime = data.appointmentTime;
   } else {
     message = "duplicate";
-    appointmentTime = convertEpochToTime(rows[0].appointmentTime);
+    appointmentTime = Number.parseInt(rows[0].appointmentTime);
   }
   res.json({
     message: message,
@@ -137,6 +130,7 @@ function getdataFromDb() {
     });
   });
 }
+
 app.get("/data", async (req, res) => {
   let identitydata = [];
   const data = await getdataFromDb();
