@@ -9,6 +9,7 @@ import { getReaderinfo, saveIdData, stopInfo } from "../../services/Utils";
 import QRGIF1 from "../../assets/images/Verification_using_QR.gif";
 import QRGIF2 from "../../assets/images/Verification_using_NFC.gif";
 import physicalIMG from "../../assets/images/DL_Scan_Back.png";
+import moment from 'moment';
 let sse;
 
 class Dashboard extends Component {
