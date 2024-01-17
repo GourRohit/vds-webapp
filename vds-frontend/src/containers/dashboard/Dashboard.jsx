@@ -137,16 +137,19 @@ class Dashboard extends Component {
                 saveIdData(obj.data)
                   .then((res) => {
                     if (res.data && res.status) {
+                      let UTCTime = parseInt(res.data.appointmentTime);
+                      let date = new Date(UTCTime);
+                      let appointmentTime = moment(date.getTime()).format("h:mm A");
                       if (res.data.message === "success") {
                         this.setState({
                           message: ` Welcome ${obj.data.givenNames} ${obj.data.familyName}, you are checked in for
-                    your ${res.data.appointmentTime} appointment`,
+                    your ${appointmentTime} appointment`,
                           portrait: obj.data.portrait,
                         });
                       } else if (res.data.message === "duplicate") {
                         this.setState({
                           message: ` Welcome ${obj.data.givenNames} ${obj.data.familyName}, we
-                      could find that you are already checked in for appointment at ${res.data.appointmentTime}`,
+                      could find that you are already checked in for appointment at ${appointmentTime}`,
                           portrait: obj.data.portrait,
                         });
                       } else {
