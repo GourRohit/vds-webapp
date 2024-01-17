@@ -114,16 +114,13 @@ app.post("/data", async (req, res) => {
     appointmentTime: time,
   };
   let rows = await checkForDuplicateData(data.documentNumber);
-  const convertEpochToTime = (time) => {
-    return moment(parseInt(time)).format("h:mm A");
-  };
   if (!rows.length > 0) {
     await insertData(data);
     message = "success";
-    appointmentTime = convertEpochToTime(data.appointmentTime);
+    appointmentTime = data.appointmentTime;
   } else {
     message = "duplicate";
-    appointmentTime = convertEpochToTime(rows[0].appointmentTime);
+    appointmentTime = rows[0].appointmentTime;
   }
   res.json({
     message: message,
@@ -137,6 +134,7 @@ function getdataFromDb() {
     });
   });
 }
+
 app.get("/data", async (req, res) => {
   let identitydata = [];
   const data = await getdataFromDb();
