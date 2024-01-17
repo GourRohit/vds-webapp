@@ -102,8 +102,12 @@ function checkForDuplicateData(docNumber) {
 app.post("/data", async (req, res) => {
   // Returns the current epoch time in milliseconds
   const currentEpochTime = Date.now();
-  // Adding 30 min in current time for getting appointment time window of 30 min
-  const time = currentEpochTime + 30*60*1000;
+  // Create a new Date object with the epoch time
+  const date = new Date(currentEpochTime);
+  // Add 30 minutes to the Date object
+  date.setMinutes(date.getMinutes() + 30);
+  // date to epoch conversion
+  const time = date.getTime();
   let message, appointmentTime;
   const data = {
     documentNumber: req.body.documentNumber,
