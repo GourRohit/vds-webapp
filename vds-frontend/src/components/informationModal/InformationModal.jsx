@@ -8,6 +8,7 @@ import Loader from "./Loader";
 import Header from "../../containers/header/Header";
 import { Navigate } from "react-router";
 import { Button } from "react-bootstrap";
+import moment from 'moment'
 
 const InformationModal = () => {
   const [message, setMessage] = useState("");
@@ -40,14 +41,19 @@ const InformationModal = () => {
             saveIdData(response.data.data)
               .then((res) => {
                 if (res.data && res.status) {
+
+                  let UTCTime = parseInt(res.data.appointmentTime);
+                  let date = new Date(UTCTime);
+                  let appointmentTime = moment(date.getTime()).format("h:mm A");
+
                   if (res.data.message === "success") {
                     responseMessage = ` Welcome ${response.data.data.givenNames} ${response.data.data.familyName}, you are checked in for 
-                    your ${res.data.appointmentTime} appointment.`;
+                    your ${appointmentTime} appointment.`;
                     setMessage(responseMessage);
                     setPortrait(response.data.data.portrait);
                   } else if (res.data.message === "duplicate") {
                     responseMessage = ` Welcome ${response.data.data.givenNames} ${response.data.data.familyName}, we
-                  could find that you are already checked in for appointment at ${res.data.appointmentTime}`;
+                  could find that you are already checked in for appointment at ${appointmentTime}`;
                     setMessage(responseMessage);
                     setPortrait(response.data.data.portrait);
                   } else {
@@ -136,7 +142,7 @@ const InformationModal = () => {
               </p>
               <p className="message-btn-wrap">
                 <span className="message-span">
-                Once mDL is presented, please stay on this screen till Verification completes
+                  Once mDL is presented, please stay on this screen till Verification completes
                 </span>
               </p>
             </div>
@@ -169,7 +175,7 @@ const InformationModal = () => {
               </p>
               <p className="message-btn-wrap">
                 <span className="message-span">
-                Once Physical ID is presented, please stay on this screen till Verification completes
+                  Once Physical ID is presented, please stay on this screen till Verification completes
                 </span>
               </p>
             </div>
