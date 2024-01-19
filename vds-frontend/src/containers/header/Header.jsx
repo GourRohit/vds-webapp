@@ -18,13 +18,13 @@ class Header extends Component {
                 />
               </Link>
             </Navbar.Brand>
-            <Link to="/" className="nav-link">
+            {/* <Link to="/" className="nav-link">
               <img
                 src={require("../../assets/images/DMV_Logo.png")}
                 alt="MID-LOGO"
                 className="mid-logo"
               />
-            </Link>
+            </Link> */}
             <Link className="setting-link" to="/dashboard/settings">
               <label className="setting-label">Settings</label>
               <img
