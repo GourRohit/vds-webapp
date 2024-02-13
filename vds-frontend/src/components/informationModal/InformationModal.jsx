@@ -31,7 +31,7 @@ const InformationModal = () => {
               responseMessage =
                 "Your age has been verified and it is above 18 years";
             } else {
-              responseMessage = "You age verification has failed and its below 21 years";
+              responseMessage = "Your age verification has failed and its below 21 years";
             }
             setMessage(responseMessage);
             setPortrait(response.data.data.portrait);
