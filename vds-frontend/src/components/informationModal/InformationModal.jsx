@@ -31,7 +31,7 @@ const InformationModal = () => {
               responseMessage =
                 "Your age has been verified and it is above 18 years";
             } else {
-              responseMessage = "You have been checked in successfully";
+              responseMessage = "You age verification has failed and its below 21 years";
             }
             setMessage(responseMessage);
             setPortrait(response.data.data.portrait);
@@ -136,7 +136,7 @@ const InformationModal = () => {
               </p>
               <p className="message-btn-wrap">
                 <span className="message-span">
-                Once mDL is presented, please stay on this screen till Verification completes
+                  Once mDL is presented, please stay on this screen till Verification completes
                 </span>
               </p>
             </div>
@@ -169,7 +169,7 @@ const InformationModal = () => {
               </p>
               <p className="message-btn-wrap">
                 <span className="message-span">
-                Once Physical ID is presented, please stay on this screen till Verification completes
+                  Once Physical ID is presented, please stay on this screen till Verification completes
                 </span>
               </p>
             </div>
