@@ -4,6 +4,7 @@ import { getIdentityInfo, saveIdData } from "../../services/Utils";
 import QRGIF1 from "../../assets/images/Verification_using_QR.gif";
 import QRGIF2 from "../../assets/images/Verification_using_NFC.gif";
 import physicalIMG from "../../assets/images/DL_Scan_Back.png";
+import M500ScanningImg from "../../assets/images/m500_scanning.png";
 import Loader from "./Loader";
 import Header from "../../containers/header/Header";
 import { Navigate } from "react-router";
@@ -104,8 +105,8 @@ const InformationModal = () => {
         {data.isMdL ? (
           <>
             <div className="information-container">
-              <div className="information-section">
-                <div className="information-modal-image-wrap">
+              <div className="information-section-mdl">
+                <div className="information-modal-image-wrap-mdl">
                   <img
                     className="information-modal-image"
                     src={QRGIF1}
@@ -151,12 +152,19 @@ const InformationModal = () => {
           <>
             <div className="information-container">
               <div className="information-section">
+                {
+                  data.deviceType === "VeriCheck" &&
+                  <div className="information-modal-image-wrap">
+                    <img
+                      className="information-modal-image-physical"
+                      src={M500ScanningImg} alt="Physical Dl scan using m500" />
+                  </div>
+                }
                 <div className="information-modal-image-wrap">
                   <img
                     className="information-modal-image-physical"
                     src={physicalIMG}
-                    alt="physicalImg"
-                  ></img>
+                    alt="physicalImg" />
                 </div>
               </div>
               <div className="close-btn-div-physical">
@@ -170,7 +178,8 @@ const InformationModal = () => {
             <div className="message-wrap">
               <p className="message-btn-wrap">
                 <span className="text-span">
-                  Please scan 2D barcode at the back of your DL
+                  Please insert your physical license into the m500 device or
+                  <br />Scan 2D barcode at the back of your DL using Tap2iD device.
                 </span>
               </p>
               <p className="message-btn-wrap">

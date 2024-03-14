@@ -169,7 +169,7 @@ button.btn-secondary:disabled {
 }
 .message-wrap {
   text-align: center;
-  margin-top: 40px;
+  margin-top: 1.5rem;
   margin-bottom: 5%;
   font-size: 26px;
   color: black;
@@ -245,30 +245,41 @@ ul.breadcrumb li a:hover {
   color: #000;
 }
 .information-modal {
-  margin-top: 120px;
+  margin-top: 100px;
 }
 .information-modal-text-span {
   font-size: xx-large;
   display: flex;
   justify-content: center;
 }
-.information-modal-image-wrap {
+.information-modal-image-wrap-mdl{
+  width: 50%;
   display: flex;
-  justify-content: center;
-  margin-left: 25%;
+}
+.information-modal-image-wrap {
+  width: 50%;
+  height: 350px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  //margin-left: 25%;
 }
 .information-modal-image-physical {
-  width: 30%;
-  margin: 50px;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  //margin: 50px;
 }
 .information-modal-image {
   width: 50%;
   margin: 50px;
 }
 .information-modal-name-wrap {
+  width: 100%;
   display: flex;
-  justify-content: space-evenly;
-  margin-left: 25%;
+  gap: 1rem;
+  justify-content: center;
+  margin: 0 45% 0 70%;
 }
 .information-modal-qr-verification-text {
   margin-left: 25px;
@@ -353,11 +364,26 @@ ul.breadcrumb li a:hover {
   }
 }
 .information-container{
+  margin-top: 1rem;
   display: flex;
+  gap: 2rem;
   justify-content: center;
 }
+.information-section-mdl{
+  width: 60%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-direction: column;
+  margin-left: 8%;
+}
 .information-section {
-  width: 75%;
+  width: 60%;
+  height: 380px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-left: 8%;
 }
 .information-btn-wrap {
   width: 20%;
