@@ -28,6 +28,7 @@ class Dashboard extends Component {
     checkinMessage: false,
     portrait: "",
     isLoading: false,
+    deviceType: "vericheck"
   };
 
   buttonEnabled = () => {
@@ -68,6 +69,7 @@ class Dashboard extends Component {
           this.setState({
             deviceMode: response.data.usbMode,
             isLoading: false,
+            deviceType: response.data.deviceType.toLowerCase()
           });
           if (response.data.usbMode === "HOLDER_DRIVEN") {
             this.serverSentEvents();

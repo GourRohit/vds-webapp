@@ -146,11 +146,14 @@ const InformationModal = () => {
           <>
             <div className="information-container">
               <div className="information-section">
-                <div className="information-modal-image-wrap">
-                  <img
-                    className="information-modal-image-physical"
-                    src={M500ScanningImg} alt="Physical Dl scan using m500" />
-                </div>
+                {
+                  data.deviceType === "vericheck" &&
+                  <div className="information-modal-image-wrap">
+                    <img
+                      className="information-modal-image-physical"
+                      src={M500ScanningImg} alt="Physical Dl scan using m500" />
+                  </div>
+                }
                 <div className="information-modal-image-wrap">
                   <img
                     className="information-modal-image-physical"
