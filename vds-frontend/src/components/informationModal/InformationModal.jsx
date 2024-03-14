@@ -147,7 +147,7 @@ const InformationModal = () => {
             <div className="information-container">
               <div className="information-section">
                 {
-                  data.deviceType === "vericheck" &&
+                  data.deviceType === "VeriCheck" &&
                   <div className="information-modal-image-wrap">
                     <img
                       className="information-modal-image-physical"
