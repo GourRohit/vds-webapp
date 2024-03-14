@@ -4,7 +4,7 @@ import { getIdentityInfo, saveIdData } from "../../services/Utils";
 import QRGIF1 from "../../assets/images/Verification_using_QR.gif";
 import QRGIF2 from "../../assets/images/Verification_using_NFC.gif";
 import physicalIMG from "../../assets/images/DL_Scan_Back.png";
-import physicalDLScanUsingM500 from "../../assets/images/physicalDL_scan_using_M500.jpg";
+import M500ScanningImg from "../../assets/images/m500_scanning.png";
 import Loader from "./Loader";
 import Header from "../../containers/header/Header";
 import { Navigate } from "react-router";
@@ -149,13 +149,13 @@ const InformationModal = () => {
                 <div className="information-modal-image-wrap">
                   <img
                     className="information-modal-image-physical"
-                    src={physicalIMG}
-                    alt="physicalImg" />
+                    src={M500ScanningImg} alt="Physical Dl scan using m500" />
                 </div>
                 <div className="information-modal-image-wrap">
                   <img
                     className="information-modal-image-physical"
-                    src={physicalDLScanUsingM500} alt="Physical Dl scan using m500" />
+                    src={physicalIMG}
+                    alt="physicalImg" />
                 </div>
               </div>
               <div className="close-btn-div-physical">
