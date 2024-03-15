@@ -4,7 +4,7 @@ import { getIdentityInfo, saveIdData } from "../../services/Utils";
 import QRGIF1 from "../../assets/images/Verification_using_QR.gif";
 import QRGIF2 from "../../assets/images/Verification_using_NFC.gif";
 import physicalIMG from "../../assets/images/DL_Scan_Back.png";
-import M500ScanningImg from "../../assets/images/m500_scanning.png";
+import M500ScanningImg from "../../assets/images/scanning_VeriCheck.gif";
 import Loader from "./Loader";
 import Header from "../../containers/header/Header";
 import { Navigate } from "react-router";
