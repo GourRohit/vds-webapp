@@ -132,7 +132,7 @@ class Dashboard extends Component {
                   });
                 } else {
                   this.setState({
-                    message: "You have been checked in successfully",
+                    message: "Your age verification has failed and its below 21 years",
                   });
                 }
                 this.navigateToCheckinMessage();
