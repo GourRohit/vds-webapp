@@ -1,0 +1,25 @@
+.profile-card {
+  border-radius: 12px;
+  border: 5px solid #244B8E;
+  padding: 2rem;
+  height: 390px;
+  width: 886px;
+
+  display: flex;
+  gap: 2rem;
+
+  .profile-data-container {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+
+    .id-attribute {
+      width: 315px;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #315999;
+      line-height: 1.6;
+      margin-bottom: 0.75rem;
+    }
+  }
+}

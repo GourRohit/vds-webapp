@@ -345,11 +345,7 @@ class Settings extends Component {
                     <div className="status-wrap">
                       <img
                         className="status-btn"
-                        src={
-                          this.state.deviceStatus === "CONNECTED_AOA_MODE"
-                            ? require("../../assets/images/connected_.png")
-                            : require("../../assets/images/not_connected.png")
-                        }
+                        src=""
                         height={15}
                         alt="connectionStatus"
                       />{" "}

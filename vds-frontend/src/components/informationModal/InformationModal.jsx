@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { getIdentityInfo, saveIdData } from "../../services/Utils";
-import QRGIF1 from "../../assets/images/Verification_using_QR.gif";
-import QRGIF2 from "../../assets/images/Verification_using_NFC.gif";
-import physicalIMG from "../../assets/images/DL_Scan_Back.png";
-import M500ScanningImg from "../../assets/images/scanning_VeriCheck.gif";
 import Loader from "./Loader";
 import Header from "../../containers/header/Header";
 import { Navigate } from "react-router";
@@ -109,12 +105,12 @@ const InformationModal = () => {
                 <div className="information-modal-image-wrap-mdl">
                   <img
                     className="information-modal-image"
-                    src={QRGIF1}
+                    src=""
                     alt="qr-gif"
                   ></img>
                   <img
                     className="information-modal-image"
-                    src={QRGIF2}
+                    src=""
                     alt="nfc-gif"
                   ></img>
                 </div>
@@ -157,13 +153,13 @@ const InformationModal = () => {
                   <div className="information-modal-image-wrap">
                     <img
                       className="information-modal-image-physical"
-                      src={M500ScanningImg} alt="Physical Dl scan using m500" />
+                      src="" alt="Physical Dl scan using m500" />
                   </div>
                 }
                 <div className="information-modal-image-wrap">
                   <img
                     className="information-modal-image-physical"
-                    src={physicalIMG}
+                    src=""
                     alt="physicalImg" />
                 </div>
               </div>

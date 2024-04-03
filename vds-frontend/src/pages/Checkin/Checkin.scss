@@ -1,0 +1,28 @@
+.dl-scan-container {
+  padding: 0rem 4rem;
+  display: flex;
+  gap: 2rem;
+
+  .dl-scan-msg {
+    width: 60%;
+    align-self: flex-end;
+    padding-bottom: 5rem;
+
+    p {
+      font-size: 1.8rem;
+    }
+  }
+
+  .dl-scan-img-container {
+    width: 40%;
+    align-self: flex-start;
+
+    .dl-scan-img {
+      width: 100%;
+    }
+
+    .physicalDL-scan-img{
+      max-width: 364px;
+    }
+  }
+}

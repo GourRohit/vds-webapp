@@ -1,0 +1,25 @@
+.dl-scan-result-container {
+  padding: 0rem 3rem;
+
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+
+  .result-msg {
+    width: 50%;
+
+    p {
+      font-size: 3rem;
+      font-weight: 700;
+    }
+
+    .error-msg {
+      color: #B01116;
+    }
+  }
+
+  .result-img {
+    width: 50%;
+    text-align: center;
+  }
+}

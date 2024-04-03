@@ -22,7 +22,7 @@ function CheckinMessage() {
       <Header />
       {portrait !== "data:image/webp;base64," && (
         <div className="portrait">
-          <img className="portrait-img" src={portrait} alt="portrait" />
+          <img className="portrait-img" src="" alt="portrait" />
         </div>
       )}
       <div

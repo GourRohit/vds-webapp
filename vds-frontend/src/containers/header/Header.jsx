@@ -12,7 +12,7 @@ class Header extends Component {
             <Navbar.Brand>
               <Link to="/">
                 <img
-                  src={require("../../assets/images/credenceid-logo.png")}
+                  src=""
                   alt="credenceID-Logo"
                   width={150}
                 />
@@ -28,7 +28,7 @@ class Header extends Component {
             <Link className="setting-link" to="/dashboard/settings">
               <label className="setting-label">Settings</label>
               <img
-                src={require("../../assets/images/setting.png")}
+                src=""
                 alt="setting-LOGO"
                 className="setting-icon"
               />
