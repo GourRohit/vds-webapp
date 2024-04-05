@@ -2,7 +2,7 @@
 
 // Global styles
 body {
-  font-family: 'Arial', sans-serif;
+  font-family: 'Montserrat', sans-serif !important;
 }
 
 .content-wrapper{
@@ -47,12 +47,14 @@ body {
 .title {
   line-height: 1.5;
   font-size: 3.5rem;
-  font-family: 'Times New Roman', Times, serif;
+  font-weight: 700;
+  font-family: 'Source Serif 4', serif;
 }
 
 .btns-ctn{
   display: flex;
   gap: 1rem;
+  font-family: 'Montserrat', sans-serif;
 }
 
 

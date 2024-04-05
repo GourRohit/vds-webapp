@@ -1,10 +1,12 @@
 import React from "react";
 import './TermsAndConditionModal.scss'
-import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
 import { FaTimes } from 'react-icons/fa';
 import { IconContext } from "react-icons";
 import { useNavigate } from "react-router-dom";
+
+import Modal from 'react-bootstrap/Modal';
+import Button from '../Button/Button';
+
 
 const TermsAndConditionModal = ({ showModal, isLicenseAvailable, handleShowModal, handleCloseModal }) => {
   const navigate = useNavigate();
@@ -15,7 +17,7 @@ const TermsAndConditionModal = ({ showModal, isLicenseAvailable, handleShowModal
   }
 
   return (
-    <div>
+    <div className="modal">
       <Modal
         centered
         size="lg"
@@ -59,9 +61,10 @@ const TermsAndConditionModal = ({ showModal, isLicenseAvailable, handleShowModal
 
         </Modal.Body>
         <Modal.Footer className="justify-content-center">
-          <Button variant="primary" onClick={handleProceed}>
+          {/* <Button variant="primary" onClick={handleProceed}>
             Proceed
-          </Button>
+          </Button> */}
+          <Button onClick={handleProceed}>Proceed</Button>
         </Modal.Footer>
       </Modal>
     </div>
