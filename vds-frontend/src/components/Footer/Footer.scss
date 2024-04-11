@@ -6,6 +6,11 @@
   align-items: center;
   flex-direction: row-reverse;
 
+  .home-btn-wrap, 
+  .back-btn-wrap {
+    cursor: pointer;
+  }
+
   .back-btn-wrap img{
     display: none;
   }

@@ -1,0 +1,23 @@
+.acknowledgement-wrap {
+  margin-top: 8rem;
+  font-size: 1.5rem;
+
+  .form-title{
+    font-family: 'Montserrat', sans-serif;
+    margin-bottom: 2rem;
+  }
+
+  .acknowledge-confirm label{
+    font-weight: 600;
+  
+    &::after{
+      content: '*';
+      color: red;
+      line-height: 1.6;
+      font-size: 16px;
+      position: relative;
+      top: -0.5rem;
+    }
+  }
+}
+

@@ -1,0 +1,15 @@
+.donation-wrap {
+  margin-top: 8rem;
+
+  .questions-wrap{
+    font-size: 1.5rem;
+    display: flex;
+    gap: 2rem;
+
+    .choice-btn-wrap{
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+  }
+}

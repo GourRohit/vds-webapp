@@ -1,0 +1,67 @@
+.personal-info-wrap {
+  margin-top: 8rem;
+
+  .questions-wrap{
+    font-size: 1.5rem;
+  
+    .questions-wrap-1,
+    .questions-wrap-2 {
+      display: flex;
+      gap: 2rem;
+    }
+  }
+}
+
+.name-change-form-wrap{
+  margin-top: 5rem;
+
+  .form-title{
+    margin-bottom: 2rem;
+  }
+
+  .name-change-form{
+    display: flex;
+    column-gap: 2rem;
+    flex-wrap: wrap;
+    align-items: center;
+
+    .form-element{
+      margin-bottom: 2rem;
+      width: 360px;
+    }
+  }
+}
+
+.residential-address-change-form-wrap{
+  margin-top: 5rem;
+
+  .residential-address-change-form{
+    display: flex;
+    column-gap: 2rem;
+    flex-wrap: wrap;
+    align-items: center;
+
+    .form-element{
+      margin-bottom: 2rem;
+      width: 360px;
+    }
+  }
+}
+
+.mailing-address-change-form-wrap{
+  margin-top: 5rem;
+
+  .mailing-address-change-form{
+    display: flex;
+    column-gap: 2rem;
+    flex-wrap: wrap;
+    align-items: center;
+
+    .form-element{
+      margin-bottom: 2rem;
+      width: 360px;
+    }
+  }
+}
+
+

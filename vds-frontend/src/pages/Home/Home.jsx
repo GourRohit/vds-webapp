@@ -50,7 +50,7 @@ const HomePage = () => {
           }
         </div>
 
-        <Footer />
+        <Footer homeIconVisible={false} />
       </div>
     </>
   )

@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import TopHeader from '../../components/Header/TopHeader'
 import Footer from '../../components/Footer/Footer'
 import Button from '../../components/Button/Button'
-import { getIdentityInfo } from '../../services/Utils'
+import { getIdentityInfo, stopInfo } from '../../services/Utils'
 
 const Checkin = () => {
   const location = useLocation();
@@ -20,34 +20,38 @@ const Checkin = () => {
   console.log("This is the state data: ", data);
 
   function handleCancel() {
-    navigate('/');
+    stopInfo()
+      .then(() => {
+        console.log("Stop Identity Info successful: ")
+        navigate('/')
+      })
+      .catch((error) => {
+        console.log("Error while calling the Stop Identity info: ", error)
+        navigate('/')
+      })
   }
 
   useEffect(() => {
     // TODO Need to call the API for either physical scan or MDL scan
-    const timer = setTimeout(() => {
-      getIdentityInfo()
-        .then((response) => {
-          setUserDLData(() => {
-            return {
-              message: "success",
-              data: response.data
-            }
-          })
-          navigate('/checkin/message', { state: { message: "success", data: response.data } })
+    getIdentityInfo()
+      .then((response) => {
+        setUserDLData(() => {
+          return {
+            message: "success",
+            data: response.data
+          }
         })
-        .catch((error) => {
-          setUserDLData(() => {
-            return {
-              message: "Error",
-              data: error
-            }
-          })
-          navigate('/checkin/message', { state: { message: "error", data: error } });
+        navigate('/checkin/message', { state: { message: "success", data: response.data } })
+      })
+      .catch((error) => {
+        setUserDLData(() => {
+          return {
+            message: "Error",
+            data: error
+          }
         })
-    }, 5000)
-
-    return () => clearInterval(timer);
+        navigate('/checkin/message', { state: { message: "error", data: error } });
+      })
   }, [])
 
   return (
@@ -87,7 +91,7 @@ const Checkin = () => {
           </div>
         </div>
       </div>
-      <Footer />
+      <Footer homeIconVisible={true} />
     </div>
   )
 }

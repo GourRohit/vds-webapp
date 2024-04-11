@@ -127,7 +127,8 @@ const Dashboard = (props) => {
         </div>
 
       </div>
-      <Footer />
+
+      <Footer homeIconVisible={true} />
     </div>
   )
 }

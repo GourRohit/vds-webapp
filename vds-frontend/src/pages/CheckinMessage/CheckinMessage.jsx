@@ -19,7 +19,7 @@ const CheckinMessage = () => {
       <div className="main-content">
         {dlData.message === "success" ? <CheckinSucces userDLData={dlData.data} /> : <CheckinError error={dlData.data} />}
       </div>
-      <Footer />
+      <Footer homeIconVisible={true} />
     </div>
   )
 }
