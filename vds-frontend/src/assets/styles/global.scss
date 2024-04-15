@@ -1,0 +1,66 @@
+// Reset styles which overrides default style
+
+/*
+  Remove default margin, padding 
+*/
+* {
+  margin: 0;
+  padding: 0;
+}
+
+/*
+  Using a more-intuitive box-sizing model.
+*/
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/*
+  Typographic tweaks!
+  1. Adding font family
+  2. Add accessible line-height
+  3. Add default text size
+  4. Improve text rendering
+*/
+
+body {
+  font-family: 'Montserrat', sans-serif !important;
+  line-height: 1.6;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+
+
+/*
+  Adding different font and weight for Headings
+*/
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Source Serif 4', serif; /* Example font */
+  font-weight: 700;
+}
+
+/*
+  Remove built-in form typography styles
+*/
+input, button, textarea, select {
+  font: inherit;
+}
+
+/*
+  Remove default margin, padding and list styles for lists
+*/
+ul, ol {
+  margin: 0;
+  padding: 0;
+  list-style: none; /* Remove default list styles */
+}
+
+/*
+  Cursor styles for interactive elements
+*/
+button, a {
+  cursor: pointer;
+}
