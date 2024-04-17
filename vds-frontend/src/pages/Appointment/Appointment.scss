@@ -1,0 +1,20 @@
+.appointment-details{
+  padding: 0 1.5rem;
+  font-size: 2rem;
+  display: flex;
+  gap: 1rem;
+
+  .appointment-details-wrap{
+    width: 55%;
+  }
+
+  .appointment-img-wrap{
+    width: 45%;
+    display: flex;
+  }
+}
+
+.finish-btn{
+  margin-top: 7.5rem;
+  margin-left: 1.5rem;
+}

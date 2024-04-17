@@ -56,3 +56,7 @@ export function setWifiSSID(value) {
     }
   })
 }
+
+export function sendApplication(data) {
+  return axios.post(`${BASE_URL}/application`, data)
+}

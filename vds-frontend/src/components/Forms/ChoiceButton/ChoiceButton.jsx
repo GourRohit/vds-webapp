@@ -1,10 +1,11 @@
 import React from 'react'
 import './ChoiceButton.scss'
 
-const Button = ({ className, onClick, children }) => {
+const Button = ({ className, disabled, onClick, children }) => {
   return (
     <button
-      className={`choice-btn ${className}`}
+      disabled={disabled}
+      className={`choice-btn ${className} ${disabled && 'disabled'}`}
       onClick={onClick}
     >
       {children}

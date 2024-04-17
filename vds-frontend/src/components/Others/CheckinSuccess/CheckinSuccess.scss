@@ -1,16 +1,16 @@
 .dl-scan-result-container {
-  padding: 0rem 3rem;
+  padding: 0rem 1.5rem;
 
   display: flex;
   gap: 2rem;
-  align-items: center;
 
   .result-msg {
     width: 50%;
 
     p {
-      font-size: 3rem;
+      font-size: 4rem;
       font-weight: 700;
+      font-family: 'Source Serif 4', serif;
     }
   }
 

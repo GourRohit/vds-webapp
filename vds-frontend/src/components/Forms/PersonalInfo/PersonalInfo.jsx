@@ -5,109 +5,255 @@ import Button from '../../Button/Button'
 import Form from 'react-bootstrap/Form'
 import Question from '../Question/Question';
 
-const PersonalInfo = () => {
+const PersonalInfo = ({ step, setStep, applicationData, setApplicationData }) => {
 
-  const [totalSteps, SetTotalSteps] = useState(4);
-
+  const [subSteps, SetSubSteps] = useState(1)
   const [answers, setAnswers] = useState({
     isNameChanged: '',
     isAddressChanged: '',
     isDemographicInfoChanged: '',
     isContactInfoChanged: ''
+  })
+
+  const [nameChangeFormData, setNameChangeFormData] = useState({
+    FirstName: "",
+    MiddleName: "",
+    LastName: "",
+    Suffix: ""
   });
 
+  // Load answers from session storage on component mount
   useEffect(() => {
-    console.log("These are the answers: ", answers)
-  }, [answers])
+    const storedPersonalInfoAnswers = sessionStorage.getItem('PersonalInfoAnswers');
+    const storedNameChangeFormData = sessionStorage.getItem('NameChangeFormData');
 
-  function handleNext() {
-    let stepCount = 0
-    let Steps = {}
-
-    for (let key in answers) {
-      if (answers[key] === 'Yes') {
-        Steps[`Step${stepCount + 1}`] = key
-        stepCount += 1;
-      }
+    if (storedPersonalInfoAnswers) {
+      setAnswers(JSON.parse(storedPersonalInfoAnswers));
     }
 
-    SetTotalSteps(() => stepCount)
-    console.log("This is the step count: ", stepCount)
-    console.log("This is the steps object: ", Steps)
+    if (storedNameChangeFormData) {
+      setNameChangeFormData(JSON.parse(storedNameChangeFormData))
+    }
+  }, []);
+
+
+  useEffect(() => {
+    // Update session storage whenever answers change
+    sessionStorage.setItem('PersonalInfoAnswers', JSON.stringify(answers));
+    sessionStorage.setItem('NameChangeFormData', JSON.stringify(nameChangeFormData));
+
+    console.log("These are the answers: ", answers)
+  }, [answers, nameChangeFormData])
+
+
+
+  function handleNext(e) {
+    const form = e.currentTarget;
+    console.log(form)
+    console.log(form.checkValidity())
+    if (form.checkValidity() === false) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+
+    // Updating the application state object
+    setApplicationData((prevState) => ({
+      ...prevState,
+      NameChange: answers.isNameChanged === 'Yes' && true,
+      AddressChange: answers.isAddressChanged === 'Yes' && true,
+      DemographicUpdate: answers.isDemographicInfoChanged === 'Yes' && true,
+      ContactUpdate: answers.isContactInfoChanged === 'Yes' && true
+    }))
+
+    if (answers['isNameChanged'] === 'Yes') {
+      // Move for next Sub Step
+      SetSubSteps((step) => step + 1)
+
+    } else {
+      // Move to the NEXT Step
+      setStep((prevStep) => prevStep + 1)
+    }
+
+    console.log("This is the steps object: ", subSteps)
+  }
+
+  // Function to handle the input fields in the Form
+  function handleNameChange(event) {
+    const { name, value } = event.target
+    console.log(`Handling the ${name}: ${value}`)
+    setNameChangeFormData((prevData) => ({
+      ...prevData,
+      [name]: value
+    }))
+  }
+
+
+  function handlePersonalInfoSubmit(e) {
+    // Preventing the default form submitting event
+    const form = e.currentTarget;
+    if (form.checkValidity() === false) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    console.log(nameChangeFormData)
+
+    // Setting the form data in the ApplicationData State
+    setApplicationData((prevState) => ({
+      ...prevState,
+      FirstName: nameChangeFormData.FirstName,
+      MiddleName: nameChangeFormData.MiddleName,
+      LastName: nameChangeFormData.LastName,
+      Suffix: nameChangeFormData.Suffix,
+      AcknowledgementName: `${nameChangeFormData.FirstName} ${nameChangeFormData.MiddleName} ${nameChangeFormData.LastName}`
+    }))
+
+    // Going on to the NEXT Step
+    setStep((prevStep) => prevStep + 1)
   }
 
   return (
     <>
-      <div className='personal-info-wrap'>
-        <h2>Personal Information</h2>
-        <div className='questions-wrap'>
-          <div className="questions-wrap-1">
-            <Question
-              answers={answers}
-              setAnswers={setAnswers}
-              questionIndex={0}
-              questionTitle="Name"
-              questionText="Has your name changed?"
-            />
+      {subSteps === 1 &&
+        <div className='personal-info-wrap'>
+          <h2>Personal Information</h2>
+          <div className='questions-wrap'>
+            <form onSubmit={(e) => handleNext(e)}>
+              <div className="questions-wrap-1">
+                <Question
+                  isRequired={true}
+                  answers={answers}
+                  questionIndex={0}
+                  questionTitle="Name"
+                  setAnswers={setAnswers}
+                  questionText="Has your name changed?"
+                />
 
-            <Question
-              answers={answers}
-              setAnswers={setAnswers}
-              questionIndex={1}
-              questionTitle="Address"
-              questionText="Do you need to update your address?"
-            />
+                <Question
+                  disabled={true}
+                  isRequired={true}
+                  answers={answers}
+                  questionIndex={1}
+                  setAnswers={setAnswers}
+                  questionTitle="Address"
+                  questionText="Do you need to update your address?"
+                />
+              </div>
+
+              <div className="questions-wrap-2">
+                <Question
+                  disabled={true}
+                  isRequired={true}
+                  answers={answers}
+                  questionIndex={2}
+                  setAnswers={setAnswers}
+                  questionTitle="Demographic Information"
+                  questionText="Do you need to update your height, weight, or eye color?"
+                />
+
+                <Question
+                  disabled={true}
+                  isRequired={true}
+                  answers={answers}
+                  questionIndex={3}
+                  setAnswers={setAnswers}
+                  questionTitle="Contact Information"
+                  questionText="Do you need to update your contact information?"
+                />
+              </div>
+
+              {/* <form action="">
+                  <div>
+                    <p>Has your name changed?</p>
+                    <div>
+                      <label htmlFor="name-change">
+                        <input type="radio" className='name-change' name='personalInfo' value="Yes" />
+                        <span className='form-btn'>Yes</span>
+                      </label>
+                    </div>
+
+                    <div>
+                      <label htmlFor="name-change">
+                        <input type="radio" className='name-change' name='personalInfo' value="No" />
+                        <span className='form-btn'>No</span>
+                      </label>
+                    </div>
+                  </div>
+                </form> */
+              }
+
+              <Button
+                type='submit'
+                disabled={(
+                  answers.isNameChanged === "" ||
+                  answers.isAddressChanged === "" ||
+                  answers.isDemographicInfoChanged === "" ||
+                  answers.isContactInfoChanged === "") && true}>
+                Next
+              </Button>
+            </form>
           </div>
-
-          <div className="questions-wrap-2">
-            <Question
-              answers={answers}
-              setAnswers={setAnswers}
-              questionIndex={2}
-              questionTitle="Demographic Information"
-              questionText="Do you need to update your height, weight, or eye color?"
-            />
-
-            <Question
-              answers={answers}
-              setAnswers={setAnswers}
-              questionIndex={3}
-              questionTitle="Contact Information"
-              questionText="Do you need to update your contact information?"
-            />
-          </div>
-
-          <Button onClick={handleNext}> Next </Button>
         </div>
-      </div>
+      }
 
-      {answers['isNameChanged'] &&
+      {
+        subSteps === 2 &&
         <div className='name-change-form-wrap'>
           <h2 className='form-title'>Name Change</h2>
-          <Form className='name-change-form'>
-            <Form.Group className='form-element'>
-              <Form.Label>First Name</Form.Label>
-              <Form.Control type='text' placeholder='Sam' />
-            </Form.Group>
+          <Form onSubmit={(e) => handlePersonalInfoSubmit(e)} >
+            <div className='name-change-form'>
+              <Form.Group className='form-element'>
+                <Form.Label className='label required'>First Name</Form.Label>
+                <Form.Control
+                  as="input"
+                  type='text'
+                  required={true}
+                  name='FirstName'
+                  placeholder='Sam'
+                  className='form-input form-text-input'
+                  value={nameChangeFormData.FirstName}
+                  onChange={(e) => handleNameChange(e)} />
+              </Form.Group>
 
-            <Form.Group className='form-element'>
-              <Form.Label>Middle Name</Form.Label>
-              <Form.Control type='text' placeholder='' />
-            </Form.Group>
+              <Form.Group className='form-element'>
+                <Form.Label className='label'>Middle Name</Form.Label>
+                <Form.Control
+                  type='text'
+                  name='MiddleName'
+                  placeholder=''
+                  className='form-input form-text-input'
+                  value={nameChangeFormData.MiddleName}
+                  onChange={(e) => handleNameChange(e)}
+                />
+              </Form.Group>
 
-            <Form.Group className='form-element'>
-              <Form.Label>Last Name</Form.Label>
-              <Form.Control type='text' placeholder='Sam' />
-            </Form.Group>
+              <Form.Group className='form-element'>
+                <Form.Label className='label required'>Last Name</Form.Label>
+                <Form.Control
+                  type='text'
+                  required={true}
+                  name="LastName"
+                  placeholder='Patricks'
+                  className='form-input form-text-input'
+                  value={nameChangeFormData.LastName}
+                  onChange={(e) => handleNameChange(e)} />
+              </Form.Group>
 
-            <Form.Group className='form-element'>
-              <Form.Label>Suffix</Form.Label>
-              <Form.Select>
-                <option>Select an option</option>
-              </Form.Select>
-            </Form.Group>
+              <Form.Group className='form-element'>
+                <Form.Label className='label'>Suffix</Form.Label>
+                <Form.Select className='form-input form-select-input'>
+                  <option className='form-input-option'>Select an option</option>
+                </Form.Select>
+              </Form.Group>
+            </div>
+
+            <Button
+              type='submit'
+              disabled={(
+                nameChangeFormData.FirstName === "" ||
+                nameChangeFormData.LastName === "") && true}>
+              Next
+            </Button>
           </Form>
-          <Button>Next</Button>
         </div>
       }
 

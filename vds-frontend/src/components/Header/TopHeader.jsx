@@ -4,18 +4,25 @@ import { Link } from "react-router-dom";
 
 const TopHeader = () => {
   return (
-    <Navbar className="header justify-content-between px-5 py-5">
+    <Navbar className="header justify-content-between">
       <Navbar.Brand>
         <Link>
           <img
             src={require("../../assets/images/Georgia-logo.png")}
+            id="GA-DDS-logo"
             alt="GA-DDS-Logo"
-            width={200}
+            width={203}
+            height={72}
           />
         </Link>
       </Navbar.Brand>
       <Nav>
-        <img src={require("../../assets/images/English-lang.png")} alt="" width={100} />
+        <img
+          src={require("../../assets/images/English-lang.png")}
+          alt="English"
+          width={125}
+          height={53}
+        />
       </Nav>
     </Navbar>
   )

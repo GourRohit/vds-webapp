@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import './CheckinSuccess.scss'
 import { useNavigate } from 'react-router-dom'
 
-const CheckinSucces = (props) => {
+const CheckinSucces = ({ userDLData }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -10,7 +10,7 @@ const CheckinSucces = (props) => {
     const timer = setTimeout(() => {
 
       // Navigating to the '/id' page after 5 seconds
-      navigate('/id', { state: props.userDLDate });
+      navigate('/id', { state: userDLData });
     }, 5000);
 
     // CLean up function to clear the timeout if component unmount before 5 seconds

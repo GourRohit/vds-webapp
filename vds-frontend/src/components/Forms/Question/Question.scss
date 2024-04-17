@@ -1,10 +1,68 @@
 .question {
-  margin: 2rem 0rem;
+  margin: 1rem 0rem;
   flex: 1;
+
+  .required{
+    &::after{
+      content: "*";
+      color: red;
+    }
+  }
+
+  .choice-btn-wrap{
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+  
+    input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      width: 93px;
+      height: 58px;
+    }
+  
+    input[class="btn-input"] + span {
+      cursor: pointer !important;
+    }
+  
+    // input[class="btn-input"]:hover + span {
+    //   outline: 0.5px solid #244B8E;
+    // }
+  
+    input[class="btn-input"]:checked + span,
+    input[class="btn-input"]:focus + span {
+      background-color: #D6E6EF;
+    }
+  
+    .form-btn{
+      border-radius: 12px;
+      border: 2px solid #244B8E;
+      color: #315999;
+      padding: 0.5rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .primary {
+      background-color: #D6E6EF;
+    }
+    
+    .secondary {
+      background-color: #FFFFFF;
+    }
+
+    .disabled {
+      cursor: not-allowed !important;
+      color: #FFFFFF;
+      border-color: #D9D9D9;
+      background-color: #D9D9D9 !important;
+    }
+  }
+
 }
 
-.choice-btn-wrap{
-  display: flex;
-  gap: 1.5rem;
-  align-items: center;
-}

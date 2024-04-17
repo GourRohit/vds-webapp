@@ -1,11 +1,16 @@
-.db-btn-container {
-  margin: 2rem 0rem;
-  display: flex;
-  gap: 2rem;
+.main-content {
 
-  .db-btn-text {
-    font-size: 1.5rem;
-    font-weight: 500;
+  .db-btn-container {
+    margin: 2rem 0rem;
+    display: flex;
+    gap: 2rem;
+  
+    .db-btn-text {
+      font-size: 1.5rem;
+      font-weight: 500;
+    }
   }
 }
+
+
 

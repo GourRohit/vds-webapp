@@ -1,11 +1,12 @@
 import React from 'react'
 import './Question.scss'
-import ChoiceButton from '../ChoiceButton/ChoiceButton'
 
-const Question = ({ answers, setAnswers, questionIndex, questionTitle, questionText }) => {
+const Question = ({ disabled, isRequired, answers, setAnswers, questionIndex, questionTitle, questionText }) => {
   const questions = Object.keys(answers);
 
-  const handleClick = (question, value) => {
+  const handleChange = (e, question) => {
+    const { name, value } = e.currentTarget;
+    console.log("This is name value pair", value)
     console.log(`${question}: ${value}`)
     setAnswers((prevState) => ({
       ...prevState,
@@ -16,25 +17,50 @@ const Question = ({ answers, setAnswers, questionIndex, questionTitle, questionT
   return (
     <div className='question'>
       <div>
-        <p>
+        <p className={`question-text ${isRequired && 'required'}`}>
           <strong>{questionTitle && `${questionTitle}: `}</strong>
           {questionText}
         </p>
       </div>
 
       <div className='choice-btn-wrap'>
-        <ChoiceButton
-          className={answers[questions[questionIndex]] === 'Yes' ? 'primary' : 'secondary'}
-          onClick={() => handleClick(questions[questionIndex], 'Yes')}>
-          Yes
-        </ChoiceButton>
+        <div>
+          <label>
+            <input
+              type="radio"
+              value="Yes"
+              disabled={disabled}
+              className={`btn-input`}
+              name={questions[questionIndex]}
+              checked={answers[questions[questionIndex]] === "Yes" ? true : false}
+              onChange={(e) => handleChange(e, questions[questionIndex])}
+            />
+            <span
+              className={`form-btn ${answers[questions[questionIndex]] === 'Yes' ? 'primary' : 'secondary'} ${disabled && 'disabled'}`}>
+              Yes
+            </span>
+          </label>
+        </div>
 
-        <ChoiceButton
-          className={answers[questions[questionIndex]] === 'No' ? 'primary' : 'secondary'}
-          onClick={() => handleClick(questions[questionIndex], 'No')}>
-          No
-        </ChoiceButton>
+        <div>
+          <label>
+            <input
+              type="radio"
+              value="No"
+              name={questions[questionIndex]}
+              required={isRequired}
+              className='btn-input'
+              checked={answers[questions[questionIndex]] === "No" ? true : false}
+              onChange={(e) => handleChange(e, questions[questionIndex])}
+            />
+            <span
+              className={`form-btn ${answers[questions[questionIndex]] === 'No' ? 'primary' : 'secondary'}`}>
+              No
+            </span>
+          </label>
+        </div>
       </div>
+
     </div>
   )
 }

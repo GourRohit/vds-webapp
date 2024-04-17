@@ -71,6 +71,7 @@ const Checkin = () => {
                 <h1 className="title">Mobile Driver's License</h1>
                 <p>Tap for NFC or Scan the QR code for verification</p>
                 <Button onClick={handleCancel}>Cancel</Button>
+                <p className='imp-instruction-msg'>Please provide consent after NFC tap or QR code scan</p>
               </div>
           }
 

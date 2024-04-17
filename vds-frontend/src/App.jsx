@@ -9,6 +9,7 @@ import Checkin from "./pages/Checkin/Checkin";
 import IdDetails from "./pages/IdDetails/IdDetails";
 import CheckinMessage from "./pages/CheckinMessage/CheckinMessage";
 import Application from "./pages/Application/Application";
+import Appointment from "./pages/Appointment/Appointment";
 
 function App() {
   const [deviceStatus, setDeviceStatus] = useState("");
@@ -86,6 +87,14 @@ function App() {
             path="/application"
             Component={(props) => (
               <Application deviceStatus={deviceStatus} {...props} />
+            )}
+          />
+
+          <Route
+            exact
+            path="/appointment"
+            Component={(props) => (
+              <Appointment deviceStatus={deviceStatus} {...props} />
             )}
           />
 

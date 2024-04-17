@@ -1,5 +1,10 @@
 .vision-and-medical-wrap {
-  margin-top: 8rem;
+
+  h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 1.5rem;
+  }
 
   .questions-wrap{
     font-size: 1.5rem;
@@ -8,6 +13,34 @@
     .questions-wrap-2 {
       display: flex;
       gap: 1rem;
+    }
+
+    .questions-wrap-1{
+      margin: 10px 0;
+    }
+
+    .questions-wrap-2{
+      margin-bottom: 120px;
+    }
+
+    // Styles for question
+    .question {
+      margin: 1rem 0rem;
+      flex: 1;
+    
+      .required{
+        &::after{
+          content: "*";
+          color: red;
+          font-weight: 600;
+        }
+      }
+    }
+    
+    .choice-btn-wrap{
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
     }
   }
 }
