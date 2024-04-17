@@ -42,10 +42,21 @@ app.post("/application", async (req, res) => {
 
   try {
     //Sending the Data to the GA-DDS Backend
-    const URL = "http://localhost:4216/vwbtawsdswsv11i.ams-garevenue.gov/WebServices/NA/GST/FormForLicIDPermit/Application";
-    const responseData = await sendDataToGADDS(URL, req.body);
+    //const URL = "http://localhost:4216/Application";
 
-    console.log("This is the response from GA-DDS: ", responseData);
+    const responseData = {
+      "successful": true,
+      "errors": [
+        {
+          "code": "",
+          "message": ""
+        }
+      ],
+      "confirmationID": "12345",
+      "webServiceID": "123",
+      "webServiceStart": "123",
+      "webServiceEnd": "123"
+    }
 
     // Check if responseData is undefined or not
     if (!responseData) {

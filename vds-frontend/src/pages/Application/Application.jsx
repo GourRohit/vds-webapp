@@ -44,7 +44,7 @@ const Application = () => {
   });
 
   // Timer for the application form
-  const [minutes, setMinutes] = useState(10);
+  const [minutes, setMinutes] = useState(5);
   const [seconds, setSeconds] = useState(0);
 
   function handleCheckboxChange(e) {
@@ -77,12 +77,15 @@ const Application = () => {
 
   useEffect(() => {
     let timer = setInterval(() => {
+
       if (minutes === 0 && seconds === 0) {
-        // Timer has reached 0, clearing the interval
-        clearInterval(timer);
 
         // TODO: Do something when the time is up
         // WIll show a alert message that time is up, either continue or cancel the application
+
+        // Timer has reached 0, clearing the interval
+        clearInterval(timer);
+
       } else if (seconds === 0) {
         // If seconds reach 0, decrement minutes and set seconds to 59
         setMinutes(minutes - 1);
