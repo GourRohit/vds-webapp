@@ -1,0 +1,150 @@
+.personal-info-wrap {
+
+  h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 1.5rem;
+  }
+
+  .questions-wrap{
+    font-size: 1.5rem;
+    margin-top: 2.625rem;
+  
+    .questions-wrap-1,
+    .questions-wrap-2 {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .questions-wrap-1{
+      margin: 10px 0;
+    }
+
+    .questions-wrap-2{
+      margin-bottom: 120px;
+    }
+
+    input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      width: 93px;
+      height: 58px;
+    }
+
+    input + span {
+      cursor: pointer;
+    }
+
+    input[class="name-change"]:hover + span {
+      font-weight: 700;
+      outline: 1px solid #244B8E;
+    }
+
+    input[class="name-change"]:checked + span,
+    input[class="name-change"]:focus + span {
+      background-color: #D6E6EF;
+    }
+
+    .form-btn{
+      border-radius: 12px;
+      border: 2px solid #244B8E;
+      color: #315999;
+      padding: 0.5rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+}
+
+.name-change-form-wrap{
+
+  .form-title{
+    margin-bottom: 2rem;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 1.5rem;
+  }
+
+  .name-change-form{
+    display: flex;
+    column-gap: 2rem;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 7.5rem;
+
+    .form-element{
+      margin-bottom: 2rem;
+      width: 360px;
+      font-size: 1.5rem;
+
+      .required{
+        &::after{
+          content: "*";
+          color: red;
+        }
+      }
+
+      .form-input{
+        border: 1px solid #244B8E;
+        font-size: 1.5rem;
+        font-weight: 600;
+        line-height: 30px;
+        border-radius: 12px;
+        height: 58px;
+        padding: 0 1rem;
+
+        &:focus{
+          border-width: 2px;
+          box-shadow: none;
+        }
+
+        &::placeholder{
+          color: #C3C2C2;
+          font-weight: 400;
+        }
+      }
+
+      .form-input-option{
+        font-size: 1rem;
+      }
+    }
+  }
+}
+
+.residential-address-change-form-wrap{
+  margin-top: 5rem;
+
+  .residential-address-change-form{
+    display: flex;
+    column-gap: 2rem;
+    flex-wrap: wrap;
+    align-items: center;
+
+    .form-element{
+      margin-bottom: 2rem;
+      width: 360px;
+    }
+  }
+}
+
+.mailing-address-change-form-wrap{
+  margin-top: 5rem;
+
+  .mailing-address-change-form{
+    display: flex;
+    column-gap: 2rem;
+    flex-wrap: wrap;
+    align-items: center;
+
+    .form-element{
+      margin-bottom: 2rem;
+      width: 360px;
+    }
+  }
+}
+
+

@@ -1,0 +1,21 @@
+.dl-scan-result-container {
+  padding: 0rem 1.5rem;
+
+  display: flex;
+  gap: 2rem;
+
+  .result-msg {
+    width: 50%;
+
+    p {
+      font-size: 4rem;
+      font-weight: 700;
+      font-family: 'Source Serif 4', serif;
+    }
+  }
+
+  .result-img {
+    width: 50%;
+    text-align: center;
+  }
+}

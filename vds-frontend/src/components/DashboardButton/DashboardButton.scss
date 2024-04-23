@@ -1,0 +1,14 @@
+button.db-btn {
+  border-radius: 12px;
+  border: 2px solid #244B8E;
+  background-color: #D6E6EF;
+  color: #315999;
+  padding: 1rem;
+  width: 200px;
+
+  display: flex;
+  gap: 1rem;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}

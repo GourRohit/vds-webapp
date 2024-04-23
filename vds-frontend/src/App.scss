@@ -1,4 +1,57 @@
-@import "./assets/styles/global.scss";
+@import "assets/styles/global.scss";
+
+@import "components/Header/TopHeader.scss";
+@import "components/Footer/Footer.scss";
+@import "components/Button/Button.scss";
+@import "components/DashboardButton/DashboardButton.scss";
+@import "components/Modal/TermsAndConditionModal.scss";
+@import "components/Others/CheckinSuccess/CheckinSuccess.scss";
+@import "components/Others/CheckinError/CheckinError.scss";
+
+.page-container {
+  text-align: center;
+  width: 80%;
+  margin: 10% auto 0;
+  font-size: 28px;
+  font-weight: 500;
+  .button-wrap button {
+    margin: 25px 30px 0;
+  }
+  .button-wrap button.btn-secondary:disabled {
+    cursor: not-allowed;
+  }
+  .user-message-wrap {
+    margin-top: 45px;
+    font-size: 26px;
+    .error-msg {
+      color: red;
+    }
+    .info-message {
+      color: black;
+    }
+  }
+  .text-align-right {
+    text-align: right;
+  }
+  .text-align-left {
+    text-align: left;
+  }
+  .setting-label {
+    font-size: 16px;
+    // margin-top: 12px;
+    // margin-bottom: 0;
+  }
+  .row-margin {
+    margin-top: 15px;
+  }
+  .no-padding {
+    padding: 0 !important;
+  }
+  .row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
 
 @import "components/Modal/Modal.scss";
 @import "components/Header/Header.scss";

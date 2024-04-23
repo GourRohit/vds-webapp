@@ -1,0 +1,151 @@
+.legal-status-wrap {
+  
+  h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 1.5rem;
+  }
+  
+  .questions-wrap{
+    font-size: 1.5rem;
+    margin-bottom: 7rem;
+
+    .questions-wrap-1{
+      margin: 10px 0 120px;
+    }
+  }
+}
+
+.register-vote-wrap{
+
+  .form-title{
+    margin-bottom: 2rem;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 1.5rem;
+  }
+
+  .register-vote-content-wrap {
+    display: flex;
+    gap: 3rem;
+    margin-bottom: 4.5rem;
+
+    .register-wrap > p {
+      font-size: 1.5rem;
+    }
+
+    .register-wrap {
+
+      .opt-and-note-wrap {
+        margin: 1.5rem 0;
+        display: flex;
+        gap: 1rem;
+
+        .opt-out-wrap {
+          width: 25%;
+
+          input[type="checkbox"] {
+            position: absolute;
+            opacity: 0;
+            width: 120px;
+            height: 58px;
+          }
+
+          input[class="affirm-checkbox"] + span {
+            cursor: pointer !important;
+          }
+
+          input[class="affirm-checkbox"]:checked + span {
+            background-color: #D6E6EF;
+          }
+
+          .opt-out-btn{
+            color: #244B8E;
+            font-weight: 600;
+            font-size: 1.5rem;
+            width: 120px;
+            height: 58px;
+            border-radius: 12px;
+            border: 1px solid #244B8E;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+
+          .primary {
+            background-color: #D6E6EF;
+          }
+          
+          .secondary {
+            background-color: #FFFFFF;
+          }
+        }
+
+        .note-wrap p{
+          margin: 0;
+        }
+      }
+
+      .warning-wrap {
+        margin: 1.5rem 0rem;
+        font-size: 1rem;
+        line-height: 19.5px;
+
+        p {
+          margin: 0;
+        }
+      }
+
+      #affirmation {
+        width: 25px;
+        height: 25px;
+        border-radius: 6px;
+        border: 3px solid #244B8E;
+      }
+      
+      .affirm-checkbox{
+        font-size: 1.5rem;
+      }
+    }
+
+    .race-wrap {
+      .label {
+        font-size: 1.5rem;
+        font-weight: 600;
+      }
+
+      .form-select-input {
+        border: 1px solid #315999;
+        border-radius: 12px;
+        font-size: 1.5rem;
+        font-weight: 600;
+        width: 348px;
+        height: 58px;
+        padding: 0.75rem 1.5rem;
+
+        ::placeholder{
+          color: #C3C2C2;
+        }
+
+        .form-input-option {
+          font-size: 1rem;
+          color: #315999;
+        }
+      }
+
+      .affirm-text-wrap {
+        margin-top: 1.5rem;
+
+        p {
+          margin-bottom: 0.5rem;
+        }
+      }
+    }
+  }
+
+  .register-vote-content-wrap > div {
+    width: 45%;
+  }
+
+}
