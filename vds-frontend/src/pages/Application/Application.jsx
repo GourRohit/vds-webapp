@@ -64,11 +64,11 @@ const Application = () => {
     console.log("This data will be sent to NodeJS backend: ", data)
 
     sendApplication(data)
-      .then(() => {
+      .then((response) => {
         console.log("Application sent successfully!!!")
 
         // Navigating to the appointment
-        navigate('/appointment')
+        navigate('/appointment', { state: { response } })
       })
       .catch((error) => {
         console.log("Application failed", error)

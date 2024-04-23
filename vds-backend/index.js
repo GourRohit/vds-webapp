@@ -2,11 +2,19 @@ const express = require("express");
 const cors = require("cors");
 const path = require("path");
 const axios = require('axios');
+const fs = require('fs');
+const https = require('https')
 
 const PORT = 3000;
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+// Creating a https agent
+const httpsAgent = new https.Agent({
+  cert: fs.readFileSync('./assets/client.cer'),
+  key: fs.readFileSync('./assets/client.key'),
+})
 
 // serve up production assets
 app.use(express.static(path.join(__dirname, "../vds-frontend/build")));
@@ -24,7 +32,8 @@ async function sendDataToGADDS(apiURL, requestData) {
 
     // Make the POST request to GA-DDS
     const response = await axios.post(apiURL, requestData, {
-      headers: requestHeaders
+      headers: requestHeaders,
+      httpsAgent: httpsAgent
     });
 
     // Handling successful response
@@ -42,21 +51,10 @@ app.post("/application", async (req, res) => {
 
   try {
     //Sending the Data to the GA-DDS Backend
-    //const URL = "http://localhost:4216/Application";
+    const URL = "https://ws-staging.drives.ga.gov/WebServices/CC/GST/Driver/IdApplication/Application";
 
-    const responseData = {
-      "successful": true,
-      "errors": [
-        {
-          "code": "",
-          "message": ""
-        }
-      ],
-      "confirmationID": "12345",
-      "webServiceID": "123",
-      "webServiceStart": "123",
-      "webServiceEnd": "123"
-    }
+    const responseData = await sendDataToGADDS(URL, req.body);
+    console.log("we got response: ", responseData); 
 
     // Check if responseData is undefined or not
     if (!responseData) {

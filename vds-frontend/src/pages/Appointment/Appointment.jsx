@@ -1,13 +1,18 @@
 import React from 'react'
 import './Appointment.scss'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 
 import TopHeader from '../../components/Header/TopHeader'
 import Footer from '../../components/Footer/Footer'
 import Button from '../../components/Button/Button'
 
-const Appointment = () => {
+const Appointment = (props) => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const respData = location.state;
+
+  // TODO: Remove this after debugging
+  console.log("Resp data: ", respData)
 
   function handleFinish() {
     sessionStorage.clear();
@@ -22,9 +27,9 @@ const Appointment = () => {
           <div className="appointment-details-wrap">
             <h1 className="title">Appointment Details</h1>
 
-            {/* TODO: Make the counter and wait time dynamic */}
-            <p>Proceed to counter: <strong> 07 </strong> </p>
-            <p>Estimated wait time : 20minutes</p>
+            {/* TODO: Make it dynamic when backend starts working */}
+            <p>ConfirmationID: <strong>{respData && `${respData.confirmationID}`}</strong></p>
+            <p>WebServiceID: <strong>{respData && `${respData.webServiceID}`}</strong></p>
 
           </div>
 
