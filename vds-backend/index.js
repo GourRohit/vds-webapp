@@ -12,15 +12,15 @@ app.use(express.json());
 
 // Creating a https agent
 const httpsAgent = new https.Agent({
-  cert: fs.readFileSync('./assets/client.cer'),
-  key: fs.readFileSync('./assets/client.key'),
+  cert: fs.readFileSync(path.resolve(__dirname, "./assets/client.cer")),
+  key: fs.readFileSync(path.resolve(__dirname, "./assets/client.key")),
 })
 
 // serve up production assets
 app.use(express.static(path.join(__dirname, "../vds-frontend/build")));
 
 /* Function to call GA-DDS backend API*/
-async function sendDataToGADDS(apiURL, requestData) {
+async function sendDataToGADDS(apiURL, requestData) { 
   try {
     // Request headers
     const requestHeaders = {
