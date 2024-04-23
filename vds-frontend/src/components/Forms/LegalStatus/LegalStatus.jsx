@@ -186,17 +186,15 @@ const LegalStatus = ({ step, setStep, setApplicationData }) => {
 
                     <option className='form-input-option' value="">Select an option</option>
 
-                    <option className='form-input-option' value="ASPAC">ASPAC</option>
-                    <option className='form-input-option' value="BLACK">BLACK</option>
-                    <option className='form-input-option' value="HISLAT">HISLAT</option>
+                    <option className='form-input-option' value="I do not wish to reveal">I do not wish to reveal </option>
+                    <option className='form-input-option' value="Asian / Pacific Islander">Asian / Pacific Islander</option>
+                    <option className='form-input-option' value="Black">Black</option>
 
-                    <option className='form-input-option' value="MULTI">MULTI</option>
-                    <option className='form-input-option' value="NATIVE">NATIVE</option>
-                    <option className='form-input-option' value="OTHER">OTHER</option>
+                    <option className='form-input-option' value="Hispanic / Latino">Hispanic / Latino</option>
+                    <option className='form-input-option' value="Multi-Racial">Multi-Racial</option>
+                    <option className='form-input-option' value="White">White</option>
 
-                    <option className='form-input-option' value="REFUSE">REFUSE</option>
-                    <option className='form-input-option' value="UNKNWN">UNKNWN</option>
-                    <option className='form-input-option' value="WHITE">WHITE</option>
+                    <option className='form-input-option' value="Other">Other</option>
 
                   </Form.Select>
                 </Form.Group>

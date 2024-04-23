@@ -44,7 +44,7 @@ const Application = () => {
   });
 
   // Timer for the application form
-  const [minutes, setMinutes] = useState(5);
+  const [minutes, setMinutes] = useState(10);
   const [seconds, setSeconds] = useState(0);
 
   function handleCheckboxChange(e) {
