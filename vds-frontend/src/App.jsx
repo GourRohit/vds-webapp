@@ -38,10 +38,12 @@ function App() {
       });
   };
 
+
   return (
     <div className="wrapper">
       <BrowserRouter>
         <Routes>
+
           <Route
             exact
             path="/"
@@ -100,6 +102,7 @@ function App() {
 
           {/* <Route exact path="/checkin" element={<InformationModal />} /> */}
           {/* <Route exact path="/checkin/message" element={<CheckinMessage />} /> */}
+
         </Routes>
       </BrowserRouter>
     </div>
