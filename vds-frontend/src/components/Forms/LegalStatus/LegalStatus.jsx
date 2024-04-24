@@ -12,7 +12,7 @@ const LegalStatus = ({ step, setStep, setApplicationData }) => {
   });
 
   const [registerVoteFormData, setRegisterVoteFormData] = useState({
-    optOut: "",
+    optOut: false,
     affirmation: "",
     race: "",
   });
@@ -123,20 +123,8 @@ const LegalStatus = ({ step, setStep, setApplicationData }) => {
 
                 <div className='opt-and-note-wrap'>
                   <div className='opt-out-wrap'>
-                    {/* <Form.Group> */}
-                    {/* <Form.Check
-                        required
-                        name='optOut'
-                        type='checkbox'
-                        id='opt-out'
-                        label=''
-                        className='affirm-checkbox'
-                        onChange={handleChange}
-                        checked={registerVoteFormData.optOut}
-                      /> */}
                     <label>
                       <input
-                        required
                         name='optOut'
                         type='checkbox'
                         id='opt-out'
@@ -168,7 +156,7 @@ const LegalStatus = ({ step, setStep, setApplicationData }) => {
                     type='checkbox'
                     id='affirmation'
                     label='Click here to affirm'
-                    className='affirm-checkbox'
+                    className='affirm-checkbox required'
                     checked={registerVoteFormData.affirmation}
                     onChange={(e) => handleChange(e)}
                   />
@@ -177,14 +165,14 @@ const LegalStatus = ({ step, setStep, setApplicationData }) => {
 
               <div className='race-wrap'>
                 <Form.Group className='form-element'>
-                  <Form.Label className='label'>Race</Form.Label>
+                  <Form.Label className='label required'>Race</Form.Label>
                   <Form.Select
                     name='race'
                     onChange={(e) => handleChange(e)}
                     value={registerVoteFormData.race}
                     className='form-input form-select-input'>
 
-                    <option className='form-input-option' value="">Select an option</option>
+                    <option className='form-input-option default' value="">Select an option</option>
 
                     <option className='form-input-option' value="I do not wish to reveal">I do not wish to reveal </option>
                     <option className='form-input-option' value="Asian / Pacific Islander">Asian / Pacific Islander</option>
@@ -217,7 +205,7 @@ const LegalStatus = ({ step, setStep, setApplicationData }) => {
               type='submit'
               disabled={(
                 registerVoteFormData.optOut === "" ||
-                registerVoteFormData.affirmation === "" ||
+                registerVoteFormData.affirmation !== true ||
                 registerVoteFormData.race === "") && true}>
               Next
             </Button>

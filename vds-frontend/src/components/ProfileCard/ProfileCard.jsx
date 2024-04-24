@@ -1,12 +1,14 @@
 import React from 'react'
+import moment from 'moment'
 import './ProfileCard.scss'
 
 const ProfileCard = ({ dlData }) => {
-  const issueDate = new Date(dlData.data.issueDate);
-  const formatedIssueDate = issueDate.toLocaleDateString('en-US');
 
-  const expiryDate = new Date(dlData.data.expiryDate);
-  const formatedExpiryDate = expiryDate.toLocaleDateString('en-US');
+  const issueDate = dlData.data.issueDate ?
+    moment(parseInt(dlData.data.issueDate * 1000)).format('MM/DD/YYYY') : "";
+
+  const expiryDate = dlData.data.expiryDate ?
+    moment(parseInt(dlData.data.expiryDate * 1000)).format('MM/DD/YYYY') : "";
 
   const {
     givenNames,
@@ -25,26 +27,60 @@ const ProfileCard = ({ dlData }) => {
     issuingAuthority
   } = dlData.data;
 
+  const portrait = `data:image/webp;base64,${dlData.data.portrait}`;
+
   return (
     <div className='profile-card'>
       <div className='profile-img-container'>
-        <img src={require("../../assets/images/user.png")} alt="user image" />
+        <img src={portrait === "data:image/webp;base64," ? require("../../assets/images/No-user-portrait.png") : portrait} alt="user image" />
       </div>
 
-      <div className='profile-data-container'>
-        <div className="id-attribute">Name: {`${dlData.data.givenNames} ${dlData.data.familyName}` || ""}</div>
-        <div className="id-attribute">DOB: {dlData.data.birthDate || ""}</div>
-        <div className="id-attribute">Sex: {dlData.data.sex || ""}</div>
-        <div className="id-attribute">Height: {dlData.data.height || ""} </div>
-        <div className="id-attribute">Eyes: {dlData.data.eyeColor || ""} </div>
-        <div className="id-attribute">Hair: {dlData.data.hairColor || ""} </div>
-        <div className="id-attribute">Weight: {dlData.data.weight || ""} </div>
-        <div className="id-attribute">Address: {`${dlData.data.residentAddress} ${dlData.data.residentCity} ${dlData.data.residentCountry} ${dlData.data.residentPostalCode}` || ""} </div>
-        <div className="id-attribute">ID: {dlData.data.documentNumber || ""}</div>
-        <div className="id-attribute">Expiry: {formatedExpiryDate || ""} </div>
-        <div className="id-attribute">ISS: {formatedIssueDate || ""}</div>
-        <div className="id-attribute">Class: {dlData.data.drivingPrivileges.length !== 0 ? (dlData.data.drivingPrivileges[0].vehicleCategory || 'C') : ""} </div>
-        <div className="id-attribute">Issuing Authority: {dlData.data.issuingAuthority || ""} </div>
+      <div className='profile-data-wrap'>
+        <div className='profile-data-wrap-1'>
+          <div className="id-attribute">
+            <span>Name: {`${dlData.data.givenNames} ${dlData.data.familyName}` || ""}</span>
+          </div>
+          <div className="id-attribute">
+            <span>DOB: {dlData.data.birthDate || ""}</span>
+          </div>
+          <div className="id-attribute">
+            <span>Sex: {dlData.data.sex || ""}</span>
+          </div>
+          <div className="id-attribute">
+            <span>Height: {dlData.data.height || ""}</span>
+          </div>
+          <div className="id-attribute">
+            <span>Eyes: {dlData.data.eyeColor || ""}</span>
+          </div>
+          <div className="id-attribute">
+            <span>Hair: {dlData.data.hairColor || ""}</span>
+          </div>
+          <div className="id-attribute">
+            <span>Weight: {dlData.data.weight || ""}</span>
+          </div>
+        </div>
+
+        <div className='profile-data-wrap-2'>
+          <div className="id-attribute">
+            <span>Address: {`${dlData.data.residentAddress} ${dlData.data.residentCity} ${dlData.data.residentState} ${dlData.data.residentCountry} ${dlData.data.residentPostalCode}` || ""}</span>
+          </div>
+          <div className="id-attribute">
+            <span>ID: {dlData.data.documentNumber || ""}</span>
+          </div>
+          <div className="id-attribute">
+            <span>Expiry: {expiryDate || ""}</span>
+          </div>
+          <div className="id-attribute">
+            <span>ISS: {issueDate || ""}</span>
+          </div>
+          <div className="id-attribute">
+            Class: {dlData.data.drivingPrivileges.length !== 0 ? (dlData.data.drivingPrivileges[0].vehicleCategory || 'C') : ""}
+          </div>
+          <div className="id-attribute">
+            <span>Issuing Authority: {dlData.data.issuingAuthority || ""} </span>
+          </div>
+        </div>
+
       </div>
     </div>
   )

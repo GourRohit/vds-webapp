@@ -155,6 +155,7 @@ const Donations = ({ step, setStep, setApplicationData }) => {
               </div>
 
               <Question
+                isRequired={true}
                 answers={answers}
                 setAnswers={setAnswers}
                 questionIndex={1}

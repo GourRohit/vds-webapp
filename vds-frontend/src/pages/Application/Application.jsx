@@ -11,10 +11,13 @@ import VisionAndMedical from '../../components/Forms/VisionAndMedical/VisionAndM
 import LegalStatus from '../../components/Forms/LegalStatus/LegalStatus'
 import Donations from '../../components/Forms/Donations/Donations'
 import { sendApplication } from '../../services/Utils'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
-const Application = () => {
+const Application = (props) => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const dlData = location.state;
+
   const [step, setStep] = useState(1);
   const [isSigned, setIsSigned] = useState(false);
 
@@ -25,6 +28,10 @@ const Application = () => {
     FirstName: "",
     MiddleName: "",
     LastName: "",
+
+    NewFirstName: "",
+    NewMiddleName: "",
+    NewLastName: "",
 
     curEmail: "",
     USCitizen: false,
@@ -40,7 +47,7 @@ const Application = () => {
     DonationBlindness: false,
     DonationEducation: false,
     Acknowledgement: false,
-    AcknowledgementName: "",
+    AcknowledgementName: `${dlData.givenNames} ${dlData.familyName}` || "",
   });
 
   // Timer for the application form
@@ -119,7 +126,7 @@ const Application = () => {
             <Form>
               <h2 className='form-title'>Acknowledgement</h2>
               <p>Under penalty of law, I swear or affirm that I am a resident of the State of Georgia, and the information provided on this form is true and correct. I understand that it is illegal to make false, fictious, or fraudulent statements on this form. I grant permission to the Department of Driver Services to verify information furnished to the Department through the release of any and all applicant information to third parties which shall include, but not be limited to the U.S. Department of Homeland Security or other public entities wherein such disclosure of the information by the Department is not prohibited by law. </p>
-              <p><strong>Name:</strong> {applicationData.AcknowledgementName}</p>
+              <p><strong>Name:</strong> {`${dlData.givenNames} ${dlData.familyName}`}</p>
 
               <Form.Group>
                 <Form.Check

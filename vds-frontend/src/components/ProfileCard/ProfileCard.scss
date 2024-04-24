@@ -1,22 +1,26 @@
 .profile-card {
-  border-radius: 12px;
-  border: 5px solid #244B8E;
   padding: 2rem;
-  height: 390px;
-  width: 886px;
-  background-color: #FFFFFF;
+  width: fit-content;
+  border-radius: 12px;
   margin-bottom: 1.5rem;
+  border: 5px solid #244B8E;
+  background-color: #FFFFFF;
 
   display: flex;
   gap: 2rem;
 
-  .profile-data-container {
+  .profile-data-wrap {
     display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
+    gap: 3rem;
+
+    .profile-data-wrap-1,
+    .profile-data-wrap-2{
+      min-width: 200px;
+      max-width: 400px;
+    }
 
     .id-attribute {
-      width: 315px;
+      word-wrap: break-word;
       font-size: 1.25rem;
       font-weight: 600;
       color: #315999;

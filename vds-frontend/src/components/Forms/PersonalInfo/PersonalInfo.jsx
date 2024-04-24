@@ -5,7 +5,7 @@ import Button from '../../Button/Button'
 import Form from 'react-bootstrap/Form'
 import Question from '../Question/Question';
 
-const PersonalInfo = ({ step, setStep, applicationData, setApplicationData }) => {
+const PersonalInfo = ({ step, setStep, dlData, applicationData, setApplicationData }) => {
 
   const [subSteps, SetSubSteps] = useState(1)
   const [answers, setAnswers] = useState({
@@ -41,8 +41,6 @@ const PersonalInfo = ({ step, setStep, applicationData, setApplicationData }) =>
     // Update session storage whenever answers change
     sessionStorage.setItem('PersonalInfoAnswers', JSON.stringify(answers));
     sessionStorage.setItem('NameChangeFormData', JSON.stringify(nameChangeFormData));
-
-    console.log("These are the answers: ", answers)
   }, [answers, nameChangeFormData])
 
 
@@ -100,11 +98,10 @@ const PersonalInfo = ({ step, setStep, applicationData, setApplicationData }) =>
     // Setting the form data in the ApplicationData State
     setApplicationData((prevState) => ({
       ...prevState,
-      FirstName: nameChangeFormData.FirstName,
-      MiddleName: nameChangeFormData.MiddleName,
-      LastName: nameChangeFormData.LastName,
-      Suffix: nameChangeFormData.Suffix,
-      AcknowledgementName: `${nameChangeFormData.FirstName} ${nameChangeFormData.MiddleName} ${nameChangeFormData.LastName}`
+      NewFirstName: nameChangeFormData.FirstName,
+      NewMiddleName: nameChangeFormData.MiddleName,
+      NewLastName: nameChangeFormData.LastName,
+      NewSuffix: nameChangeFormData.Suffix,
     }))
 
     // Going on to the NEXT Step
@@ -129,7 +126,6 @@ const PersonalInfo = ({ step, setStep, applicationData, setApplicationData }) =>
                 />
 
                 <Question
-                  disabled={true}
                   isRequired={true}
                   answers={answers}
                   questionIndex={1}
@@ -141,7 +137,6 @@ const PersonalInfo = ({ step, setStep, applicationData, setApplicationData }) =>
 
               <div className="questions-wrap-2">
                 <Question
-                  disabled={true}
                   isRequired={true}
                   answers={answers}
                   questionIndex={2}
@@ -151,7 +146,6 @@ const PersonalInfo = ({ step, setStep, applicationData, setApplicationData }) =>
                 />
 
                 <Question
-                  disabled={true}
                   isRequired={true}
                   answers={answers}
                   questionIndex={3}
@@ -160,26 +154,6 @@ const PersonalInfo = ({ step, setStep, applicationData, setApplicationData }) =>
                   questionText="Do you need to update your contact information?"
                 />
               </div>
-
-              {/* <form action="">
-                  <div>
-                    <p>Has your name changed?</p>
-                    <div>
-                      <label htmlFor="name-change">
-                        <input type="radio" className='name-change' name='personalInfo' value="Yes" />
-                        <span className='form-btn'>Yes</span>
-                      </label>
-                    </div>
-
-                    <div>
-                      <label htmlFor="name-change">
-                        <input type="radio" className='name-change' name='personalInfo' value="No" />
-                        <span className='form-btn'>No</span>
-                      </label>
-                    </div>
-                  </div>
-                </form> */
-              }
 
               <Button
                 type='submit'
@@ -240,8 +214,33 @@ const PersonalInfo = ({ step, setStep, applicationData, setApplicationData }) =>
 
               <Form.Group className='form-element'>
                 <Form.Label className='label'>Suffix</Form.Label>
-                <Form.Select className='form-input form-select-input'>
-                  <option className='form-input-option'>Select an option</option>
+                <Form.Select
+                  name='Suffix'
+                  value={nameChangeFormData.Suffix}
+                  onChange={(e) => handleNameChange(e)}
+                  className='form-input form-select-input'
+                >
+                  <option className='form-input-option default' value="">Select an option</option>
+                  <option className='form-input-option' value="1ST">1ST</option>
+                  <option className='form-input-option' value="2ND">2ND</option>
+                  <option className='form-input-option' value="3RD">3RD</option>
+                  <option className='form-input-option' value="4TH">4TH</option>
+                  <option className='form-input-option' value="5TH">5TH</option>
+                  <option className='form-input-option' value="6TH">6TH</option>
+                  <option className='form-input-option' value="7TH">7TH</option>
+                  <option className='form-input-option' value="8TH">8TH</option>
+                  <option className='form-input-option' value="9TH">9TH</option>
+                  <option className='form-input-option' value="I">I</option>
+                  <option className='form-input-option' value="II">II</option>
+                  <option className='form-input-option' value="III">III</option>
+                  <option className='form-input-option' value="IV">IV</option>
+                  <option className='form-input-option' value="V">V</option>
+                  <option className='form-input-option' value="VI">VI</option>
+                  <option className='form-input-option' value="VII">VII</option>
+                  <option className='form-input-option' value="VIII">VIII</option>
+                  <option className='form-input-option' value="IX">IX</option>
+                  <option className='form-input-option' value="JR">JR</option>
+                  <option className='form-input-option' value="SR">SR</option>
                 </Form.Select>
               </Form.Group>
             </div>

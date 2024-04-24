@@ -55,7 +55,6 @@ const VisionAndMedical = ({ step, setStep, setApplicationData }) => {
           <form onSubmit={(e) => handleNext(e)}>
             <div className="questions-wrap-1">
               <Question
-                disabled={true}
                 isRequired={true}
                 answers={answers}
                 setAnswers={setAnswers}
@@ -65,7 +64,6 @@ const VisionAndMedical = ({ step, setStep, setApplicationData }) => {
               />
 
               <Question
-                disabled={true}
                 isRequired={true}
                 answers={answers}
                 setAnswers={setAnswers}
@@ -77,7 +75,6 @@ const VisionAndMedical = ({ step, setStep, setApplicationData }) => {
 
             <div className="questions-wrap-2">
               <Question
-                disabled={true}
                 isRequired={true}
                 answers={answers}
                 setAnswers={setAnswers}
@@ -87,7 +84,6 @@ const VisionAndMedical = ({ step, setStep, setApplicationData }) => {
               />
 
               <Question
-                disabled={true}
                 isRequired={true}
                 answers={answers}
                 setAnswers={setAnswers}

@@ -15,7 +15,7 @@ const IdDetails = () => {
   console.log("This is the dlData: ", dlData)
 
   function handleProceed() {
-    navigate('/application');
+    navigate('/application', { state: dlData.data });
   }
 
   return (
