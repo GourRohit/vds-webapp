@@ -245,7 +245,7 @@ class Dashboard extends Component {
             <Navigate to="/checkin" state={this.state} />
           )}
           <div className="page-container">
-            <p>Welcome to Mocktana Department of Transportation </p>
+            <p>Welcome to Department of Transportation</p>
             {this.state.deviceMode !== "HOLDER_DRIVEN" && (
               <div className="button-wrap">
                 <Button
